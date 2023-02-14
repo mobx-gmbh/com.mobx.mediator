@@ -1,0 +1,16 @@
+{
+    "name": "mobx.mediator",
+    "rootNamespace": "MobX.Mediator",
+    "references": [
+        "GUID:451c7863c31cdec4fbc99d53f3082b53"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
