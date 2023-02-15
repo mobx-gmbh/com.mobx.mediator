@@ -15,6 +15,7 @@ namespace MobX.Mediator.Values
         [SerializeField] private TValue value;
 
         [Readonly]
+#pragma warning disable 414
         [SerializeField] private TValue cached;
 
         private readonly Broadcast<TValue> _changedEvent = new();
