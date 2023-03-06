@@ -8,9 +8,9 @@ using UnityEngine;
 namespace MobX.Mediator.Values
 {
     /// <summary>
-    /// Scriptable object holding a value that can be accessed and set during runtime.
+    ///     Scriptable object holding a value that can be accessed and set during runtime.
     /// </summary>
-    public abstract class ValueAsset<TValue> : ScriptableObject, IOnExitEdit, IOnEnterEdit
+    public abstract class ValueAsset<TValue> : ScriptableObject, IOnExitEditMode, IOnEnterEditMode
     {
         [SerializeField] private TValue value;
 
@@ -21,12 +21,12 @@ namespace MobX.Mediator.Values
         private readonly Broadcast<TValue> _changedEvent = new();
 
         /// <summary>
-        /// Event, called every time the value changed.
+        ///     Event, called every time the value changed.
         /// </summary>
         public IReceiver<TValue> Changed => _changedEvent;
 
         /// <summary>
-        /// Get or set the underlying value.
+        ///     Get or set the underlying value.
         /// </summary>
         public TValue Value
         {
@@ -55,8 +55,7 @@ namespace MobX.Mediator.Values
             EngineCallbacks.AddExitEditModeListener(this);
             EngineCallbacks.AddEnterEditModeListener(this);
 #else
-            // Set the cached value to a default value (null for reference types) to release potential
-            // references, keeping them in memory indefinitely.
+            // Set the cached value to a default value (null for reference types) to release references.
             cached = default;
 #endif
         }
