@@ -1,5 +1,4 @@
-﻿using MobX.Utilities;
-using MobX.Utilities.Callbacks;
+﻿using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
 using UnityEngine;
