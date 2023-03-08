@@ -8,14 +8,14 @@ namespace MobX.Mediator.Pooling
     /// </summary>
     public class ComponentPool : PoolAsset<Component>
     {
-        protected override void OnReleaseCallback(Component item)
+        protected override void OnReleaseInstance(Component item)
         {
             item.SetActive(false);
         }
 
-        protected override void OnGetCallback(Component item)
+        protected override void OnGetInstance(Component instance)
         {
-            item.SetActive(true);
+            instance.SetActive(true);
         }
     }
 }

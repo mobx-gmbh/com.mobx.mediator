@@ -7,14 +7,14 @@ namespace MobX.Mediator.Pooling
     /// </summary>
     public class GameObjectPool : PoolAsset<GameObject>
     {
-        protected override void OnReleaseCallback(GameObject item)
+        protected override void OnReleaseInstance(GameObject instance)
         {
-            item.SetActive(false);
+            instance.SetActive(false);
         }
 
-        protected override void OnGetCallback(GameObject item)
+        protected override void OnGetInstance(GameObject instance)
         {
-            item.SetActive(true);
+            instance.SetActive(true);
         }
     }
 }

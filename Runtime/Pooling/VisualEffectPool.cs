@@ -8,14 +8,14 @@ namespace MobX.Mediator.Pooling
     /// </summary>
     public class VisualEffectPool : PoolAsset<VisualEffect>
     {
-        protected override void OnReleaseCallback(VisualEffect item)
+        protected override void OnReleaseInstance(VisualEffect item)
         {
             item.SetActive(false);
         }
 
-        protected override void OnGetCallback(VisualEffect item)
+        protected override void OnGetInstance(VisualEffect instance)
         {
-            item.SetActive(true);
+            instance.SetActive(true);
         }
     }
 }
