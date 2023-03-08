@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Pooling
 {
-    sealed class PoolHook : MonoBehaviour
+    internal sealed class PoolHook : MonoBehaviour
     {
 #if UNITY_EDITOR
         [Button]

@@ -6,14 +6,14 @@ namespace MobX.Mediator.Pooling
     /// <summary>
     ///     Generic <see cref="Component" /> object pool.
     /// </summary>
-    public class ComponentPool : PoolAsset<Component>
+    public abstract class ComponentPool<TComponent> : PoolAsset<TComponent> where TComponent : Component
     {
-        protected override void OnReleaseInstance(Component item)
+        protected override void OnReleaseInstance(TComponent instance)
         {
-            item.SetActive(false);
+            instance.SetActive(false);
         }
 
-        protected override void OnGetInstance(Component instance)
+        protected override void OnGetInstance(TComponent instance)
         {
             instance.SetActive(true);
         }

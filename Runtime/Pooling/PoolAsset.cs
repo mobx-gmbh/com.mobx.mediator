@@ -4,13 +4,15 @@ using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Pool;
 using Object = UnityEngine.Object;
 
 namespace MobX.Mediator.Pooling
 {
-    public abstract class PoolAsset : RuntimeAsset
+    public abstract class PoolAsset : ScriptableObject
     {
     }
 
@@ -28,7 +30,7 @@ namespace MobX.Mediator.Pooling
         #endregion
 
 
-        #region Fields & Properties
+        #region Settings
 
         [SerializeField] private T prefab;
         [ConditionalShow(nameof(multiple))]
@@ -58,59 +60,47 @@ namespace MobX.Mediator.Pooling
         [ConditionalShow(nameof(autoRelease))]
         [SerializeField] private float lifeSpanInSeconds = 3;
 
+        #endregion
+
+
+        #region Fields & Properties
+
         public bool IsLoaded { get; private set; }
-        private ObjectPool<T> _pool;
+        public int CountAll { get; private set; }
+
+        public int CountInactive => _pool.Count;
+        public int MaxPoolSize => limitPoolSize ? maxPoolSize : 10000;
+
         private Transform _parent;
-        private Loop _index;
+        private Loop _prefabIndex;
+
+        private readonly List<T> _pool = new();
 
         #endregion
 
 
         #region Internal Pool Callbacks
 
-        private readonly Dictionary<T, Timer> _autoReleaseInstances = new Dictionary<T, Timer>();
+        private readonly Dictionary<T, Timer> _autoReleaseInstances = new();
 
         public void OnUpdate(float deltaTime)
         {
-            List<T> releaseBuffer = ListPool<T>.Get();
-            foreach (KeyValuePair<T, Timer> autoReleaseInstance in _autoReleaseInstances)
+            var releaseBuffer = ListPool<T>.Get();
+
+            foreach (var autoReleaseInstance in _autoReleaseInstances)
             {
                 if (autoReleaseInstance.Value.Expired)
                 {
                     releaseBuffer.Add(autoReleaseInstance.Key);
                 }
             }
-            foreach (T key in releaseBuffer)
+
+            foreach (var key in releaseBuffer)
             {
                 _autoReleaseInstances.Remove(key);
             }
+
             ListPool<T>.Release(releaseBuffer);
-        }
-
-        /// <summary>
-        ///     Called by the pool when a new instance needs to be created.
-        /// </summary>
-        private void OnGetInstanceInternal(T instance)
-        {
-            OnGetInstance(instance);
-            Debug.Log("Pool", $"Get instance {instance} from pool {name}");
-            if (autoRelease)
-            {
-                var timer = new Timer(lifeSpanInSeconds);
-                _autoReleaseInstances.AddOrUpdate(instance, timer);
-            }
-        }
-
-        /// <summary>
-        ///     Called by the pool when an instance is released back to the pool.
-        /// </summary>
-        private void OnReleaseInstanceInternal(T instance)
-        {
-            if (autoRelease)
-            {
-                _autoReleaseInstances.Remove(instance);
-            }
-            OnReleaseInstance(instance);
         }
 
         #endregion
@@ -132,7 +122,7 @@ namespace MobX.Mediator.Pooling
             switch (selectionMode)
             {
                 case SelectionMode.RoundRobin:
-                    return Instantiate(prefabs[_index++], _parent);
+                    return Instantiate(prefabs[_prefabIndex++], _parent);
                 case SelectionMode.Random:
                     return Instantiate(prefabs.RandomItem(), _parent);
                 default:
@@ -171,7 +161,7 @@ namespace MobX.Mediator.Pooling
         {
             if (warmupOnBeginPlay)
             {
-                Warmup();
+                Load();
             }
         }
 
@@ -183,20 +173,20 @@ namespace MobX.Mediator.Pooling
         #endregion
 
 
-        #region Warup & Termination
+        #region Ctor
 
-        private IObjectPool<T> GetOrCreatePool()
+        protected PoolAsset()
         {
-            if (IsLoaded)
-            {
-                return _pool;
-            }
-
-            Warmup();
-            return _pool;
+            EngineCallbacks.AddBeginPlayListener(this);
+            EngineCallbacks.AddEndPlayListener(this);
         }
 
-        public void Warmup()
+        #endregion
+
+
+        #region Warup & Termination
+
+        public void Load()
         {
             if (IsLoaded)
             {
@@ -213,29 +203,25 @@ namespace MobX.Mediator.Pooling
                 prefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             }
 
-            if (!autoRelease)
+            if (autoRelease)
             {
-                EngineCallbacks.RemoveUpdateListener(this);
+                EngineCallbacks.AddUpdateListener(this);
             }
 
             if (multiple && selectionMode == SelectionMode.RoundRobin)
             {
-                _index = Loop.Create(prefabs);
+                _prefabIndex = Loop.Create(prefabs);
             }
 
-            var defaultCapacity = initialPoolSize;
-            var maxSize = limitPoolSize ? maxPoolSize : 10000;
-
-            _pool ??= new ObjectPool<T>(CreateInstance, OnGetInstanceInternal, OnReleaseInstanceInternal, OnDestroyInstance, collectionCheck, defaultCapacity, maxSize);
-            List<T> buffer = ListPool<T>.Get();
+            var buffer = ListPool<T>.Get();
             for (var i = 0; i < initialPoolSize; i++)
             {
-                buffer.Add(_pool.Get());
+                buffer.Add(Get());
             }
 
-            foreach (T element in buffer)
+            foreach (var element in buffer)
             {
-                _pool.Release(element);
+                Release(element);
             }
 
             ListPool<T>.Release(buffer);
@@ -245,8 +231,7 @@ namespace MobX.Mediator.Pooling
         public void Dispose()
         {
             IsLoaded = false;
-            _pool?.Dispose();
-            _pool = null;
+            Clear();
         }
 
         #endregion
@@ -257,34 +242,102 @@ namespace MobX.Mediator.Pooling
         public T Get()
         {
             AssertIsPlaying();
-            return GetOrCreatePool().Get();
+            Load();
+
+            T instance;
+            if (_pool.Count == 0)
+            {
+                instance = CreateInstance();
+                ++CountAll;
+            }
+            else
+            {
+                switch (selectionMode)
+                {
+                    case SelectionMode.RoundRobin:
+                        var index = _pool.Count - 1;
+                        instance = _pool[index];
+                        _pool.RemoveAt(index);
+                        break;
+                    case SelectionMode.Random:
+                        instance = _pool.RandomItemRemove();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            OnGetInstance(instance);
+
+            if (autoRelease)
+            {
+                var timer = new Timer(lifeSpanInSeconds);
+                _autoReleaseInstances.AddOrUpdate(instance, timer);
+            }
+            return instance;
         }
 
         public PooledObject<T> Get(out T instance)
         {
-            AssertIsPlaying();
-            return GetOrCreatePool().Get(out instance);
+            throw new InvalidOperationException("Invalid method call!");
         }
 
-        public void Release(T element)
+        public void Release(T instance)
         {
             AssertIsPlaying();
-            if (IsLoaded)
+
+            if (collectionCheck && _pool.Count > 0)
             {
-                _pool.Release(element);
+                for (var index = 0; index < _pool.Count; ++index)
+                {
+                    if (instance == _pool[index])
+                    {
+                        throw new InvalidOperationException(
+                            "Trying to release an object that has already been released to the pool.");
+                    }
+                }
+            }
+
+            if (autoRelease)
+            {
+                _autoReleaseInstances.Remove(instance);
+            }
+
+            OnReleaseInstance(instance);
+            if (CountInactive < MaxPoolSize)
+            {
+                _pool.Add(instance);
+            }
+            else
+            {
+                Debug.Log("Pooling",
+                    $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ");
+                OnDestroyInstance(instance);
             }
         }
 
         public void Clear()
         {
             AssertIsPlaying();
-            if (IsLoaded)
+            foreach (var instance in _pool)
             {
-                _pool.Clear();
+                OnDestroyInstance(instance);
             }
+            _pool.Clear();
+            CountAll = 0;
+            EngineCallbacks.RemoveUpdateListener(this);
         }
 
-        public int CountInactive => IsLoaded ? _pool.CountInactive : 0;
+        #endregion
+
+
+        #region Misc
+
+        [Conditional("UNITY_EDITOR")]
+        private static void AssertIsPlaying()
+        {
+            Assert.IsTrue(Application.isPlaying, "Application Is Not Playing!");
+        }
 
         #endregion
     }
