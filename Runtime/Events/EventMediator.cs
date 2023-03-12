@@ -1,10 +1,11 @@
-﻿using MobX.Utilities.Inspector;
+﻿using MobX.Utilities.Callbacks;
+using MobX.Utilities.Inspector;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace MobX.Mediator.Events
 {
-    public abstract class EventMediator : ScriptableObject
+    public abstract class EventMediator : RuntimeAsset
     {
         [Tooltip("When enabled, the event is meant to be used during runtime only.")]
         [SerializeField] private bool runtimeOnly;

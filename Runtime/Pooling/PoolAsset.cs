@@ -74,20 +74,20 @@ namespace MobX.Mediator.Pooling
         private Transform _parent;
         private Loop _prefabIndex;
 
-        private readonly List<T> _pool = new();
+        private readonly List<T> _pool = new List<T>();
 
         #endregion
 
 
         #region Internal Pool Callbacks
 
-        private readonly Dictionary<T, Timer> _autoReleaseInstances = new();
+        private readonly Dictionary<T, Timer> _autoReleaseInstances = new Dictionary<T, Timer>();
 
         public void OnUpdate(float deltaTime)
         {
-            var releaseBuffer = ListPool<T>.Get();
+            List<T> releaseBuffer = ListPool<T>.Get();
 
-            foreach (var autoReleaseInstance in _autoReleaseInstances)
+            foreach (KeyValuePair<T, Timer> autoReleaseInstance in _autoReleaseInstances)
             {
                 if (autoReleaseInstance.Value.Expired)
                 {
@@ -95,7 +95,7 @@ namespace MobX.Mediator.Pooling
                 }
             }
 
-            foreach (var key in releaseBuffer)
+            foreach (T key in releaseBuffer)
             {
                 _autoReleaseInstances.Remove(key);
             }
@@ -213,13 +213,13 @@ namespace MobX.Mediator.Pooling
                 _prefabIndex = Loop.Create(prefabs);
             }
 
-            var buffer = ListPool<T>.Get();
+            List<T> buffer = ListPool<T>.Get();
             for (var i = 0; i < initialPoolSize; i++)
             {
                 buffer.Add(Get());
             }
 
-            foreach (var element in buffer)
+            foreach (T element in buffer)
             {
                 Release(element);
             }
@@ -242,7 +242,6 @@ namespace MobX.Mediator.Pooling
         public T Get()
         {
             AssertIsPlaying();
-            Load();
 
             T instance;
             if (_pool.Count == 0)
@@ -319,7 +318,7 @@ namespace MobX.Mediator.Pooling
         public void Clear()
         {
             AssertIsPlaying();
-            foreach (var instance in _pool)
+            foreach (T instance in _pool)
             {
                 OnDestroyInstance(instance);
             }
