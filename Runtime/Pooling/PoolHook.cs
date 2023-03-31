@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Pooling
 {
-    internal sealed class PoolHook : MonoBehaviour
+    sealed class PoolHook : MonoBehaviour
     {
 #if UNITY_EDITOR
         [Button]
@@ -18,11 +18,10 @@ namespace MobX.Mediator.Pooling
 #endif
 
         // ReSharper disable Unity.PerformanceAnalysis
-        public static Transform Create(Object pool, bool hidePool)
+        public static Transform Create(Object pool)
         {
             var instance = new GameObject(pool.name);
 
-            instance.hideFlags |= hidePool ? HideFlags.HideInHierarchy : HideFlags.None;
             instance.DontDestroyOnLoad();
 #if UNITY_EDITOR
             instance.AddComponent<PoolHook>()._poolAsset = pool;

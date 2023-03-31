@@ -10,6 +10,7 @@ namespace MobX.Mediator.Pooling
         protected override void OnReleaseInstance(GameObject instance)
         {
             instance.SetActive(false);
+            instance.transform.SetParent(Parent);
         }
 
         protected override void OnGetInstance(GameObject instance)
