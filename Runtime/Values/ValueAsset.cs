@@ -1,6 +1,7 @@
 ﻿using MobX.Mediator.Events;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -19,6 +20,12 @@ namespace MobX.Mediator.Values
         [SerializeField] private TValue cached;
 
         private readonly Broadcast<TValue> _changedEvent = new();
+
+        public event Action<TValue> ChangedEvent
+        {
+            add => _changedEvent.Add(value);
+            remove => _changedEvent.Remove(value);
+        }
 
         /// <summary>
         ///     Event, called every time the value changed.
