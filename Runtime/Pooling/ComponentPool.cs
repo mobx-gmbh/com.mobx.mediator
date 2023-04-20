@@ -11,6 +11,7 @@ namespace MobX.Mediator.Pooling
         protected override void OnReleaseInstance(TComponent instance)
         {
             instance.SetActive(false);
+            instance.transform.SetParent(Parent);
         }
 
         protected override void OnGetInstance(TComponent instance)

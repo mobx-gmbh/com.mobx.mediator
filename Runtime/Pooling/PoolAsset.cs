@@ -70,6 +70,17 @@ namespace MobX.Mediator.Pooling
         [ConditionalShow(nameof(autoRelease))]
         [SerializeField] private float lifeSpanInSeconds = 3;
 
+        [Button]
+        private void SelectRuntimeObject()
+        {
+#if UNITY_EDITOR
+            if (Parent != null)
+            {
+                UnityEditor.Selection.activeObject = Parent;
+            }
+#endif
+        }
+
         #endregion
 
 
@@ -77,6 +88,7 @@ namespace MobX.Mediator.Pooling
 
         public T Prefab => prefab;
 
+        [Readonly]
         public PoolState State { get; private set; }
         public int CountAll { get; private set; }
         public Transform Parent { get; private set; }
@@ -101,6 +113,10 @@ namespace MobX.Mediator.Pooling
         {
             if (!multiple)
             {
+                if (prefab == null)
+                {
+                    Debug.LogError("Pooling", "Prefab for {this} was null! Cannot create new instance!", this);
+                }
                 return Instantiate(prefab, Parent);
             }
 
@@ -266,6 +282,7 @@ namespace MobX.Mediator.Pooling
         public void Dispose()
         {
             Clear();
+            State = PoolState.Unloaded;
         }
 
         #endregion
@@ -282,7 +299,10 @@ namespace MobX.Mediator.Pooling
         {
             AssertIsPlaying();
 
-            Assert.IsNotNull(_pool, "Pool is null!");
+            if (State == PoolState.Unloaded)
+            {
+                Warmup();
+            }
 
             T instance;
             if (_pool.Count == 0)
@@ -307,19 +327,28 @@ namespace MobX.Mediator.Pooling
                 }
             }
 
+            if (instance == null)
+            {
+                Debug.LogError("Pooling", $"Requested Instance from {this} was null!", this);
+                instance = CreateInstance();
+                ++CountAll;
+            }
+
             OnGetInstance(instance);
             if (!discrete && autoRelease)
             {
                 ReleaseAsync(instance, lifeSpanInSeconds).Forget();
             }
-            Assert.IsNotNull(instance, "Instance is null!");
             return instance;
         }
 
         public void Release(T instance)
         {
             AssertIsPlaying();
-
+            if (EngineCallbacks.IsQuitting)
+            {
+                return;
+            }
             if (instance == null)
             {
                 Debug.Log("Pooling", "Released Instance was null!");

@@ -11,6 +11,7 @@ namespace MobX.Mediator.Pooling
         protected override void OnReleaseInstance(VisualEffect instance)
         {
             instance.SetActive(false);
+            instance.transform.SetParent(Parent);
         }
 
         protected override void OnGetInstance(VisualEffect instance)
