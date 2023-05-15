@@ -17,8 +17,8 @@ namespace MobX.Mediator.Collections
             EngineCallbacks.AddEnterEditModeListener(this);
         }
 
-        private protected abstract int CountInternal { get; }
-        private protected abstract IEnumerable<T> CollectionInternal { get; }
+        protected private abstract int CountInternal { get; }
+        protected private abstract IEnumerable<T> CollectionInternal { get; }
 
         public void OnEnterEditMode()
         {
@@ -36,6 +36,6 @@ namespace MobX.Mediator.Collections
 
         [Button("Clear")]
         [Foldout("Options")]
-        private protected abstract void ClearInternal();
+        protected private abstract void ClearInternal();
     }
 }
