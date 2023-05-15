@@ -1,5 +1,5 @@
 using MobX.Mediator.Values;
-using MobX.Utilities.Editor;
+using MobX.Utilities.Editor.Helper;
 using UnityEngine;
 
 namespace Mobx.Mediator.Editor

@@ -1,28 +1,27 @@
 using MobX.Mediator.Conditions;
-using MobX.Utilities.Editor;
-using UnityEditor;
+using MobX.Utilities.Editor.Helper;
 using UnityEngine;
 
 namespace Mobx.Mediator.Editor
 {
-    [CustomPropertyDrawer(typeof(Statement))]
-    public class StatementPropertyDrawer : PropertyDrawer
+    [UnityEditor.CustomPropertyDrawer(typeof(Statement))]
+    public class StatementPropertyDrawer : UnityEditor.PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override float GetPropertyHeight(UnityEditor.SerializedProperty property, GUIContent label)
         {
             return 0;
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void OnGUI(Rect position, UnityEditor.SerializedProperty property, GUIContent label)
         {
-            var typeProperty = property.FindPropertyRelative("checkMethod");
-            var conditionsProperty = property.FindPropertyRelative("conditions");
+            UnityEditor.SerializedProperty typeProperty = property.FindPropertyRelative("checkMethod");
+            UnityEditor.SerializedProperty conditionsProperty = property.FindPropertyRelative("conditions");
 
             GUIHelper.BeginBox();
-            EditorGUILayout.LabelField(label);
-            EditorGUILayout.PropertyField(typeProperty);
+            UnityEditor.EditorGUILayout.LabelField(label);
+            UnityEditor.EditorGUILayout.PropertyField(typeProperty);
             GUIHelper.IncreaseIndent();
-            EditorGUILayout.PropertyField(conditionsProperty);
+            UnityEditor.EditorGUILayout.PropertyField(conditionsProperty);
             GUIHelper.DecreaseIndent();
             GUIHelper.EndBox();
         }
