@@ -1,4 +1,4 @@
-﻿namespace MobX.Mediator.Collections.Temp
+﻿namespace MobX.Mediator.Collections
 {
     public class StringQueue : QueueAsset<string>
     {

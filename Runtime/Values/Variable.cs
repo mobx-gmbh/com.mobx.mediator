@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MobX.Mediator.Values
 {
     /// <summary>
-    /// Proxy variable that either points to a <see cref="ValueAsset{TValue}"/> or a locally serialized value.
+    ///     Proxy variable that either points to a <see cref="ValueAsset{TValue}" /> or a locally serialized value.
     /// </summary>
     [Serializable]
     public sealed class Variable<T>
@@ -14,7 +14,7 @@ namespace MobX.Mediator.Values
         [SerializeField] private T value;
 
         /// <summary>
-        /// Access the contained value.
+        ///     Access the contained value.
         /// </summary>
         public T Value
         {
@@ -23,7 +23,7 @@ namespace MobX.Mediator.Values
             {
                 if (byReference)
                 {
-                    reference.Value = value;
+                    reference.SetValue(value);
                 }
                 else
                 {

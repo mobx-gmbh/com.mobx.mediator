@@ -1,6 +1,6 @@
 ﻿namespace MobX.Mediator.Values
 {
-    public class FloatValue : ValueAsset<float>
+    public class FloatValue : SerializedValueAsset<float>
     {
     }
 }

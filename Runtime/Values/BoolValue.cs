@@ -1,6 +1,6 @@
 ﻿namespace MobX.Mediator.Values
 {
-    public class BoolValue : ValueAsset<bool>
+    public class BoolValue : SerializedValueAsset<bool>
     {
     }
 }

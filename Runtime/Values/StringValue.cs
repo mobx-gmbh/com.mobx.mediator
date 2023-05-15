@@ -1,6 +1,6 @@
 ﻿namespace MobX.Mediator.Values
 {
-    public class StringValue : ValueAsset<string>
+    public class StringValue : SerializedValueAsset<string>
     {
     }
 }

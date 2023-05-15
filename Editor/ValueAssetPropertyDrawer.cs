@@ -1,19 +1,18 @@
 using MobX.Mediator.Values;
 using MobX.Utilities.Editor;
-using UnityEditor;
 using UnityEngine;
 
 namespace Mobx.Mediator.Editor
 {
-    [CustomPropertyDrawer(typeof(ValueAsset<>), true)]
-    public class ValueAssetPropertyDrawer : PropertyDrawer
+    [UnityEditor.CustomPropertyDrawer(typeof(SerializedValueAsset<>), true)]
+    public class ValueAssetPropertyDrawer : UnityEditor.PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override float GetPropertyHeight(UnityEditor.SerializedProperty property, GUIContent label)
         {
             return -2f;
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void OnGUI(Rect position, UnityEditor.SerializedProperty property, GUIContent label)
         {
             if (property.objectReferenceValue != null)
             {
@@ -21,11 +20,11 @@ namespace Mobx.Mediator.Editor
             }
             else
             {
-                EditorGUILayout.PropertyField(property, label);
+                UnityEditor.EditorGUILayout.PropertyField(property, label);
             }
         }
 
-        private static void DrawDefaultInspector(SerializedProperty property, GUIContent label)
+        private static void DrawDefaultInspector(UnityEditor.SerializedProperty property, GUIContent label)
         {
             if (Application.isPlaying)
             {
@@ -39,40 +38,40 @@ namespace Mobx.Mediator.Editor
 
         //--------------------------------------------------------------------------------------------------------------
 
-        private static void DrawEditorInspector(SerializedProperty property, GUIContent label)
+        private static void DrawEditorInspector(UnityEditor.SerializedProperty property, GUIContent label)
         {
-            var serializedObject = new SerializedObject(property.objectReferenceValue);
-            var valueProperty = serializedObject.FindProperty("value");
+            var serializedObject = new UnityEditor.SerializedObject(property.objectReferenceValue);
+            UnityEditor.SerializedProperty valueProperty = serializedObject.FindProperty("value");
 
             serializedObject.Update();
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(valueProperty, label);
+            UnityEditor.EditorGUILayout.BeginHorizontal();
+            UnityEditor.EditorGUILayout.PropertyField(valueProperty, label);
             GUIHelper.BeginIndentOverride(0);
-            EditorGUILayout.PropertyField(property, GUIContent.none, GUILayout.MaxWidth(100));
+            UnityEditor.EditorGUILayout.PropertyField(property, GUIContent.none, GUILayout.MaxWidth(100));
             GUIHelper.EndIndentOverride();
-            EditorGUILayout.EndHorizontal();
+            UnityEditor.EditorGUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private static void DrawRuntimeInspector(SerializedProperty property, GUIContent label)
+        private static void DrawRuntimeInspector(UnityEditor.SerializedProperty property, GUIContent label)
         {
-            var serializedObject = new SerializedObject(property.objectReferenceValue);
+            var serializedObject = new UnityEditor.SerializedObject(property.objectReferenceValue);
 
-            var valueProperty = serializedObject.FindProperty("value");
-            var cachedProperty = serializedObject.FindProperty("cached");
+            UnityEditor.SerializedProperty valueProperty = serializedObject.FindProperty("value");
+            UnityEditor.SerializedProperty cachedProperty = serializedObject.FindProperty("cached");
 
             serializedObject.Update();
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(valueProperty, label);
+            UnityEditor.EditorGUILayout.BeginHorizontal();
+            UnityEditor.EditorGUILayout.PropertyField(valueProperty, label);
             GUI.enabled = false;
             GUIHelper.BeginIndentOverride(0);
-            EditorGUILayout.PropertyField(cachedProperty, GUIContent.none, GUILayout.MaxWidth(100));
+            UnityEditor.EditorGUILayout.PropertyField(cachedProperty, GUIContent.none, GUILayout.MaxWidth(100));
             GUIHelper.EndIndentOverride();
             GUI.enabled = true;
-            EditorGUILayout.EndHorizontal();
+            UnityEditor.EditorGUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();
         }

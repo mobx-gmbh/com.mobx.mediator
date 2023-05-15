@@ -1,7 +1,6 @@
-﻿namespace MobX.Mediator.Collections.Temp
+﻿namespace MobX.Mediator.Collections
 {
     public class StringDictionary : DictionaryAsset<string, string>
     {
-
     }
 }

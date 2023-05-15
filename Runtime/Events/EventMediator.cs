@@ -7,6 +7,7 @@ namespace MobX.Mediator.Events
 {
     public abstract class EventMediator : RuntimeAsset
     {
+        [Foldout("Settings")]
         [Tooltip("When enabled, the event is meant to be used during runtime only.")]
         [SerializeField] private bool runtimeOnly;
 

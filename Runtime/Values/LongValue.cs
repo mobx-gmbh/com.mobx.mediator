@@ -1,6 +1,6 @@
 ﻿namespace MobX.Mediator.Values
 {
-    public class LongValue : ValueAsset<long>
+    public class LongValue : SerializedValueAsset<long>
     {
     }
 }

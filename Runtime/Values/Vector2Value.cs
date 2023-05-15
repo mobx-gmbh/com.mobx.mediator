@@ -2,7 +2,7 @@
 
 namespace MobX.Mediator.Values
 {
-    public class Vector2Value : ValueAsset<Vector2>
+    public class Vector2Value : SerializedValueAsset<Vector2>
     {
     }
 }

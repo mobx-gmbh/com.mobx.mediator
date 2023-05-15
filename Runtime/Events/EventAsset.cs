@@ -4,7 +4,7 @@ namespace MobX.Mediator.Events
 {
     public abstract class EventAsset : EventMediator, IReceiver
     {
-        private protected readonly IBroadcast Event = new Broadcast();
+        protected private readonly IBroadcast Event = new Broadcast();
 
         public void Add(Action listener)
         {
@@ -68,7 +68,7 @@ namespace MobX.Mediator.Events
 
     public abstract class EventAsset<T> : EventMediator, IReceiver<T>
     {
-        private protected readonly IBroadcast<T> Event = new Broadcast<T>();
+        protected private readonly IBroadcast<T> Event = new Broadcast<T>();
 
         public void Add(Action<T> listener)
         {
@@ -132,7 +132,7 @@ namespace MobX.Mediator.Events
 
     public abstract class EventAsset<T1, T2> : EventMediator, IReceiver<T1, T2>
     {
-        private protected readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
+        protected private readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
 
         public void Add(Action<T1, T2> listener)
         {
@@ -196,7 +196,7 @@ namespace MobX.Mediator.Events
 
     public abstract class EventAsset<T1, T2, T3> : EventMediator, IReceiver<T1, T2, T3>
     {
-        private protected readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
+        protected private readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
 
         public void Add(Action<T1, T2, T3> listener)
         {
@@ -260,7 +260,7 @@ namespace MobX.Mediator.Events
 
     public abstract class EventAsset<T1, T2, T3, T4> : EventMediator, IReceiver<T1, T2, T3, T4>
     {
-        private protected readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
+        protected private readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
 
         public void Add(Action<T1, T2, T3, T4> listener)
         {
