@@ -48,6 +48,7 @@ namespace MobX.Mediator.Collections
         public void Push(T item)
         {
             _stack.Push(item);
+            Repaint();
         }
 
         /// <summary>Removes and returns the object at the top of the <see cref="T:System.Collections.Generic.Stack`1" />.</summary>
@@ -56,7 +57,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Pop()
         {
-            return _stack.Pop();
+            var result = _stack.Pop();
+            Repaint();
+            return result;
         }
 
         /// <summary>Returns the object at the top of the <see cref="T:System.Collections.Generic.Stack`1" /> without removing it.</summary>
@@ -85,10 +88,11 @@ namespace MobX.Mediator.Collections
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            foreach (T element in collection)
+            foreach (var element in collection)
             {
                 _stack.Push(element);
             }
+            Repaint();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +104,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryPop(out T item)
         {
-            return _stack.TryPop(out item);
+            var result = _stack.TryPop(out item);
+            Repaint();
+            return result;
         }
 
         /// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -112,6 +118,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _stack.Clear();
+            Repaint();
         }
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
@@ -120,6 +127,7 @@ namespace MobX.Mediator.Collections
         ///     <see langword="true" /> if <paramref name="item" /> is found in the
         ///     <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, <see langword="false" />.
         /// </returns>
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Contains(T item)
         {
@@ -151,6 +159,7 @@ namespace MobX.Mediator.Collections
         public void CopyTo(T[] array, int arrayIndex)
         {
             _stack.CopyTo(array, arrayIndex);
+            Repaint();
         }
 
         /// <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>

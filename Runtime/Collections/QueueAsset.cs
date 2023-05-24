@@ -50,6 +50,7 @@ namespace MobX.Mediator.Collections
         public void Enqueue(T item)
         {
             _queue.Enqueue(item);
+            Repaint();
         }
 
         /// <summary>Removes and returns the object at the beginning of the <see cref="T:System.Collections.Generic.Queue`1" />.</summary>
@@ -58,7 +59,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Dequeue()
         {
-            return _queue.Dequeue();
+            var element = _queue.Dequeue();
+            Repaint();
+            return element;
         }
 
         /// <summary>
@@ -82,6 +85,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _queue.Clear();
+            Repaint();
         }
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
@@ -108,10 +112,11 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnqueueRange([NotNull] IEnumerable<T> collection)
         {
-            foreach (T element in collection)
+            foreach (var element in collection)
             {
                 _queue.Enqueue(element);
             }
+            Repaint();
         }
 
         /// <summary>
@@ -139,6 +144,7 @@ namespace MobX.Mediator.Collections
         public void CopyTo(T[] array, int arrayIndex)
         {
             _queue.CopyTo(array, arrayIndex);
+            Repaint();
         }
 
         /// <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>

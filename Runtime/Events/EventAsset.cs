@@ -68,6 +68,12 @@ namespace MobX.Mediator.Events
 
     public abstract class EventAsset<T> : EventMediator, IReceiver<T>
     {
+        public event Action<T> Invoked
+        {
+            add => Add(value);
+            remove => Remove(value);
+        }
+
         protected private readonly IBroadcast<T> Event = new Broadcast<T>();
 
         public void Add(Action<T> listener)

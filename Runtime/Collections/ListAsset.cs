@@ -1,6 +1,7 @@
 ﻿using MobX.Utilities.Inspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace MobX.Mediator.Collections
@@ -46,6 +47,7 @@ namespace MobX.Mediator.Collections
         public void Add(T item)
         {
             _list.Add(item);
+            Repaint();
         }
 
         /// <summary>
@@ -64,6 +66,7 @@ namespace MobX.Mediator.Collections
         public void AddRange(IEnumerable<T> collection)
         {
             _list.AddRange(collection);
+            Repaint();
         }
 
         /// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -75,6 +78,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _list.Clear();
+            Repaint();
         }
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
@@ -84,6 +88,7 @@ namespace MobX.Mediator.Collections
         ///     <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, <see langword="false" />.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Pure]
         public bool Contains(T item)
         {
             return _list.Contains(item);
@@ -134,7 +139,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Remove(T item)
         {
-            return _list.Remove(item);
+            var result = _list.Remove(item);
+            Repaint();
+            return result;
         }
 
         /// <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -160,6 +167,7 @@ namespace MobX.Mediator.Collections
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
         /// <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Pure]
         public int IndexOf(T item)
         {
             return _list.IndexOf(item);
@@ -176,6 +184,7 @@ namespace MobX.Mediator.Collections
         public void Insert(int index, T item)
         {
             _list.Insert(index, item);
+            Repaint();
         }
 
         /// <summary>Removes the <see cref="T:System.Collections.Generic.IList`1" /> item at the specified index.</summary>
@@ -188,6 +197,7 @@ namespace MobX.Mediator.Collections
         public void RemoveAt(int index)
         {
             _list.RemoveAt(index);
+            Repaint();
         }
 
         /// <summary>Gets or sets the element at the specified index.</summary>

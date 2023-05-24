@@ -50,6 +50,7 @@ namespace MobX.Mediator.Collections
         public void Add(T item)
         {
             _hashSet.Add(item);
+            Repaint();
         }
 
         /// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -61,6 +62,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _hashSet.Clear();
+            Repaint();
         }
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
@@ -87,10 +89,11 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnqueueRange([NotNull] IEnumerable<T> collection)
         {
-            foreach (T element in collection)
+            foreach (var element in collection)
             {
                 _hashSet.Add(element);
             }
+            Repaint();
         }
 
         /// <summary>
@@ -118,6 +121,7 @@ namespace MobX.Mediator.Collections
         public void CopyTo(T[] array, int arrayIndex)
         {
             _hashSet.CopyTo(array, arrayIndex);
+            Repaint();
         }
 
         /// <summary>
@@ -138,7 +142,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Remove(T item)
         {
-            return _hashSet.Remove(item);
+            var result = _hashSet.Remove(item);
+            Repaint();
+            return result;
         }
 
         /// <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>

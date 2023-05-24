@@ -60,6 +60,7 @@ namespace MobX.Mediator.Collections
         public void Add(TKey key, TValue value)
         {
             _dictionary.Add(key, value);
+            Repaint();
         }
 
         /// <summary>Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -72,6 +73,7 @@ namespace MobX.Mediator.Collections
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             ((ICollection<KeyValuePair<TKey, TValue>>) _dictionary).Add(item);
+            Repaint();
         }
 
         /// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
@@ -83,6 +85,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _dictionary.Clear();
+            Repaint();
         }
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
@@ -122,6 +125,7 @@ namespace MobX.Mediator.Collections
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             ((ICollection<KeyValuePair<TKey, TValue>>) _dictionary).CopyTo(array, arrayIndex);
+            Repaint();
         }
 
         /// <summary>
@@ -142,7 +146,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            return ((ICollection<KeyValuePair<TKey, TValue>>) _dictionary).Remove(item);
+            var result = ((ICollection<KeyValuePair<TKey, TValue>>) _dictionary).Remove(item);
+            Repaint();
+            return result;
         }
 
         /// <summary>Gets the number of elements in the collection.</summary>
@@ -196,7 +202,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Remove(TKey key)
         {
-            return _dictionary.Remove(key);
+            var result = _dictionary.Remove(key);
+            Repaint();
+            return result;
         }
 
         /// <summary>Gets the value that is associated with the specified key.</summary>
