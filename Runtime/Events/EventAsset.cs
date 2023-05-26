@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 
 namespace MobX.Mediator.Events
@@ -6,8 +7,12 @@ namespace MobX.Mediator.Events
     {
         protected private readonly IBroadcast Event = new Broadcast();
 
-        public void Add(Action listener)
+        public void Add([NotNull] Action listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -17,8 +22,12 @@ namespace MobX.Mediator.Events
             Event.Add(listener);
         }
 
-        public bool AddUnique(Action listener)
+        public bool AddUnique([NotNull] Action listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -76,8 +85,12 @@ namespace MobX.Mediator.Events
 
         protected private readonly IBroadcast<T> Event = new Broadcast<T>();
 
-        public void Add(Action<T> listener)
+        public void Add([NotNull] Action<T> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -87,8 +100,12 @@ namespace MobX.Mediator.Events
             Event.Add(listener);
         }
 
-        public bool AddUnique(Action<T> listener)
+        public bool AddUnique([NotNull] Action<T> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -140,8 +157,12 @@ namespace MobX.Mediator.Events
     {
         protected private readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
 
-        public void Add(Action<T1, T2> listener)
+        public void Add([NotNull] Action<T1, T2> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -151,8 +172,12 @@ namespace MobX.Mediator.Events
             Event.Add(listener);
         }
 
-        public bool AddUnique(Action<T1, T2> listener)
+        public bool AddUnique([NotNull] Action<T1, T2> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -204,8 +229,12 @@ namespace MobX.Mediator.Events
     {
         protected private readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
 
-        public void Add(Action<T1, T2, T3> listener)
+        public void Add([NotNull] Action<T1, T2, T3> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -215,8 +244,12 @@ namespace MobX.Mediator.Events
             Event.Add(listener);
         }
 
-        public bool AddUnique(Action<T1, T2, T3> listener)
+        public bool AddUnique([NotNull] Action<T1, T2, T3> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -268,8 +301,12 @@ namespace MobX.Mediator.Events
     {
         protected private readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
 
-        public void Add(Action<T1, T2, T3, T4> listener)
+        public void Add([NotNull] Action<T1, T2, T3, T4> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
@@ -279,8 +316,12 @@ namespace MobX.Mediator.Events
             Event.Add(listener);
         }
 
-        public bool AddUnique(Action<T1, T2, T3, T4> listener)
+        public bool AddUnique([NotNull] Action<T1, T2, T3, T4> listener)
         {
+            if (listener == null)
+            {
+                throw new ArgumentNullException(nameof(listener));
+            }
 #if UNITY_EDITOR
             if (IsIllegalCall(this))
             {
