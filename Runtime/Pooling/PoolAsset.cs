@@ -33,6 +33,7 @@ namespace MobX.Mediator.Pooling
         [Foldout("Optimizations")]
         [Tooltip("When enabled, the pool is created at the start of the game")]
         [SerializeField] private bool warmupOnBeginPlay;
+        [Annotation("Auto Release is deprecated!", MessageTypeValue.Warning)]
         [SerializeField] private bool autoRelease;
         [ConditionalShow(nameof(autoRelease))]
         [SerializeField] private float lifeSpanInSeconds = 3;
@@ -67,7 +68,14 @@ namespace MobX.Mediator.Pooling
         public int MaxPoolSize => limitPoolSize ? maxPoolSize : 10000;
 
         private Loop _prefabIndex;
+
+        [Readonly]
+        [Foldout("Debug")]
         private readonly List<T> _pool = new();
+
+        [Readonly]
+        [Foldout("Debug")]
+        private readonly List<T> _activeItems = new();
 
         private enum SelectionMode
         {

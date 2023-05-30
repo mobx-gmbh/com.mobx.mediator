@@ -3,7 +3,6 @@ using MobX.Utilities;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Types;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -62,7 +61,7 @@ namespace MobX.Mediator.Pooling
             }
             State = PoolState.Loading;
 
-            List<T> buffer = ListPool<T>.Get();
+            var buffer = ListPool<T>.Get();
 
             if (Parent == null)
             {
@@ -79,7 +78,7 @@ namespace MobX.Mediator.Pooling
                 buffer.Add(GetInternal(true));
             }
 
-            foreach (T element in buffer)
+            foreach (var element in buffer)
             {
                 ReleaseInternal(element);
             }
@@ -91,7 +90,7 @@ namespace MobX.Mediator.Pooling
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RefreshInternal()
         {
-            T instance = GetInternal(true);
+            var instance = GetInternal(true);
             Release(instance);
         }
 
@@ -106,7 +105,7 @@ namespace MobX.Mediator.Pooling
         public void ClearInternal()
         {
             AssertIsPlaying();
-            foreach (T instance in _pool)
+            foreach (var instance in _pool)
             {
                 OnDestroyInstance(instance);
             }
@@ -133,8 +132,17 @@ namespace MobX.Mediator.Pooling
             T instance;
             if (_pool.Count == 0)
             {
-                instance = CreateInstance();
-                ++CountAll;
+                if (_activeItems.Count >= MaxPoolSize)
+                {
+                    instance = _activeItems[0];
+                    _activeItems.RemoveAt(0);
+                    OnReleaseInstance(instance);
+                }
+                else
+                {
+                    instance = CreateInstance();
+                    ++CountAll;
+                }
             }
             else
             {
@@ -168,6 +176,9 @@ namespace MobX.Mediator.Pooling
                     ReleaseInternal(instance);
                 });
             }
+
+            _activeItems.Add(instance);
+            UpdateInspector();
             return instance;
         }
 
@@ -181,9 +192,10 @@ namespace MobX.Mediator.Pooling
             }
             if (instance == null)
             {
-                Debug.Log("Pooling", "Released Instance was null!");
+                Debug.LogError("Pooling", "Released Instance was null!");
                 return;
             }
+
             if (_pool.Contains(instance))
             {
                 Debug.Log("Pooling", $"Released Instance [{instance}] was already released to the pool!", instance);
@@ -191,6 +203,8 @@ namespace MobX.Mediator.Pooling
             }
 
             OnReleaseInstance(instance);
+            _activeItems.Remove(instance);
+
             if (CountInactive < MaxPoolSize)
             {
                 _pool.Add(instance);
@@ -200,6 +214,8 @@ namespace MobX.Mediator.Pooling
                 Debug.Log("Pooling", $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ", LogOption.NoStacktrace);
                 OnDestroyInstance(instance);
             }
+
+            UpdateInspector();
         }
 
         #endregion
@@ -213,10 +229,23 @@ namespace MobX.Mediator.Pooling
             throw new InvalidOperationException("Invalid method call!");
         }
 
+        #endregion
+
+
+        #region Editor
+
         [Conditional("UNITY_EDITOR")]
         private static void AssertIsPlaying()
         {
             Assert.IsTrue(Application.isPlaying, "Application Is Not Playing!");
+        }
+
+        [Conditional("UNITY_EDITOR")]
+        private void UpdateInspector()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
         #endregion
