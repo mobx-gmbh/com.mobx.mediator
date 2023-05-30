@@ -6,7 +6,7 @@ namespace MobX.Mediator.Values
     {
         public abstract event Action<TValue> Changed;
 
-        new public abstract TValue Value { get; set; }
+        public new abstract TValue Value { get; set; }
 
         public abstract void SetValue(TValue newValue);
     }
