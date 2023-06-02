@@ -15,7 +15,7 @@ namespace MobX.Mediator.Pooling
     {
         #region Runtime Callbacks
 
-        public void OnBeginPlay()
+        public void OnAwake()
         {
 #if UNITY_EDITOR
             if (warmupOnBeginPlay)
@@ -25,7 +25,7 @@ namespace MobX.Mediator.Pooling
 #endif
         }
 
-        public void OnEndPlay()
+        public void OnQuit()
         {
             Dispose();
         }
@@ -37,14 +37,14 @@ namespace MobX.Mediator.Pooling
 
         private void OnEnable()
         {
-            EngineCallbacks.AddBeginPlayListener(this);
-            EngineCallbacks.AddEndPlayListener(this);
+            EngineCallbacks.AddAfterLoadListener(this);
+            EngineCallbacks.AddOnQuitListener(this);
         }
 
         private void OnDisable()
         {
-            EngineCallbacks.RemoveBeginPlayListener(this);
-            EngineCallbacks.RemoveEndPlayListener(this);
+            EngineCallbacks.RemoveAfterLoadListener(this);
+            EngineCallbacks.RemoveQuitListener(this);
         }
 
         #endregion
@@ -171,10 +171,8 @@ namespace MobX.Mediator.Pooling
             OnGetInstance(instance);
             if (!discrete && autoRelease)
             {
-                UniTask.Delay(TimeSpan.FromSeconds(lifeSpanInSeconds)).ContinueWith(() =>
-                {
-                    ReleaseInternal(instance);
-                });
+                UniTask.Delay(TimeSpan.FromSeconds(lifeSpanInSeconds))
+                    .ContinueWith(() => { ReleaseInternal(instance); });
             }
 
             _activeItems.Add(instance);
@@ -211,7 +209,9 @@ namespace MobX.Mediator.Pooling
             }
             else
             {
-                Debug.Log("Pooling", $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ", LogOption.NoStacktrace);
+                Debug.Log("Pooling",
+                    $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ",
+                    LogOption.NoStacktrace);
                 OnDestroyInstance(instance);
             }
 

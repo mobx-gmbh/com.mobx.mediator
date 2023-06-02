@@ -22,8 +22,8 @@ namespace MobX.Mediator.Collections
             EngineCallbacks.AddEnterEditModeListener(this);
         }
 
-        protected private abstract int CountInternal { get; }
-        protected private abstract IEnumerable<T> CollectionInternal { get; }
+        private protected abstract int CountInternal { get; }
+        private protected abstract IEnumerable<T> CollectionInternal { get; }
 
         public void OnEnterEditMode()
         {
@@ -42,16 +42,17 @@ namespace MobX.Mediator.Collections
         [Conditional("UNITY_EDITOR")]
         protected void Repaint()
         {
-#if UNITY_EDITOR
-            if (allowRepaint)
+            if (!allowRepaint)
             {
-                UnityEditor.EditorUtility.SetDirty(this);
+                return;
             }
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }
 
         [Button("Clear")]
         [Foldout("Options")]
-        protected private abstract void ClearInternal();
+        private protected abstract void ClearInternal();
     }
 }

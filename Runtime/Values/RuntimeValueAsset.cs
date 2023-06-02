@@ -76,7 +76,9 @@ namespace MobX.Mediator.Values
 
         public void OnEnterEditMode()
         {
+#if UNITY_EDITOR
             ResetValue();
+#endif
         }
 
 #if UNITY_EDITOR
