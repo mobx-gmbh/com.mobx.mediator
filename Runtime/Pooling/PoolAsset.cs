@@ -10,7 +10,8 @@ using Object = UnityEngine.Object;
 
 namespace MobX.Mediator.Pooling
 {
-    public abstract partial class PoolAsset<T> : IPoolAsset, IDisposable, IObjectPool<T>, IOnAwake, IOnQuit
+    public abstract partial class PoolAsset<T> : IPoolAsset, IDisposable, IObjectPool<T>, IOnAfterFirstSceneLoad,
+        IOnQuit
         where T : Object
     {
         #region Settings

@@ -15,7 +15,7 @@ namespace MobX.Mediator.Pooling
     {
         #region Runtime Callbacks
 
-        public void OnAwake()
+        public void OnAfterFirstSceneLoad()
         {
 #if UNITY_EDITOR
             if (warmupOnBeginPlay)
@@ -37,13 +37,13 @@ namespace MobX.Mediator.Pooling
 
         private void OnEnable()
         {
-            EngineCallbacks.AddAfterLoadListener(this);
+            EngineCallbacks.AddAfterFirstSceneLoadListener(this);
             EngineCallbacks.AddOnQuitListener(this);
         }
 
         private void OnDisable()
         {
-            EngineCallbacks.RemoveAfterLoadListener(this);
+            EngineCallbacks.RemoveAfterFirstSceneLoadListener(this);
             EngineCallbacks.RemoveQuitListener(this);
         }
 
