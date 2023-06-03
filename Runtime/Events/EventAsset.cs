@@ -1,11 +1,12 @@
 using JetBrains.Annotations;
+using MobX.Utilities.Inspector;
 using System;
 
 namespace MobX.Mediator.Events
 {
-    public abstract class EventAsset : EventMediator, IReceiver
+    public abstract class EventAsset : EventAssetBase, IReceiver
     {
-        protected private readonly IBroadcast Event = new Broadcast();
+        private protected readonly IBroadcast Event = new Broadcast();
 
         public void Add([NotNull] Action listener)
         {
@@ -53,16 +54,22 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Clear()
         {
             Event.Clear();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Raise()
         {
 #if UNITY_EDITOR
@@ -73,9 +80,13 @@ namespace MobX.Mediator.Events
 #endif
             Event.Raise();
         }
+
+        [Readonly]
+        [Foldout("Debug")]
+        public int Count => Event.Count;
     }
 
-    public abstract class EventAsset<T> : EventMediator, IReceiver<T>
+    public abstract class EventAsset<T> : EventAssetBase, IReceiver<T>
     {
         public event Action<T> Invoked
         {
@@ -83,7 +94,7 @@ namespace MobX.Mediator.Events
             remove => Remove(value);
         }
 
-        protected private readonly IBroadcast<T> Event = new Broadcast<T>();
+        private protected readonly IBroadcast<T> Event = new Broadcast<T>();
 
         public void Add([NotNull] Action<T> listener)
         {
@@ -131,16 +142,22 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Clear()
         {
             Event.Clear();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Raise(T value)
         {
 #if UNITY_EDITOR
@@ -151,11 +168,15 @@ namespace MobX.Mediator.Events
 #endif
             Event.Raise(value);
         }
+
+        [Readonly]
+        [Foldout("Debug")]
+        public int Count => Event.Count;
     }
 
-    public abstract class EventAsset<T1, T2> : EventMediator, IReceiver<T1, T2>
+    public abstract class EventAsset<T1, T2> : EventAssetBase, IReceiver<T1, T2>
     {
-        protected private readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
+        private protected readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
 
         public void Add([NotNull] Action<T1, T2> listener)
         {
@@ -203,16 +224,22 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Clear()
         {
             Event.Clear();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Raise(T1 value1, T2 value2)
         {
 #if UNITY_EDITOR
@@ -223,11 +250,15 @@ namespace MobX.Mediator.Events
 #endif
             Event.Raise(value1, value2);
         }
+
+        [Readonly]
+        [Foldout("Debug")]
+        public int Count => Event.Count;
     }
 
-    public abstract class EventAsset<T1, T2, T3> : EventMediator, IReceiver<T1, T2, T3>
+    public abstract class EventAsset<T1, T2, T3> : EventAssetBase, IReceiver<T1, T2, T3>
     {
-        protected private readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
+        private protected readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
 
         public void Add([NotNull] Action<T1, T2, T3> listener)
         {
@@ -275,16 +306,22 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Clear()
         {
             Event.Clear();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Raise(T1 value1, T2 value2, T3 value3)
         {
 #if UNITY_EDITOR
@@ -295,11 +332,15 @@ namespace MobX.Mediator.Events
 #endif
             Event.Raise(value1, value2, value3);
         }
+
+        [Readonly]
+        [Foldout("Debug")]
+        public int Count => Event.Count;
     }
 
-    public abstract class EventAsset<T1, T2, T3, T4> : EventMediator, IReceiver<T1, T2, T3, T4>
+    public abstract class EventAsset<T1, T2, T3, T4> : EventAssetBase, IReceiver<T1, T2, T3, T4>
     {
-        protected private readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
+        private protected readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
 
         public void Add([NotNull] Action<T1, T2, T3, T4> listener)
         {
@@ -347,16 +388,22 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Clear()
         {
             Event.Clear();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
+        [Button]
+        [Foldout("Debug")]
         public void Raise(T1 value1, T2 value2, T3 value3, T4 value4)
         {
 #if UNITY_EDITOR
@@ -367,5 +414,9 @@ namespace MobX.Mediator.Events
 #endif
             Event.Raise(value1, value2, value3, value4);
         }
+
+        [Readonly]
+        [Foldout("Debug")]
+        public int Count => Event.Count;
     }
 }

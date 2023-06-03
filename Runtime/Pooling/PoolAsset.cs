@@ -104,9 +104,9 @@ namespace MobX.Mediator.Pooling
             ClearInternal();
         }
 
-        public sealed override void Warmup()
+        public sealed override void Load()
         {
-            WarmupInternal();
+            LoadInternal();
         }
 
         public sealed override void Refresh()

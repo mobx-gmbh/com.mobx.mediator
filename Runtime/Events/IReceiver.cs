@@ -21,6 +21,9 @@ namespace MobX.Mediator.Events
 
         /// <summary> Remove all null listener from the event </summary>
         public void ClearInvalid();
+
+        /// <summary> The count of subscribed listeners </summary>
+        public int Count { get; }
     }
 
     public interface IReceiver<out T>
@@ -42,6 +45,9 @@ namespace MobX.Mediator.Events
 
         /// <summary> Remove all null listener from the event </summary>
         public void ClearInvalid();
+
+        /// <summary> The count of subscribed listeners </summary>
+        public int Count { get; }
     }
 
     public interface IReceiver<out T1, out T2>
@@ -63,6 +69,9 @@ namespace MobX.Mediator.Events
 
         /// <summary> Remove all null listener from the event </summary>
         public void ClearInvalid();
+
+        /// <summary> The count of subscribed listeners </summary>
+        public int Count { get; }
     }
 
     public interface IReceiver<out T1, out T2, out T3>
@@ -84,6 +93,9 @@ namespace MobX.Mediator.Events
 
         /// <summary> Remove all null listener from the event </summary>
         public void ClearInvalid();
+
+        /// <summary> The count of subscribed listeners </summary>
+        public int Count { get; }
     }
 
     public interface IReceiver<out T1, out T2, out T3, out T4>
@@ -105,5 +117,8 @@ namespace MobX.Mediator.Events
 
         /// <summary> Remove all null listener from the event </summary>
         public void ClearInvalid();
+
+        /// <summary> The count of subscribed listeners </summary>
+        public int Count { get; }
     }
 }

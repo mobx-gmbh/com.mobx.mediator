@@ -1,13 +1,11 @@
-﻿using MobX.Utilities.Callbacks;
-using MobX.Utilities.Inspector;
+﻿using MobX.Utilities.Inspector;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace MobX.Mediator.Events
 {
-    public abstract class EventMediator : RuntimeAsset
+    public abstract class EventAssetBase : MediatorAsset
     {
-        [Foldout("Settings")]
         [Tooltip("When enabled, the event is meant to be used during runtime only.")]
         [SerializeField] private bool runtimeOnly;
 
@@ -30,11 +28,13 @@ namespace MobX.Mediator.Events
 
 #if UNITY_EDITOR
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static bool IsIllegalCall(EventMediator target, [CallerMemberName] string callerName = "")
+        protected static bool IsIllegalCall(EventAssetBase target, [CallerMemberName] string callerName = "")
         {
-            if (target.runtimeOnly && Application.isPlaying is false && target.omitCalls)
+            if (target.RuntimeOnly && Application.isPlaying is false && target.OmitCalls)
             {
-                Debug.LogWarning("Event", $"Edit time ({callerName}) method call omitted in runtime only event asset ({target.name})", target);
+                Debug.LogWarning("Event",
+                    $"Edit time ({callerName}) method call omitted in runtime only event asset ({target.name})",
+                    target);
                 return true;
             }
 

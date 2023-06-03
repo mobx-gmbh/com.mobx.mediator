@@ -1,5 +1,4 @@
 ﻿using MobX.Mediator.Events;
-using MobX.Utilities.Editor.Helper;
 using MobX.Utilities.Editor.Inspector;
 using System;
 using System.Reflection;
@@ -8,27 +7,18 @@ using Object = UnityEngine.Object;
 
 namespace Mobx.Mediator.Editor
 {
-    [UnityEditor.CustomEditor(typeof(EventMediator), true)]
-    public class EventAssetInspector : OverrideInspector<EventMediator>
+    [UnityEditor.CustomEditor(typeof(EventAssetBase), true)]
+    public class EventAssetInspector : OverrideInspector<EventAssetBase>
     {
-        private const string EVENT_FIELD_NAME = "Event";
-        private const string NEXT_INDEX_FIELD_NAME = "_nextIndex";
-        private const string LISTENER_FIELD_NAME = "_listener";
-        private const string CLEAR_METHOD_NAME = "Clear";
-        private const string CLEAR_INVALID_METHOD_NAME = "ClearInvalid";
-        private const string RAISE_METHOD_NAME = "Raise";
-        private const string REMOVE_METHOD_NAME = "Remove";
+        private const string EventFieldName = "Event";
+        private const string CountProperty = "Count";
+        private const string ListenerFieldName = "_listener";
 
         private bool _showListener;
         private ParameterInfo[] _parameterInfos;
-        private object[] _arguments;
 
         private Func<int> _count;
         private Func<Delegate[]> _listener;
-        private Func<object, object>[] _elementEditors;
-        private Action _clear;
-        private Action _clearInvalid;
-        private Action _raise;
         private Action<Delegate> _remove;
 
         private Vector2 _scrollPosition;
@@ -36,92 +26,21 @@ namespace Mobx.Mediator.Editor
         protected override void OnEnable()
         {
             base.OnEnable();
-            FieldInfo eventField = GetFieldIncludeBaseTypes(target.GetType(), EVENT_FIELD_NAME);
+            var eventField = GetFieldIncludeBaseTypes(target.GetType(), EventFieldName);
             var eventValue = eventField.GetValue(target);
 
-            Type broadcastType = eventValue.GetType();
-            Type receiverType = eventValue.GetType().BaseType!;
-            FieldInfo indexField = receiverType.GetField(NEXT_INDEX_FIELD_NAME, BindingFlags.NonPublic | BindingFlags.Instance);
-            FieldInfo listenerField =
-                receiverType.GetField(LISTENER_FIELD_NAME, BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo clearMethod = receiverType.GetMethod(CLEAR_METHOD_NAME,
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            MethodInfo clearInvalidMethod = receiverType.GetMethod(CLEAR_INVALID_METHOD_NAME,
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            MethodInfo raiseMethod = broadcastType.GetMethod(RAISE_METHOD_NAME, BindingFlags.Public | BindingFlags.Instance)!;
-            MethodInfo removeMethod = receiverType.GetMethod(REMOVE_METHOD_NAME, BindingFlags.Public | BindingFlags.Instance)!;
+            var receiverType = eventValue.GetType().BaseType!;
+            var propertyInfo = receiverType.GetProperty(CountProperty, BindingFlags.Public | BindingFlags.Instance);
+            var listenerField =
+                receiverType.GetField(ListenerFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 
-            _count = () => (int) indexField!.GetValue(eventValue);
+            _count = () => (int) propertyInfo!.GetValue(eventValue);
             _listener = () => listenerField!.GetValue(eventValue) as Delegate[];
-            _clear = () => clearMethod!.Invoke(eventValue, null);
-            _clearInvalid = () => clearInvalidMethod!.Invoke(eventValue, null);
-            _raise = () => raiseMethod!.Invoke(eventValue, _arguments);
-            _remove = listener => removeMethod!.Invoke(eventValue, new object[]
-            {
-                listener
-            });
-
-            _parameterInfos = raiseMethod.GetParameters();
-            _elementEditors = new Func<object, object>[_parameterInfos.Length];
-            _arguments = new object[_parameterInfos.Length];
-            for (var i = 0; i < _arguments.Length; i++)
-            {
-                ParameterInfo parameterInfo = _parameterInfos[i];
-                Type parameterType = parameterInfo.ParameterType;
-                Type underlyingParameterType = parameterType.GetElementType() ?? parameterType;
-                _arguments[i] = underlyingParameterType.IsValueType
-                    ? Activator.CreateInstance(underlyingParameterType, true)
-                    : Convert.ChangeType(_arguments[i], underlyingParameterType);
-
-                _elementEditors[i] =
-                    GUIHelper.CreateEditor(new GUIContent(parameterInfo.Name), parameterInfo.ParameterType);
-            }
         }
 
         public override void OnInspectorGUI()
         {
-            try
-            {
-                base.OnInspectorGUI();
-            }
-            catch (NullReferenceException)
-            {
-            }
-
-            if (Foldout["Settings"])
-            {
-                UnityEditor.EditorGUILayout.LabelField("Listener Count", _count().ToString());
-
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Clear"))
-                {
-                    _clear();
-                }
-
-                if (GUILayout.Button("Clear Invalid"))
-                {
-                    _clearInvalid();
-                }
-
-                GUILayout.EndHorizontal();
-            }
-
-            if (Foldout["Arguments"])
-            {
-                GUIHelper.Space();
-                for (var i = 0; i < _parameterInfos.Length; i++)
-                {
-                    _arguments[i] = _elementEditors[i](_arguments[i]);
-                }
-
-                GUIHelper.Space();
-                if (GUILayout.Button("Raise"))
-                {
-                    _raise();
-                }
-
-                GUIHelper.Space();
-            }
+            base.OnInspectorGUI();
 
             if (Foldout["Listener"])
             {
@@ -133,12 +52,12 @@ namespace Mobx.Mediator.Editor
 
         private void DrawListenerGUI()
         {
-            Delegate[] listeners = _listener();
+            var listeners = _listener();
             var count = _count();
 
             for (var index = 0; index < count; index++)
             {
-                Delegate listener = listeners[index];
+                var listener = listeners[index];
                 DrawListener(listener);
             }
         }
@@ -155,10 +74,6 @@ namespace Mobx.Mediator.Editor
             GUILayout.BeginHorizontal();
             UnityEditor.EditorGUILayout.LabelField($"Listener: {listener.Method}");
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Raise", GUILayout.Width(70)))
-            {
-                listener.DynamicInvoke(_arguments);
-            }
 
             if (GUILayout.Button("Remove", GUILayout.Width(70)))
             {
@@ -198,7 +113,7 @@ namespace Mobx.Mediator.Editor
             BindingFlags.FlattenHierarchy)
         {
             FieldInfo fieldInfo = null;
-            Type targetType = type;
+            var targetType = type;
 
             while (fieldInfo == null)
             {

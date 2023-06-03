@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace MobX.Mediator.Values
+﻿namespace MobX.Mediator.Values
 {
-    public abstract class ValueAsset : ScriptableObject
+    public abstract class ValueAsset : MediatorAsset
     {
     }
 }

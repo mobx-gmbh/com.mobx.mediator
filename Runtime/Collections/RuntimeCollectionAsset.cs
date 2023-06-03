@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Collections
 {
-    public abstract class RuntimeCollectionAsset<T> : CollectionAsset, IOnEnterEditMode
+    public abstract class RuntimeCollectionAsset<T> : MediatorAsset, IOnEnterEditMode
     {
         [Foldout("Options")]
         [Tooltip("When enabled, leaks that occur when exiting playmode will logged to the console")]
@@ -40,14 +40,14 @@ namespace MobX.Mediator.Collections
         }
 
         [Conditional("UNITY_EDITOR")]
-        protected void Repaint()
+        protected new void Repaint()
         {
             if (!allowRepaint)
             {
                 return;
             }
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            base.Repaint();
 #endif
         }
 

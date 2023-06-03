@@ -169,7 +169,7 @@ namespace MobX.Mediator.Events
 
         public Action<T> this[int index] => _listener[index];
 
-        private int _nextIndex;
+        public int Count { get; private set; }
         private Action<T>[] _listener;
 
         #endregion
@@ -210,14 +210,14 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public void Add(Action<T> listener)
         {
-            if (_listener.Length <= _nextIndex)
+            if (_listener.Length <= Count)
             {
                 IncreaseCapacity();
             }
 
-            _listener[_nextIndex] = listener;
+            _listener[Count] = listener;
 
-            _nextIndex++;
+            Count++;
         }
 
         private void IncreaseCapacity()
@@ -235,7 +235,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Contains(Action<T> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -254,7 +254,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Remove(Action<T> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -268,19 +268,19 @@ namespace MobX.Mediator.Events
 
         private void RemoveAt(int index)
         {
-            --_nextIndex;
-            for (var i = index; i < _nextIndex; ++i)
+            --Count;
+            for (var i = index; i < Count; ++i)
             {
                 _listener[i] = _listener[i + 1];
             }
 
-            _listener[_nextIndex] = null;
+            _listener[Count] = null;
         }
 
         /// <inheritdoc />
         public void Clear()
         {
-            _nextIndex = 0;
+            Count = 0;
             for (var i = _listener.Length - 1; i >= 0; i--)
             {
                 _listener[i] = null;
@@ -290,7 +290,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public void ClearInvalid()
         {
-            for (var i = _nextIndex - 1; i >= 0; i--)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 if (_listener[i] is null || _listener[i].Target == null)
                 {
@@ -307,7 +307,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T arg)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 _listener[i](arg);
             }
@@ -326,7 +326,7 @@ namespace MobX.Mediator.Events
 
         public Action<T1, T2> this[int index] => _listener[index];
 
-        private int _nextIndex;
+        public int Count { get; private set; }
         private Action<T1, T2>[] _listener;
 
         #endregion
@@ -369,14 +369,14 @@ namespace MobX.Mediator.Events
         {
             Assert.IsNotNull(listener);
 
-            if (_listener.Length <= _nextIndex)
+            if (_listener.Length <= Count)
             {
                 IncreaseCapacity();
             }
 
-            _listener[_nextIndex] = listener;
+            _listener[Count] = listener;
 
-            _nextIndex++;
+            Count++;
         }
 
         private void IncreaseCapacity()
@@ -394,7 +394,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Contains(Action<T1, T2> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -413,7 +413,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Remove(Action<T1, T2> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -427,19 +427,19 @@ namespace MobX.Mediator.Events
 
         private void RemoveAt(int index)
         {
-            --_nextIndex;
-            for (var i = index; i < _nextIndex; ++i)
+            --Count;
+            for (var i = index; i < Count; ++i)
             {
                 _listener[i] = _listener[i + 1];
             }
 
-            _listener[_nextIndex] = null;
+            _listener[Count] = null;
         }
 
         /// <inheritdoc />
         public void Clear()
         {
-            _nextIndex = 0;
+            Count = 0;
             for (var i = _listener.Length - 1; i >= 0; i--)
             {
                 _listener[i] = null;
@@ -449,7 +449,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public void ClearInvalid()
         {
-            for (var i = _nextIndex - 1; i >= 0; i--)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 if (_listener[i] is null || _listener[i].Target == null)
                 {
@@ -466,7 +466,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 _listener[i](first, second);
             }
@@ -485,7 +485,7 @@ namespace MobX.Mediator.Events
 
         public Action<T1, T2, T3> this[int index] => _listener[index];
 
-        private int _nextIndex;
+        public int Count { get; private set; }
         private Action<T1, T2, T3>[] _listener;
 
         #endregion
@@ -528,14 +528,14 @@ namespace MobX.Mediator.Events
         {
             Assert.IsNotNull(listener);
 
-            if (_listener.Length <= _nextIndex)
+            if (_listener.Length <= Count)
             {
                 IncreaseCapacity();
             }
 
-            _listener[_nextIndex] = listener;
+            _listener[Count] = listener;
 
-            _nextIndex++;
+            Count++;
         }
 
         private void IncreaseCapacity()
@@ -553,7 +553,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Contains(Action<T1, T2, T3> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -572,7 +572,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Remove(Action<T1, T2, T3> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -586,19 +586,19 @@ namespace MobX.Mediator.Events
 
         private void RemoveAt(int index)
         {
-            --_nextIndex;
-            for (var i = index; i < _nextIndex; ++i)
+            --Count;
+            for (var i = index; i < Count; ++i)
             {
                 _listener[i] = _listener[i + 1];
             }
 
-            _listener[_nextIndex] = null;
+            _listener[Count] = null;
         }
 
         /// <inheritdoc />
         public void Clear()
         {
-            _nextIndex = 0;
+            Count = 0;
             for (var i = _listener.Length - 1; i >= 0; i--)
             {
                 _listener[i] = null;
@@ -608,7 +608,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public void ClearInvalid()
         {
-            for (var i = _nextIndex - 1; i >= 0; i--)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 if (_listener[i] is null || _listener[i].Target == null)
                 {
@@ -625,7 +625,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second, T3 third)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 _listener[i](first, second, third);
             }
@@ -644,7 +644,7 @@ namespace MobX.Mediator.Events
 
         public Action<T1, T2, T3, T4> this[int index] => _listener[index];
 
-        private int _nextIndex;
+        public int Count { get; private set; }
         private Action<T1, T2, T3, T4>[] _listener;
 
         #endregion
@@ -687,14 +687,14 @@ namespace MobX.Mediator.Events
         {
             Assert.IsNotNull(listener);
 
-            if (_listener.Length <= _nextIndex)
+            if (_listener.Length <= Count)
             {
                 IncreaseCapacity();
             }
 
-            _listener[_nextIndex] = listener;
+            _listener[Count] = listener;
 
-            _nextIndex++;
+            Count++;
         }
 
         private void IncreaseCapacity()
@@ -712,7 +712,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Contains(Action<T1, T2, T3, T4> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -731,7 +731,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public bool Remove(Action<T1, T2, T3, T4> listener)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_listener[i].Equals(listener))
                 {
@@ -745,19 +745,19 @@ namespace MobX.Mediator.Events
 
         private void RemoveAt(int index)
         {
-            --_nextIndex;
-            for (var i = index; i < _nextIndex; ++i)
+            --Count;
+            for (var i = index; i < Count; ++i)
             {
                 _listener[i] = _listener[i + 1];
             }
 
-            _listener[_nextIndex] = null;
+            _listener[Count] = null;
         }
 
         /// <inheritdoc />
         public void Clear()
         {
-            _nextIndex = 0;
+            Count = 0;
             for (var i = _listener.Length - 1; i >= 0; i--)
             {
                 _listener[i] = null;
@@ -767,7 +767,7 @@ namespace MobX.Mediator.Events
         /// <inheritdoc />
         public void ClearInvalid()
         {
-            for (var i = _nextIndex - 1; i >= 0; i--)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 if (_listener[i] is null || _listener[i].Target == null)
                 {
@@ -784,7 +784,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second, T3 third, T4 fourth)
         {
-            for (var i = 0; i < _nextIndex; i++)
+            for (var i = 0; i < Count; i++)
             {
                 _listener[i](first, second, third, fourth);
             }

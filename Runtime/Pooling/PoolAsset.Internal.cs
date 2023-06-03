@@ -20,7 +20,7 @@ namespace MobX.Mediator.Pooling
 #if UNITY_EDITOR
             if (warmupOnBeginPlay)
             {
-                Warmup();
+                Load();
             }
 #endif
         }
@@ -33,28 +33,13 @@ namespace MobX.Mediator.Pooling
         #endregion
 
 
-        #region Ctor
-
-        private void OnEnable()
-        {
-            EngineCallbacks.AddAfterFirstSceneLoadListener(this);
-            EngineCallbacks.AddOnQuitListener(this);
-        }
-
-        private void OnDisable()
-        {
-            EngineCallbacks.RemoveAfterFirstSceneLoadListener(this);
-            EngineCallbacks.RemoveQuitListener(this);
-        }
-
-        #endregion
-
-
         #region Warup And Refresh
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WarmupInternal()
+        private void LoadInternal()
         {
+            EngineCallbacks.AddCallbacks(this);
+
             if (State != PoolState.Unloaded)
             {
                 return;
@@ -126,7 +111,7 @@ namespace MobX.Mediator.Pooling
 
             if (State == PoolState.Unloaded)
             {
-                Warmup();
+                Load();
             }
 
             T instance;
