@@ -57,7 +57,7 @@ namespace MobX.Mediator.Pooling
 
         public T Prefab => prefab;
 
-        [Readonly]
+        [ReadonlyInspector]
         public PoolState State { get; private set; }
 
         public int CountAll { get; private set; }
@@ -70,11 +70,11 @@ namespace MobX.Mediator.Pooling
 
         private Loop _prefabIndex;
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         private readonly List<T> _pool = new();
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         private readonly List<T> _activeItems = new();
 

@@ -81,7 +81,7 @@ namespace MobX.Mediator.Events
             Event.Raise();
         }
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
     }
@@ -169,7 +169,7 @@ namespace MobX.Mediator.Events
             Event.Raise(value);
         }
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
     }
@@ -251,7 +251,7 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2);
         }
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
     }
@@ -333,7 +333,7 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2, value3);
         }
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
     }
@@ -415,7 +415,7 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2, value3, value4);
         }
 
-        [Readonly]
+        [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
     }

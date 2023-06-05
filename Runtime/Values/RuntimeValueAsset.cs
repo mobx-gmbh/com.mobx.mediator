@@ -10,7 +10,7 @@ namespace MobX.Mediator.Values
 {
     public abstract class RuntimeValueAsset<TValue> : ValueAsset<TValue>, IOnExitEditMode, IOnEnterEditMode
     {
-        [Readonly]
+        [ReadonlyInspector]
         [NonSerialized] private TValue _value;
 
         private readonly Broadcast<TValue> _changedEvent = new();

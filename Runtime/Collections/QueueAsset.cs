@@ -12,7 +12,7 @@ namespace MobX.Mediator.Collections
     /// </summary>
     public abstract class QueueAsset<T> : RuntimeCollectionAsset<T>, IQueue<T>
     {
-        [Readonly]
+        [ReadonlyInspector]
         [ShowInInspector]
         [Foldout(FoldoutName.HumanizedObjectName)]
         private readonly Queue<T> _queue = new(8);
@@ -169,7 +169,7 @@ namespace MobX.Mediator.Collections
         /// <summary>
         ///     Internal call to get the underlying collection.
         /// </summary>
-        protected private sealed override IEnumerable<T> CollectionInternal
+        private protected sealed override IEnumerable<T> CollectionInternal
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => _queue;
@@ -179,7 +179,7 @@ namespace MobX.Mediator.Collections
         ///     Internal call to clear the underlying collection.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected private sealed override void ClearInternal()
+        private protected sealed override void ClearInternal()
         {
             Clear();
         }
@@ -187,7 +187,7 @@ namespace MobX.Mediator.Collections
         /// <summary>
         ///     Internal call to get the count of the underlying collection.
         /// </summary>
-        protected private sealed override int CountInternal
+        private protected sealed override int CountInternal
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Count;

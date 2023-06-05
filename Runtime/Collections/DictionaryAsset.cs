@@ -8,9 +8,10 @@ namespace MobX.Mediator.Collections
     /// <summary>
     ///     Collection Asset representing a dictionary that can be modified during runtime.
     /// </summary>
-    public abstract class DictionaryAsset<TKey, TValue> : RuntimeCollectionAsset<KeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue>
+    public abstract class DictionaryAsset<TKey, TValue> : RuntimeCollectionAsset<KeyValuePair<TKey, TValue>>,
+        IDictionary<TKey, TValue>
     {
-        [Readonly]
+        [ReadonlyInspector]
         [ShowInInspector]
         [Foldout(FoldoutName.HumanizedObjectName)]
         private readonly Dictionary<TKey, TValue> _dictionary = new(16);
@@ -297,7 +298,7 @@ namespace MobX.Mediator.Collections
         /// <summary>
         ///     Internal call to get the underlying collection.
         /// </summary>
-        protected private sealed override IEnumerable<KeyValuePair<TKey, TValue>> CollectionInternal
+        private protected sealed override IEnumerable<KeyValuePair<TKey, TValue>> CollectionInternal
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => _dictionary;
@@ -307,7 +308,7 @@ namespace MobX.Mediator.Collections
         ///     Internal call to clear the underlying collection.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected private sealed override void ClearInternal()
+        private protected sealed override void ClearInternal()
         {
             Clear();
         }
@@ -315,7 +316,7 @@ namespace MobX.Mediator.Collections
         /// <summary>
         ///     Internal call to get the count of the underlying collection.
         /// </summary>
-        protected private sealed override int CountInternal
+        private protected sealed override int CountInternal
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Count;
