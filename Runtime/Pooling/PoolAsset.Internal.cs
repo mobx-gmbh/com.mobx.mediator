@@ -38,8 +38,6 @@ namespace MobX.Mediator.Pooling
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void LoadInternal()
         {
-            EngineCallbacks.AddCallbacks(this);
-
             if (State != PoolState.Unloaded)
             {
                 return;
