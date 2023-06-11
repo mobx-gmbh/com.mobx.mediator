@@ -8,10 +8,6 @@ namespace MobX.Mediator.Events
     {
         #region Member Variables
 
-        /*
-         * State
-         */
-
         public int Count { get; private set; }
         public Action this[int index] => _listener[index];
 
@@ -154,7 +150,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal()
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i]();
             }
@@ -307,7 +303,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T arg)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](arg);
             }
@@ -319,10 +315,6 @@ namespace MobX.Mediator.Events
     public class Receiver<T1, T2> : IReceiver<T1, T2>
     {
         #region Member Variables
-
-        /*
-         * State
-         */
 
         public Action<T1, T2> this[int index] => _listener[index];
 
@@ -466,7 +458,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](first, second);
             }
@@ -478,10 +470,6 @@ namespace MobX.Mediator.Events
     public class Receiver<T1, T2, T3> : IReceiver<T1, T2, T3>
     {
         #region Member Variables
-
-        /*
-         * State
-         */
 
         public Action<T1, T2, T3> this[int index] => _listener[index];
 
@@ -625,7 +613,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second, T3 third)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](first, second, third);
             }
@@ -637,10 +625,6 @@ namespace MobX.Mediator.Events
     public class Receiver<T1, T2, T3, T4> : IReceiver<T1, T2, T3, T4>
     {
         #region Member Variables
-
-        /*
-         * State
-         */
 
         public Action<T1, T2, T3, T4> this[int index] => _listener[index];
 
@@ -784,7 +768,7 @@ namespace MobX.Mediator.Events
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RaiseInternal(T1 first, T2 second, T3 third, T4 fourth)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](first, second, third, fourth);
             }
