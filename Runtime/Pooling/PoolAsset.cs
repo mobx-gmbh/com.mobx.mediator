@@ -10,7 +10,10 @@ using Object = UnityEngine.Object;
 
 namespace MobX.Mediator.Pooling
 {
-    public abstract partial class PoolAsset<T> : IPoolAsset, IDisposable, IObjectPool<T>, IOnAfterFirstSceneLoad,
+    public abstract partial class PoolAsset<T> : IPoolAsset,
+        IDisposable,
+        IObjectPool<T>,
+        IOnAfterFirstSceneLoad,
         IOnQuit
         where T : Object
     {
@@ -134,7 +137,7 @@ namespace MobX.Mediator.Pooling
             {
                 if (prefab == null)
                 {
-                    Debug.LogError("Pooling", "Prefab for {this} was null! Cannot create new instance!", this);
+                    Debug.LogError("Pooling", $"Prefab {this} was null! Cannot create new instance!", this);
                 }
                 return Instantiate(prefab, Parent);
             }
