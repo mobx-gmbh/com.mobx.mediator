@@ -48,7 +48,7 @@ namespace MobX.Mediator.Pooling
 
             if (Parent == null)
             {
-                Parent = PoolHook.Create(this);
+                Parent = PoolTransform.Create(this);
             }
 
             if (multiple && selectionMode == SelectionMode.RoundRobin)

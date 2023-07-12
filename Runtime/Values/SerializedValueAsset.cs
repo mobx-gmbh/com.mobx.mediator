@@ -69,12 +69,10 @@ namespace MobX.Mediator.Values
             return serializedValueAsset.value;
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
-#if UNITY_EDITOR
-            EngineCallbacks.AddExitEditModeListener(this);
-            EngineCallbacks.AddEnterEditModeListener(this);
-#else
+            base.OnEnable();
+#if !UNITY_EDITOR
             // Set the cached value to a default value (null for reference types) to release references.
             cached = default;
 #endif

@@ -1,7 +1,10 @@
-﻿namespace MobX.Mediator.Values
+﻿using MobX.Utilities.Inspector;
+
+namespace MobX.Mediator.Values
 {
     public abstract class ReadonlyValueAsset<TValue> : ValueAsset
     {
+        [ReadonlyInspector]
         public TValue Value => GetValue();
 
         public abstract TValue GetValue();
@@ -15,6 +18,11 @@
             }
 #endif
             return valueAsset.Value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
 }
