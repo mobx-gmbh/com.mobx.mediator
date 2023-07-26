@@ -19,6 +19,12 @@ namespace MobX.Mediator.Requests
 
         public bool HasResponder => _responder != null;
 
+        [Button]
+        private void DebugRequest()
+        {
+            Request();
+        }
+
         public Response Request()
         {
             return RequestInternal();

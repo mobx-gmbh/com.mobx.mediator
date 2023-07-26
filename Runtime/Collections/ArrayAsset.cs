@@ -17,7 +17,6 @@ namespace MobX.Mediator.Collections
         [Foldout("Options")]
         [SerializeField] private bool showMoreOptions;
 
-        [ListOptions(DisplayHeader = false)]
         [Foldout(FoldoutName.HumanizedObjectName)]
         [SerializeField] private List<T> items = new(16);
 
