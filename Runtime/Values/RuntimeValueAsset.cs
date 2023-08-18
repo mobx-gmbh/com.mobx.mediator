@@ -10,7 +10,6 @@ namespace MobX.Mediator.Values
 {
     public abstract class RuntimeValueAsset<TValue> : ValueAsset<TValue>, IOnExitEditMode, IOnEnterEditMode
     {
-        [ReadonlyInspector]
         [NonSerialized] private TValue _value;
 
         private readonly Broadcast<TValue> _changedEvent = new();
@@ -42,7 +41,7 @@ namespace MobX.Mediator.Values
                 {
                     return;
                 }
-
+                ValidateValue(ref value);
                 _value = value;
                 _changedEvent.Raise(value);
             }
@@ -61,6 +60,10 @@ namespace MobX.Mediator.Values
         public static implicit operator TValue(RuntimeValueAsset<TValue> serializedValueAsset)
         {
             return serializedValueAsset._value;
+        }
+
+        protected virtual void ValidateValue(ref TValue value)
+        {
         }
 
         protected RuntimeValueAsset()
