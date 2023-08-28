@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using MobX.Utilities;
+﻿using MobX.Utilities;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Types;
 using System;
@@ -58,7 +57,7 @@ namespace MobX.Mediator.Pooling
 
             for (var i = 0; i < initialPoolSize; i++)
             {
-                buffer.Add(GetInternal(true));
+                buffer.Add(GetInternal());
             }
 
             foreach (var element in buffer)
@@ -73,8 +72,11 @@ namespace MobX.Mediator.Pooling
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RefreshInternal()
         {
-            var instance = GetInternal(true);
-            Release(instance);
+            for (var i = _activeItems.Count - 1; i >= 0; i--)
+            {
+                var instance = _activeItems[i];
+                Release(instance);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,7 +105,7 @@ namespace MobX.Mediator.Pooling
         #region Get And Release
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private T GetInternal(bool discrete)
+        private T GetInternal()
         {
             AssertIsPlaying();
 
@@ -152,11 +154,6 @@ namespace MobX.Mediator.Pooling
             }
 
             OnGetInstance(instance);
-            if (!discrete && autoRelease)
-            {
-                UniTask.Delay(TimeSpan.FromSeconds(lifeSpanInSeconds))
-                    .ContinueWith(() => { ReleaseInternal(instance); });
-            }
 
             _activeItems.Add(instance);
             UpdateInspector();

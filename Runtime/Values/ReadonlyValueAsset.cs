@@ -1,4 +1,5 @@
 ﻿using MobX.Utilities.Inspector;
+using System;
 
 namespace MobX.Mediator.Values
 {
@@ -8,6 +9,8 @@ namespace MobX.Mediator.Values
         public TValue Value => GetValue();
 
         public abstract TValue GetValue();
+
+        public virtual event Action<TValue> Changed;
 
         public static implicit operator TValue(ReadonlyValueAsset<TValue> valueAsset)
         {
