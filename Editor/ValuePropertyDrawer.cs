@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Mobx.Mediator.Editor
 {
-    [UnityEditor.CustomPropertyDrawer(typeof(Variable<>), true)]
-    [UnityEditor.CustomPropertyDrawer(typeof(ReadonlyVariable<>), true)]
+    [UnityEditor.CustomPropertyDrawer(typeof(VariableRW<>), true)]
+    [UnityEditor.CustomPropertyDrawer(typeof(VariableRO<>), true)]
     public class ValuePropertyDrawer : UnityEditor.PropertyDrawer
     {
         private static readonly GUIContent modeLabel = new("Pass By", "Set the value directly or set a reference to a value object.");
@@ -18,9 +18,9 @@ namespace Mobx.Mediator.Editor
         public override void OnGUI(Rect position, UnityEditor.SerializedProperty property, GUIContent label)
         {
             property.serializedObject.Update();
-            UnityEditor.SerializedProperty byReferenceProperty = property.FindPropertyRelative("byReference");
-            UnityEditor.SerializedProperty referenceProperty = property.FindPropertyRelative("reference");
-            UnityEditor.SerializedProperty valueProperty = property.FindPropertyRelative("value");
+            var byReferenceProperty = property.FindPropertyRelative("byReference");
+            var referenceProperty = property.FindPropertyRelative("reference");
+            var valueProperty = property.FindPropertyRelative("value");
 
             UnityEditor.EditorGUILayout.PropertyField(byReferenceProperty.boolValue ? referenceProperty : valueProperty, label);
 

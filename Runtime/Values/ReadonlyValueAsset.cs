@@ -10,7 +10,9 @@ namespace MobX.Mediator.Values
 
         public abstract TValue GetValue();
 
+#pragma warning disable
         public virtual event Action<TValue> Changed;
+#pragma warning restore
 
         public static implicit operator TValue(ReadonlyValueAsset<TValue> valueAsset)
         {

@@ -7,10 +7,10 @@ namespace MobX.Mediator.Values
     ///     Proxy variable that either points to a <see cref="SerializedValueAsset{TValue}" /> or a locally serialized value.
     /// </summary>
     [Serializable]
-    public sealed class ReadonlyVariable<T>
+    public struct VariableRO<T>
     {
         [SerializeField] private bool byReference;
-        [SerializeField] private SerializedValueAsset<T> reference;
+        [SerializeField] private ReadonlyValueAsset<T> reference;
         [SerializeField] private T value;
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace MobX.Mediator.Values
             return Value.ToString();
         }
 
-        public static implicit operator T(ReadonlyVariable<T> variable)
+        public static implicit operator T(VariableRO<T> variableRO)
         {
-            return variable.Value;
+            return variableRO.Value;
         }
     }
 }
