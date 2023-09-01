@@ -95,7 +95,10 @@ namespace MobX.Mediator.Pooling
 
             _pool.Clear();
             CountAll = 0;
-            Destroy(Parent.gameObject);
+            if (Parent != null)
+            {
+                Destroy(Parent.gameObject);
+            }
             Parent = null;
             State = PoolState.Unloaded;
         }
