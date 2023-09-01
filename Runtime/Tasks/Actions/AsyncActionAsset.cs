@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using MobX.Utilities.Inspector;
 
-namespace MobX.Mediator.Actions
+namespace MobX.Mediator.Tasks
 {
     public abstract class AsyncActionAsset : MediatorAsset
     {

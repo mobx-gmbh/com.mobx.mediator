@@ -1,0 +1,28 @@
+{
+    "name": "mobx.mediator.addressables",
+    "rootNamespace": "MobX.Mediator",
+    "references": [
+        "GUID:451c7863c31cdec4fbc99d53f3082b53",
+        "GUID:2b850f3411e9ada4f8d8bad02456c6e6",
+        "GUID:60b317c0e9339ed42a02f571de4723cd",
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:84651a3751eca9349aac36a66bba901b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "MEDIATOR_ADDRESSABLES"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "1.0.0",
+            "define": "MEDIATOR_ADDRESSABLES"
+        }
+    ],
+    "noEngineReferences": false
+}

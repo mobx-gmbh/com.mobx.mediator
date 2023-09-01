@@ -36,21 +36,10 @@ namespace MobX.Mediator.Pooling
         [ConditionalShow(nameof(limitPoolSize))]
         [SerializeField] private int maxPoolSize = 100;
 
-        [Button]
-        private void SelectRuntimeObject()
-        {
-#if UNITY_EDITOR
-            if (Parent != null)
-            {
-                UnityEditor.Selection.activeObject = Parent;
-            }
-#endif
-        }
-
         #endregion
 
 
-        #region Fields & Properties
+        #region Properties
 
         public T Prefab => prefab;
 
@@ -64,6 +53,11 @@ namespace MobX.Mediator.Pooling
         public int CountInactive => _pool.Count;
 
         public int MaxPoolSize => limitPoolSize ? maxPoolSize : 10000;
+
+        #endregion
+
+
+        #region Fields
 
         private Loop _prefabIndex;
 
@@ -108,12 +102,17 @@ namespace MobX.Mediator.Pooling
 
         public sealed override void ResetPool()
         {
-            RefreshInternal();
+            ResetInternal();
         }
 
         public sealed override void Dispose()
         {
-            DisposeInternal();
+            UnloadInternal();
+        }
+
+        public sealed override void Unload()
+        {
+            UnloadInternal();
         }
 
         #endregion
@@ -136,15 +135,12 @@ namespace MobX.Mediator.Pooling
                 return Instantiate(prefab, Parent);
             }
 
-            switch (selectionMode)
+            return selectionMode switch
             {
-                case SelectionMode.RoundRobin:
-                    return Instantiate(prefabs[_prefabIndex++], Parent);
-                case SelectionMode.Random:
-                    return Instantiate(prefabs.RandomItem(), Parent);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                SelectionMode.RoundRobin => Instantiate(prefabs[_prefabIndex++], Parent),
+                SelectionMode.Random => Instantiate(prefabs.RandomItem(), Parent),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         /// <summary>
@@ -167,6 +163,22 @@ namespace MobX.Mediator.Pooling
         protected virtual void OnDestroyInstance(T instance)
         {
             Destroy(instance);
+        }
+
+        #endregion
+
+
+        #region Editor
+
+        [Button]
+        private void SelectRuntimeObject()
+        {
+#if UNITY_EDITOR
+            if (Parent != null)
+            {
+                UnityEditor.Selection.activeObject = Parent;
+            }
+#endif
         }
 
         #endregion

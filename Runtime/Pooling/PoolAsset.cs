@@ -3,7 +3,7 @@
     public abstract class PoolAsset : MediatorAsset
     {
         /// <summary>
-        ///     Preload assets to prevent potential frame drops.
+        ///     Preload assets of the pool.
         /// </summary>
         public abstract void Load();
 
@@ -16,5 +16,10 @@
         ///     Release all active elements back to the pool.
         /// </summary>
         public abstract void ResetPool();
+
+        /// <summary>
+        ///     Unload assets of the pool. This will force every element of the pool to be returned to the pool.
+        /// </summary>
+        public abstract void Unload();
     }
 }

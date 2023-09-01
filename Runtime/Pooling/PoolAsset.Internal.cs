@@ -70,33 +70,44 @@ namespace MobX.Mediator.Pooling
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void RefreshInternal()
+        private void ResetInternal()
         {
-            for (var i = _activeItems.Count - 1; i >= 0; i--)
+            for (var index = _activeItems.Count - 1; index >= 0; index--)
             {
-                var instance = _activeItems[i];
+                var instance = _activeItems[index];
                 Release(instance);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void DisposeInternal()
+        private void UnloadInternal()
         {
-            ClearInternal();
+            AssertIsPlaying();
+            for (var index = _activeItems.Count - 1; index >= 0; index--)
+            {
+                Release(_activeItems[index]);
+            }
+
+            foreach (var instance in _pool)
+            {
+                OnDestroyInstance(instance);
+            }
+
+            _pool.Clear();
+            CountAll = 0;
+            Destroy(Parent.gameObject);
+            Parent = null;
             State = PoolState.Unloaded;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ClearInternal()
+        private void ClearInternal()
         {
-            AssertIsPlaying();
             foreach (var instance in _pool)
             {
                 OnDestroyInstance(instance);
             }
             _pool.Clear();
             CountAll = 0;
-            State = PoolState.Unloaded;
         }
 
         #endregion
@@ -111,7 +122,7 @@ namespace MobX.Mediator.Pooling
 
             if (State == PoolState.Unloaded)
             {
-                Load();
+                LoadInternal();
             }
 
             T instance;
@@ -201,18 +212,20 @@ namespace MobX.Mediator.Pooling
         #endregion
 
 
-        #region Assertions And Obsolete
+        #region Assertions & Obsolete
 
+        /// <summary>
+        ///     This method is Obsolete and will throw an InvalidOperationException since we cannot create a new
+        ///     <see cref="PooledObject&lt;T&gt;" /> since its constructor is internal.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         [Obsolete("This method is Obsolete and will throw an InvalidOperationException")]
         public PooledObject<T> Get(out T instance)
         {
             throw new InvalidOperationException("Invalid method call!");
         }
-
-        #endregion
-
-
-        #region Editor
 
         [Conditional("UNITY_EDITOR")]
         private static void AssertIsPlaying()
