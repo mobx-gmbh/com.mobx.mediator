@@ -1,4 +1,4 @@
-using MobX.Mediator.Events;
+﻿using MobX.Mediator.Events;
 using MobX.Utilities;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
@@ -9,7 +9,11 @@ using UnityEngine;
 
 namespace MobX.Mediator.Blocking
 {
-    public sealed class BlockerAsset : MediatorAsset, IOnEnterEditMode
+    /// <summary>
+    ///     Generic variant of a <see cref="BlockerAsset" />. Use this for more control over what can and what cannot block.
+    /// </summary>
+    /// <typeparam name="T">Instances of this type can be used as blocker</typeparam>
+    public abstract class BlockerAsset<T> : MediatorAsset, IOnEnterEditMode
     {
         #region Inspector
 
@@ -20,7 +24,7 @@ namespace MobX.Mediator.Blocking
         [SerializeField] private bool clearLeaks = true;
 
         [ReadonlyInspector]
-        private readonly HashSet<object> _blocker = new(4);
+        private readonly HashSet<T> _blocker = new(4);
         private readonly IBroadcast _blockedEvent = new Broadcast();
         private readonly IBroadcast _unblockedEvent = new Broadcast();
 
@@ -58,7 +62,7 @@ namespace MobX.Mediator.Blocking
         /// <summary>
         ///     Returns true if the passed object is a registered blocker.
         /// </summary>
-        public bool IsObjectRegisteredBlocker(object potentialBlocker)
+        public bool IsObjectRegisteredBlocker(T potentialBlocker)
         {
             return _blocker.Contains(potentialBlocker);
         }
@@ -67,7 +71,7 @@ namespace MobX.Mediator.Blocking
         ///     Add a new object to the list of blockers. An object can only be added once as a blocker!
         /// </summary>
         /// <returns>true if the object was added, false if it was already added</returns>
-        public bool AddBlocker(object blocker)
+        public bool AddBlocker(T blocker)
         {
             var wasAdded = _blocker.Add(blocker);
             if (wasAdded && _blocker.Count == 1)
@@ -81,7 +85,7 @@ namespace MobX.Mediator.Blocking
         ///     Remove an object from the list of blockers. An object can only be added once as a blocker!
         /// </summary>
         /// <returns>true if the object was removed, false if it was not an active blocker</returns>
-        public bool RemoveBlocker(object blocker)
+        public bool RemoveBlocker(T blocker)
         {
             var wasRemoved = _blocker.Remove(blocker);
             if (wasRemoved && _blocker.Count == 0)
@@ -112,7 +116,7 @@ namespace MobX.Mediator.Blocking
 
         #region Operator
 
-        public static explicit operator bool(BlockerAsset blockerAsset)
+        public static explicit operator bool(BlockerAsset<T> blockerAsset)
         {
             return blockerAsset.IsBlocked();
         }
@@ -122,7 +126,7 @@ namespace MobX.Mediator.Blocking
 
         #region Setup
 
-        private BlockerAsset()
+        protected BlockerAsset()
         {
             EngineCallbacks.AddEnterEditModeListener(this);
         }

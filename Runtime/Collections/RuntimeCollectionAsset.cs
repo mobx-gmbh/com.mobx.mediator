@@ -30,7 +30,9 @@ namespace MobX.Mediator.Collections
             if (logLeaks && CountInternal > 0)
             {
                 Debug.LogWarning("Collection",
-                    $"Leak detected in runtime collection: {name}\n{CollectionInternal.ToCollectionString()}", this);
+                    $"Leak detected in runtime collection: {name}\n{CollectionInternal.ToCollectionString()} " +
+                    "This means that you did not remove every element from the collection during shutdown! " +
+                    "Please ensure that runtime collections are properly shutdown and cleared!", this);
             }
 
             if (clearLeaks && CountInternal > 0)

@@ -9,7 +9,7 @@ namespace MobX.Mediator
     public class MediatorAsset : RuntimeAsset
     {
 #pragma warning disable
-        [TextArea]
+        [TextArea(0, 6)]
         [DrawLineAfter]
         [UsedImplicitly]
         [SerializeField] private string description;
