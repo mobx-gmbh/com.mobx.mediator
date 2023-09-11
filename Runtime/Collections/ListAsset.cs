@@ -1,4 +1,5 @@
 ﻿using MobX.Utilities.Inspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -217,6 +218,22 @@ namespace MobX.Mediator.Collections
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set => _list[index] = value;
+        }
+
+        /// <summary>
+        ///     Sort the list using a default implementation.
+        /// </summary>
+        public void Sort()
+        {
+            _list.Sort();
+        }
+
+        /// <summary>
+        ///     Sort the list using the passed comparison delegate.
+        /// </summary>
+        public void Sort(Comparison<T> comparison)
+        {
+            _list.Sort(comparison);
         }
 
         /// <summary>
