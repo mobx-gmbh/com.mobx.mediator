@@ -13,12 +13,12 @@ namespace MobX.Mediator.Collections
         [ReadonlyInspector]
         [ShowInInspector]
         [Foldout(FoldoutName.HumanizedObjectName)]
-        private readonly Stack<T> _stack = new(8);
+        private readonly List<T> _stack = new(8);
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stack<T>.Enumerator GetEnumerator()
+        public List<T>.Enumerator GetEnumerator()
         {
             return _stack.GetEnumerator();
         }
@@ -47,7 +47,7 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Push(T item)
         {
-            _stack.Push(item);
+            _stack.Add(item);
             Repaint();
         }
 
@@ -57,7 +57,14 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Pop()
         {
-            var result = _stack.Pop();
+            if (_stack.Count <= 0)
+            {
+                return default(T);
+            }
+
+            var index = _stack.Count - 1;
+            var result = _stack[index];
+            _stack.RemoveAt(index);
             Repaint();
             return result;
         }
@@ -68,7 +75,23 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Peek()
         {
-            return _stack.Peek();
+            if (_stack.Count <= 0)
+            {
+                return default(T);
+            }
+
+            var index = _stack.Count - 1;
+            var result = _stack[index];
+            return result;
+        }
+
+        /// <summary>
+        ///     Removes the item from the stack if it is contained. The item does not need to be at the top of the stack.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Remove(T item)
+        {
+            return _stack.Remove(item);
         }
 
         /// <summary>Adds the elements of the specified collection to the stack />.</summary>
@@ -90,7 +113,7 @@ namespace MobX.Mediator.Collections
 
             foreach (var element in collection)
             {
-                _stack.Push(element);
+                _stack.Add(element);
             }
             Repaint();
         }
@@ -98,15 +121,25 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryPeek(out T item)
         {
-            return _stack.TryPeek(out item);
+            if (_stack.Count > 0)
+            {
+                item = Peek();
+                return true;
+            }
+            item = default(T);
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryPop(out T item)
         {
-            var result = _stack.TryPop(out item);
-            Repaint();
-            return result;
+            if (_stack.Count > 0)
+            {
+                item = Pop();
+                return true;
+            }
+            item = default(T);
+            return false;
         }
 
         /// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
