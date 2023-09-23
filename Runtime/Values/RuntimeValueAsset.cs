@@ -66,17 +66,13 @@ namespace MobX.Mediator.Values
         {
         }
 
-        protected RuntimeValueAsset()
-        {
-            EngineCallbacks.AddExitEditModeListener(this);
-            EngineCallbacks.AddEnterEditModeListener(this);
-        }
-
+        [CallbackMethod(Segment.ExitingEditMode)]
         public void OnExitEditMode()
         {
             Value = default(TValue);
         }
 
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
 #if UNITY_EDITOR

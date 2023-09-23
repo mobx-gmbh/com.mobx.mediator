@@ -25,6 +25,7 @@ namespace MobX.Mediator.Collections
         private protected abstract int CountInternal { get; }
         private protected abstract IEnumerable<T> CollectionInternal { get; }
 
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (logLeaks && CountInternal > 0)

@@ -7,6 +7,7 @@ namespace MobX.Mediator.Pooling
 {
     public class PoolList : ListAsset<PoolAsset>, IOnInitializationCompleted
     {
+        [CallbackMethod(Segment.InitializationCompleted)]
         public void OnInitializationCompleted()
         {
             foreach (var runtimeAsset in AssetRegistry.RuntimeAssets)

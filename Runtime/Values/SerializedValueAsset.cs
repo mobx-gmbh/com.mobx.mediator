@@ -78,6 +78,7 @@ namespace MobX.Mediator.Values
 #endif
         }
 
+        [CallbackMethod(Segment.ExitingEditMode)]
         public void OnExitEditMode()
         {
 #if UNITY_EDITOR
@@ -85,6 +86,7 @@ namespace MobX.Mediator.Values
 #endif
         }
 
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
 #if UNITY_EDITOR

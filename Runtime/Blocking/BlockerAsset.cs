@@ -122,11 +122,7 @@ namespace MobX.Mediator.Blocking
 
         #region Setup
 
-        private BlockerAsset()
-        {
-            EngineCallbacks.AddEnterEditModeListener(this);
-        }
-
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (logLeaks && _blocker.Count > 0)

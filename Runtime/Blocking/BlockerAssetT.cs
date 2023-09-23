@@ -131,6 +131,7 @@ namespace MobX.Mediator.Blocking
             EngineCallbacks.AddEnterEditModeListener(this);
         }
 
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (logLeaks && _blocker.Count > 0)

@@ -80,6 +80,7 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (clearResponder)
@@ -158,6 +159,7 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (clearResponder)
@@ -236,6 +238,7 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (clearResponder)
@@ -314,6 +317,7 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (clearResponder)
@@ -374,17 +378,20 @@ namespace MobX.Mediator.Requests
                 {
                     Debug.Log("Request", $"Request for {this} was left unanswered!", this);
                 }
-                return new Response<T1, T2, T3, T4>(ResponseType.Unanswered, default(T1), default(T2), default(T3), default(T4));
+                return new Response<T1, T2, T3, T4>(ResponseType.Unanswered, default(T1), default(T2), default(T3),
+                    default(T4));
             }
             try
             {
                 var result = _responder();
-                return new Response<T1, T2, T3, T4>(ResponseType.Answered, result.Item1, result.Item2, result.Item3, result.Item4);
+                return new Response<T1, T2, T3, T4>(ResponseType.Answered, result.Item1, result.Item2, result.Item3,
+                    result.Item4);
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception);
-                return new Response<T1, T2, T3, T4>(ResponseType.Faulted, default(T1), default(T2), default(T3), default(T4));
+                return new Response<T1, T2, T3, T4>(ResponseType.Faulted, default(T1), default(T2), default(T3),
+                    default(T4));
             }
         }
 
@@ -392,6 +399,7 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
+        [CallbackMethod(Segment.EnteredEditMode)]
         public void OnEnterEditMode()
         {
             if (clearResponder)
