@@ -105,7 +105,7 @@ namespace MobX.Mediator.Pooling
             ResetInternal();
         }
 
-        public sealed override void Dispose()
+        public void Dispose()
         {
             UnloadInternal();
         }

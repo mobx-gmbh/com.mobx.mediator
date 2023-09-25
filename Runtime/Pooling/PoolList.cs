@@ -1,22 +1,28 @@
 ﻿using MobX.Mediator.Collections;
 using MobX.Utilities;
 using MobX.Utilities.Callbacks;
-using MobX.Utilities.Registry;
 
 namespace MobX.Mediator.Pooling
 {
-    public class PoolList : ListAsset<PoolAsset>, IOnInitializationCompleted
+    public class PoolList : ListAsset<PoolAsset>
     {
-        [CallbackMethod(Segment.InitializationCompleted)]
-        public void OnInitializationCompleted()
+#if UNITY_EDITOR
+
+        [CallbackMethod(Segment.EnteredEditMode)]
+        private void AddPoolAssets()
         {
-            foreach (var runtimeAsset in AssetRegistry.RuntimeAssets)
+            var guids = UnityEditor.AssetDatabase.FindAssets($"t:{typeof(PoolAsset)}");
+            for (var i = 0; i < guids.Length; i++)
             {
-                if (runtimeAsset is PoolAsset poolAsset)
+                var assetPath = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[i]);
+                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<PoolAsset>(assetPath);
+                if (asset != null)
                 {
-                    this.AddUnique(poolAsset);
+                    this.AddUnique(asset);
                 }
             }
         }
+
+#endif
     }
 }
