@@ -11,7 +11,7 @@ namespace MobX.Mediator.Values
     /// <summary>
     ///     Scriptable object holding a value that can be accessed and set during runtime.
     /// </summary>
-    public abstract class SerializedValueAsset<TValue> : ValueAsset<TValue>, IOnExitEditMode, IOnEnterEditMode
+    public abstract class SerializedValueAsset<TValue> : ValueAsset<TValue>
     {
         [SerializeField] private TValue value;
 
@@ -78,23 +78,20 @@ namespace MobX.Mediator.Values
 #endif
         }
 
-        [CallbackMethod(Segment.ExitingEditMode)]
-        public void OnExitEditMode()
-        {
 #if UNITY_EDITOR
+
+        [CallbackOnExitEditMode]
+        private void OnExitEditMode()
+        {
             UpdateCached();
-#endif
         }
 
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
-#if UNITY_EDITOR
             ResetValue();
-#endif
         }
 
-#if UNITY_EDITOR
         [SpaceBefore]
         [Button(ButtonType.Center)]
         [Tooltip("Reset the current value to the cached value")]

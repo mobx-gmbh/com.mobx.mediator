@@ -1,5 +1,4 @@
 ﻿using MobX.Utilities;
-using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
 using System;
@@ -12,9 +11,7 @@ namespace MobX.Mediator.Pooling
 {
     public abstract partial class PoolAsset<T> : PoolAsset,
         IDisposable,
-        IObjectPool<T>,
-        IOnAfterFirstSceneLoad,
-        IOnQuit
+        IObjectPool<T>
         where T : Object
     {
         #region Settings

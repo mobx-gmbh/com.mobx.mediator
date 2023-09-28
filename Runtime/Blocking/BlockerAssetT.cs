@@ -13,7 +13,7 @@ namespace MobX.Mediator.Blocking
     ///     Generic variant of a <see cref="BlockerAsset" />. Use this for more control over what can and what cannot block.
     /// </summary>
     /// <typeparam name="T">Instances of this type can be used as blocker</typeparam>
-    public abstract class BlockerAsset<T> : MediatorAsset, IOnEnterEditMode
+    public abstract class BlockerAsset<T> : MediatorAsset
     {
         #region Inspector
 
@@ -126,12 +126,7 @@ namespace MobX.Mediator.Blocking
 
         #region Setup
 
-        protected BlockerAsset()
-        {
-            EngineCallbacks.AddEnterEditModeListener(this);
-        }
-
-        [CallbackMethod(Segment.EnteredEditMode)]
+        [CallbackOnEnterEditMode]
         public void OnEnterEditMode()
         {
             if (logLeaks && _blocker.Count > 0)

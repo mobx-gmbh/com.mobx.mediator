@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Values
 {
-    public abstract class RuntimeValueAsset<TValue> : ValueAsset<TValue>, IOnExitEditMode, IOnEnterEditMode
+    public abstract class RuntimeValueAsset<TValue> : ValueAsset<TValue>
     {
         [NonSerialized] private TValue _value;
 
@@ -66,21 +66,19 @@ namespace MobX.Mediator.Values
         {
         }
 
-        [CallbackMethod(Segment.ExitingEditMode)]
-        public void OnExitEditMode()
+#if UNITY_EDITOR
+        [CallbackOnExitEditMode]
+        private void OnExitEditMode()
         {
             Value = default(TValue);
         }
 
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
-#if UNITY_EDITOR
             ResetValue();
-#endif
         }
 
-#if UNITY_EDITOR
         [SpaceBefore]
         [Button(ButtonType.Center)]
         [Tooltip("Reset the current value to the cached value")]

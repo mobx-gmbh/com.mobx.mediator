@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Collections
 {
-    public abstract class RuntimeCollectionAsset<T> : MediatorAsset, IOnEnterEditMode
+    public abstract class RuntimeCollectionAsset<T> : MediatorAsset
     {
         [Foldout("Options")]
         [Tooltip("When enabled, leaks that occur when exiting playmode will logged to the console")]
@@ -17,15 +17,10 @@ namespace MobX.Mediator.Collections
         [Tooltip("When enabled, changes to the collection will trigger an immediate repaint in the inspector")]
         [SerializeField] private bool allowRepaint = true;
 
-        protected RuntimeCollectionAsset()
-        {
-            EngineCallbacks.AddEnterEditModeListener(this);
-        }
-
         private protected abstract int CountInternal { get; }
         private protected abstract IEnumerable<T> CollectionInternal { get; }
 
-        [CallbackMethod(Segment.EnteredEditMode)]
+        [CallbackOnEnterEditMode]
         public void OnEnterEditMode()
         {
             if (logLeaks && CountInternal > 0)

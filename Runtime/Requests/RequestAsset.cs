@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Requests
 {
-    public class RequestAsset : MediatorAsset, IOnEnterEditMode
+    public class RequestAsset : MediatorAsset
     {
         [Tooltip("When enabled, the responder is automatically cleared when entering edit mode")]
         [SerializeField] private bool clearResponder;
@@ -80,8 +80,8 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (clearResponder)
             {
@@ -91,7 +91,7 @@ namespace MobX.Mediator.Requests
 #endif
     }
 
-    public abstract class RequestAsset<T> : MediatorAsset, IOnEnterEditMode
+    public abstract class RequestAsset<T> : MediatorAsset
     {
         [Tooltip("When enabled, the responder is automatically cleared when entering edit mode")]
         [SerializeField] private bool clearResponder;
@@ -159,8 +159,8 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (clearResponder)
             {
@@ -170,7 +170,7 @@ namespace MobX.Mediator.Requests
 #endif
     }
 
-    public abstract class RequestAsset<T1, T2> : MediatorAsset, IOnEnterEditMode
+    public abstract class RequestAsset<T1, T2> : MediatorAsset
     {
         [Tooltip("When enabled, the responder is automatically cleared when entering edit mode")]
         [SerializeField] private bool clearResponder;
@@ -238,8 +238,8 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (clearResponder)
             {
@@ -249,7 +249,7 @@ namespace MobX.Mediator.Requests
 #endif
     }
 
-    public abstract class RequestAsset<T1, T2, T3> : MediatorAsset, IOnEnterEditMode
+    public abstract class RequestAsset<T1, T2, T3> : MediatorAsset
     {
         [Tooltip("When enabled, the responder is automatically cleared when entering edit mode")]
         [SerializeField] private bool clearResponder;
@@ -317,8 +317,8 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (clearResponder)
             {
@@ -328,7 +328,7 @@ namespace MobX.Mediator.Requests
 #endif
     }
 
-    public abstract class RequestAsset<T1, T2, T3, T4> : MediatorAsset, IOnEnterEditMode
+    public abstract class RequestAsset<T1, T2, T3, T4> : MediatorAsset
     {
         [Tooltip("When enabled, the responder is automatically cleared when entering edit mode")]
         [SerializeField] private bool clearResponder;
@@ -399,8 +399,8 @@ namespace MobX.Mediator.Requests
 
 
 #if UNITY_EDITOR
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (clearResponder)
             {

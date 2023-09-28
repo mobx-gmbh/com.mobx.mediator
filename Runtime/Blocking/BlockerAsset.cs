@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MobX.Mediator.Blocking
 {
-    public sealed class BlockerAsset : MediatorAsset, IOnEnterEditMode
+    public sealed class BlockerAsset : MediatorAsset
     {
         #region Inspector
 
@@ -122,8 +122,8 @@ namespace MobX.Mediator.Blocking
 
         #region Setup
 
-        [CallbackMethod(Segment.EnteredEditMode)]
-        public void OnEnterEditMode()
+        [CallbackOnEnterEditMode]
+        private void OnEnterEditMode()
         {
             if (logLeaks && _blocker.Count > 0)
             {

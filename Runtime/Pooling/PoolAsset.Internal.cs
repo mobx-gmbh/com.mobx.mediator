@@ -14,17 +14,17 @@ namespace MobX.Mediator.Pooling
     {
         #region Runtime Callbacks
 
-        public void OnAfterFirstSceneLoad()
+        [CallbackOnAfterFirstSceneLoad]
+        private void OnAfterFirstSceneLoad()
         {
-#if UNITY_EDITOR
             if (warmupOnBeginPlay)
             {
                 Load();
             }
-#endif
         }
 
-        public void OnQuit()
+        [CallbackOnApplicationQuit]
+        private void OnQuit()
         {
             Dispose();
         }
