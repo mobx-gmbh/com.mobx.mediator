@@ -51,6 +51,19 @@ namespace MobX.Mediator.Collections
             Repaint();
         }
 
+        /// <summary>Inserts an object at the top of the stack and ensure that it is only contained once in the stack</summary>
+        /// <param name="item">
+        ///     The object to push onto the <see cref="T:System.Collections.Generic.Stack`1" />. The value can be
+        ///     <see langword="null" /> for reference types.
+        /// </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void PushUnique(T item)
+        {
+            Remove(item);
+            _stack.Add(item);
+            Repaint();
+        }
+
         /// <summary>Removes and returns the object at the top of the <see cref="T:System.Collections.Generic.Stack`1" />.</summary>
         /// <returns>The object removed from the top of the <see cref="T:System.Collections.Generic.Stack`1" />.</returns>
         /// <exception cref="T:System.InvalidOperationException">The <see cref="T:System.Collections.Generic.Stack`1" /> is empty.</exception>
@@ -71,7 +84,6 @@ namespace MobX.Mediator.Collections
 
         /// <summary>Returns the object at the top of the <see cref="T:System.Collections.Generic.Stack`1" /> without removing it.</summary>
         /// <returns>The object at the top of the <see cref="T:System.Collections.Generic.Stack`1" />.</returns>
-        /// <exception cref="T:System.InvalidOperationException">The <see cref="T:System.Collections.Generic.Stack`1" /> is empty.</exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Peek()
         {
@@ -83,6 +95,18 @@ namespace MobX.Mediator.Collections
             var index = _stack.Count - 1;
             var result = _stack[index];
             return result;
+        }
+
+        /// <summary>Returns the object at the root of the <see cref="T:System.Collections.Generic.Stack`1" /> without removing it.</summary>
+        /// <returns>The object at the root of the <see cref="T:System.Collections.Generic.Stack`1" />.</returns>
+        public T Root()
+        {
+            if (_stack.Count <= 0)
+            {
+                return default(T);
+            }
+
+            return _stack[0];
         }
 
         /// <summary>

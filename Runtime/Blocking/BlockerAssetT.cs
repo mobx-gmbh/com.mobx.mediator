@@ -38,7 +38,14 @@ namespace MobX.Mediator.Blocking
         /// </summary>
         public event Action Blocked
         {
-            add => _blockedEvent.Add(value);
+            add
+            {
+                _blockedEvent.Add(value);
+                if (IsBlocked())
+                {
+                    value();
+                }
+            }
             remove => _blockedEvent.Remove(value);
         }
 
@@ -47,7 +54,14 @@ namespace MobX.Mediator.Blocking
         /// </summary>
         public event Action Unblocked
         {
-            add => _unblockedEvent.Add(value);
+            add
+            {
+                _unblockedEvent.Add(value);
+                if (IsBlocked() is false)
+                {
+                    value();
+                }
+            }
             remove => _unblockedEvent.Remove(value);
         }
 
