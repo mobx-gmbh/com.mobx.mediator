@@ -115,7 +115,9 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Remove(T item)
         {
-            return _stack.Remove(item);
+            var result = _stack.Remove(item);
+            Repaint();
+            return result;
         }
 
         /// <summary>Adds the elements of the specified collection to the stack />.</summary>
@@ -263,6 +265,25 @@ namespace MobX.Mediator.Collections
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Count;
+        }
+
+        /// <summary>Gets or sets the element at the specified index.</summary>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <returns>The element at the specified index.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        ///     <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.
+        /// </exception>
+        /// <exception cref="T:System.NotSupportedException">
+        ///     The property is set and the
+        ///     <see cref="T:System.Collections.Generic.IList`1" /> is read-only.
+        /// </exception>
+        public T this[int index]
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _stack[index];
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set => _stack[index] = value;
         }
     }
 }

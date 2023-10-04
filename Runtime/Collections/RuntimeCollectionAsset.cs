@@ -44,6 +44,14 @@ namespace MobX.Mediator.Collections
             {
                 return;
             }
+            if (Gameloop.IsQuitting)
+            {
+                return;
+            }
+            if (this == null)
+            {
+                return;
+            }
 #if UNITY_EDITOR
             base.Repaint();
 #endif

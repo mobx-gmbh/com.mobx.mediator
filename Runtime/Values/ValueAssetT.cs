@@ -4,6 +4,6 @@
     {
         public new abstract TValue Value { get; set; }
 
-        public abstract void SetValue(TValue newValue);
+        public abstract void SetValue(TValue value);
     }
 }

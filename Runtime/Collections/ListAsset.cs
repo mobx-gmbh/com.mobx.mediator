@@ -1,4 +1,5 @@
-﻿using MobX.Utilities.Inspector;
+﻿using MobX.Mediator.Events;
+using MobX.Utilities.Inspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,16 @@ namespace MobX.Mediator.Collections
         [ShowInInspector]
         [Foldout(FoldoutName.HumanizedObjectName)]
         private readonly List<T> _list = new(16);
+        private readonly Broadcast _changed = new();
+
+        /// <summary>
+        ///     Called when the collection was altered.
+        /// </summary>
+        public event Action Changed
+        {
+            add => _changed.Add(value);
+            remove => _changed.Remove(value);
+        }
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
@@ -48,6 +59,7 @@ namespace MobX.Mediator.Collections
         public void Add(T item)
         {
             _list.Add(item);
+            _changed.Raise();
             Repaint();
         }
 
@@ -67,6 +79,7 @@ namespace MobX.Mediator.Collections
         public void AddRange(IEnumerable<T> collection)
         {
             _list.AddRange(collection);
+            _changed.Raise();
             Repaint();
         }
 
@@ -79,6 +92,7 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _list.Clear();
+            _changed.Raise();
             Repaint();
         }
 
@@ -141,6 +155,7 @@ namespace MobX.Mediator.Collections
         public bool Remove(T item)
         {
             var result = _list.Remove(item);
+            _changed.Raise();
             Repaint();
             return result;
         }
@@ -185,6 +200,7 @@ namespace MobX.Mediator.Collections
         public void Insert(int index, T item)
         {
             _list.Insert(index, item);
+            _changed.Raise();
             Repaint();
         }
 
@@ -198,6 +214,7 @@ namespace MobX.Mediator.Collections
         public void RemoveAt(int index)
         {
             _list.RemoveAt(index);
+            _changed.Raise();
             Repaint();
         }
 
@@ -217,7 +234,11 @@ namespace MobX.Mediator.Collections
             get => _list[index];
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => _list[index] = value;
+            set
+            {
+                _list[index] = value;
+                _changed.Raise();
+            }
         }
 
         /// <summary>
@@ -226,6 +247,7 @@ namespace MobX.Mediator.Collections
         public void Sort()
         {
             _list.Sort();
+            _changed.Raise();
         }
 
         /// <summary>
@@ -234,6 +256,7 @@ namespace MobX.Mediator.Collections
         public void Sort(Comparison<T> comparison)
         {
             _list.Sort(comparison);
+            _changed.Raise();
         }
 
         /// <summary>

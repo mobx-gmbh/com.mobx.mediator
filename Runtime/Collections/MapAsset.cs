@@ -2,6 +2,7 @@
 using MobX.Utilities.Inspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -46,6 +47,8 @@ namespace MobX.Mediator.Collections
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => map.Count;
         }
+
+        public bool IsReadOnly { get; } = false;
 
         /// <summary>Determines whether the read-only dictionary contains an element that has the specified key.</summary>
         /// <param name="key">The key to locate.</param>
@@ -113,6 +116,22 @@ namespace MobX.Mediator.Collections
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => map.Values;
+        }
+
+        /// <summary>
+        ///     Add an element to the map (Editor Only!)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        [Conditional("UNITY_EDITOR")]
+        protected void Add(TKey key, TValue value)
+        {
+            map.Add(key, value);
+        }
+
+        public void Add(KeyValuePair<TKey, TValue> item)
+        {
+            Debug.LogError("MapAsset", "Add(KeyValuePair<TKey, TValue> item) is not supported!");
         }
     }
 }
