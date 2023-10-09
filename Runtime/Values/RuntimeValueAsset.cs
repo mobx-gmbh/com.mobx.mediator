@@ -47,9 +47,9 @@ namespace MobX.Mediator.Values
             }
         }
 
-        public override void SetValue(TValue value)
+        public override void SetValue(TValue newValue)
         {
-            Value = value;
+            Value = newValue;
         }
 
         public override TValue GetValue()
