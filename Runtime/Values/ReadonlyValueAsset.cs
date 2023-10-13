@@ -29,5 +29,8 @@ namespace MobX.Mediator.Values
         {
             return Value.ToString();
         }
+
+        public bool IsValueNull => GetValue() == null;
+        public bool IsValueNotNull => GetValue() != null;
     }
 }
