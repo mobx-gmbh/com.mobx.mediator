@@ -10,9 +10,9 @@ namespace MobX.Mediator.Collections
     public abstract class RuntimeCollectionAsset<T> : MediatorAsset
     {
         [Foldout("Options")]
-        [Tooltip("When enabled, leaks that occur when exiting playmode will logged to the console")]
+        [Tooltip("When enabled, leaks that occur when exiting playmode will logged to the console. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
         [SerializeField] private bool logLeaks = true;
-        [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically")]
+        [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
         [SerializeField] private bool clearLeaks = true;
         [Tooltip("When enabled, changes to the collection will trigger an immediate repaint in the inspector")]
         [SerializeField] private bool allowRepaint = true;
