@@ -15,6 +15,8 @@ namespace MobX.Mediator.Collections
         [Foldout(FoldoutName.HumanizedObjectName)]
         private readonly List<T> _list = new(16);
         private readonly Broadcast _changed = new();
+        private readonly Broadcast<T> _removed = new();
+        private readonly Broadcast<T> _added = new();
 
         /// <summary>
         ///     Called when the collection was altered.
@@ -23,6 +25,24 @@ namespace MobX.Mediator.Collections
         {
             add => _changed.Add(value);
             remove => _changed.Remove(value);
+        }
+
+        /// <summary>
+        ///     Called when an element was removed from the list.
+        /// </summary>
+        public event Action<T> Removed
+        {
+            add => _removed.Add(value);
+            remove => _removed.Remove(value);
+        }
+
+        /// <summary>
+        ///     Called when an element was added to the list.
+        /// </summary>
+        public event Action<T> Added
+        {
+            add => _added.Add(value);
+            remove => _added.Remove(value);
         }
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
@@ -60,6 +80,7 @@ namespace MobX.Mediator.Collections
         {
             _list.Add(item);
             _changed.Raise();
+            _added.Raise(item);
             Repaint();
         }
 
@@ -78,7 +99,18 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRange(IEnumerable<T> collection)
         {
-            _list.AddRange(collection);
+            if (_added.Count > 0)
+            {
+                foreach (var item in collection)
+                {
+                    _list.Add(item);
+                    _added.Raise(item);
+                }
+            }
+            else
+            {
+                _list.AddRange(collection);
+            }
             _changed.Raise();
             Repaint();
         }
@@ -92,6 +124,13 @@ namespace MobX.Mediator.Collections
         public void Clear()
         {
             _list.Clear();
+            if (_removed.Count > 0)
+            {
+                foreach (var item in this)
+                {
+                    _removed.Raise(item);
+                }
+            }
             _changed.Raise();
             Repaint();
         }
@@ -155,6 +194,10 @@ namespace MobX.Mediator.Collections
         public bool Remove(T item)
         {
             var result = _list.Remove(item);
+            if (result)
+            {
+                _removed.Raise(item);
+            }
             _changed.Raise();
             Repaint();
             return result;
@@ -200,6 +243,7 @@ namespace MobX.Mediator.Collections
         public void Insert(int index, T item)
         {
             _list.Insert(index, item);
+            _added.Raise(item);
             _changed.Raise();
             Repaint();
         }
@@ -213,6 +257,11 @@ namespace MobX.Mediator.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void RemoveAt(int index)
         {
+            if (_removed.Count > 0)
+            {
+                var element = _list[index];
+                _removed.Raise(element);
+            }
             _list.RemoveAt(index);
             _changed.Raise();
             Repaint();
