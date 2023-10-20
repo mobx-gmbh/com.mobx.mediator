@@ -2,7 +2,7 @@
 
 namespace MobX.Mediator.Values
 {
-    public class QuaternionValue : SerializedValueAsset<Quaternion>
+    public class QuaternionAsset : SerializedValueAsset<Quaternion>
     {
     }
 }
