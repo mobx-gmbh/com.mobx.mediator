@@ -1,10 +1,10 @@
 ﻿using MobX.Utilities.Reflection;
-using UnityEngine;
+using MobX.Utilities.Types;
 
 namespace MobX.Mediator
 {
     [AddressablesGroup("Settings")]
-    public class SettingsAsset : ScriptableObject
+    public class SettingsAsset : InlinedScriptableObject
     {
     }
 }
