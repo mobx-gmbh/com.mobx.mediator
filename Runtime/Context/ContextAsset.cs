@@ -26,6 +26,7 @@ namespace MobX.Mediator.Context
         /// <summary>
         ///     Returns true if the context is active and part of a context stack.
         /// </summary>
+        [ReadonlyInspector]
         public bool IsActive => contextStack.Peek() == this;
 
         /// <summary>
