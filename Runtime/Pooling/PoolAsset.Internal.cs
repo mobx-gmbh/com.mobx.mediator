@@ -178,7 +178,7 @@ namespace MobX.Mediator.Pooling
         private void ReleaseInternal(T instance)
         {
             AssertIsPlaying();
-            if (EngineCallbacks.IsQuitting)
+            if (Gameloop.IsQuitting)
             {
                 return;
             }
