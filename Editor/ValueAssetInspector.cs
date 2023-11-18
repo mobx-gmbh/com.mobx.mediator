@@ -1,7 +1,7 @@
 using MobX.Mediator.Values;
 using MobX.Utilities.Editor.Inspector;
 
-namespace Mobx.Mediator
+namespace Mobx.Mediator.Editor
 {
 #if !DISABLE_CUSTOM_INSPECTOR
     [UnityEditor.CustomEditor(typeof(ValueAsset), true)]
