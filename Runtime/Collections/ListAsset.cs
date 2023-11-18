@@ -1,4 +1,5 @@
-﻿using MobX.Mediator.Events;
+﻿using MobX.Mediator.Collections.Abstractions;
+using MobX.Mediator.Events;
 using MobX.Utilities.Inspector;
 using System;
 using System.Collections;

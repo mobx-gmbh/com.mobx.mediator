@@ -5,14 +5,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-namespace MobX.Mediator.Collections
+namespace MobX.Mediator.Collections.Abstractions
 {
     public abstract class RuntimeCollectionAsset<T> : MediatorAsset
     {
         [Foldout("Options")]
-        [Tooltip("When enabled, leaks that occur when exiting playmode will logged to the console. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
+        [Tooltip(
+            "When enabled, leaks that occur when exiting playmode will logged to the console. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
         [SerializeField] private bool logLeaks = true;
-        [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
+        [Tooltip(
+            "When enabled, leaks that occur when exiting playmode will be cleared automatically. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
         [SerializeField] private bool clearLeaks = true;
         [Tooltip("When enabled, changes to the collection will trigger an immediate repaint in the inspector")]
         [SerializeField] private bool allowRepaint = true;
@@ -21,7 +23,7 @@ namespace MobX.Mediator.Collections
         private protected abstract IEnumerable<T> CollectionInternal { get; }
 
         [CallbackOnEnterEditMode]
-        public void OnEnterEditMode()
+        private void OnEnterEditMode()
         {
             if (logLeaks && CountInternal > 0)
             {
@@ -40,6 +42,7 @@ namespace MobX.Mediator.Collections
         [Conditional("UNITY_EDITOR")]
         protected new void Repaint()
         {
+#if UNITY_EDITOR
             if (!allowRepaint)
             {
                 return;
@@ -52,7 +55,6 @@ namespace MobX.Mediator.Collections
             {
                 return;
             }
-#if UNITY_EDITOR
             base.Repaint();
 #endif
         }

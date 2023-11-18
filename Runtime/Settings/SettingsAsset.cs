@@ -1,7 +1,7 @@
 ﻿using MobX.Utilities.Reflection;
 using MobX.Utilities.Types;
 
-namespace MobX.Mediator
+namespace MobX.Mediator.Settings
 {
     [AddressablesGroup("Settings")]
     public class SettingsAsset : InlinedScriptableObject

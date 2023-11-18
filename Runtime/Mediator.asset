@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3d90b36b18e2447ab59cbb8d827bb0, type: 3}
+  m_Name: Mediator
+  m_EditorClassIdentifier: 
+  note: "##Actions\nActionAssets are used to wrap and abstract logic into an asset.
+    The Perform() method can be called on the base type and overridden by the subtypes.\n\n\n##
+    Collections\nCollectionAssets all represent a typical either dynamic or static
+    collection. For most collections there is a runtime (dynamic) and a serialized
+    (static) collection asset variation.\n\n# ListAsset \nDynamic List for runtime
+    Add and Remvoe access. \n\n# ArrayAsset\nSerialized List for not suited for runtime
+    Add and Remove access. \n\n# DictionaryAsset\nDynamic Dictionary for runtime
+    Add and Remvoe access. \n\n# MapAsset\nSerialized Dictionary for not suited for
+    runtime Add and Remove access. \n\n# QueueAsset\nDynamic Queue for runtime Add
+    and Remvoe access. \n\n# StackAsset\nDynamic Stack for runtime Add and Remvoe
+    access. \n\n# HashSetAsset\nDynamic HasSet for runtime Add and Remvoe access.
+    \n\n# SetAsset \nSerialized HasSet for not suited for runtime Add and Remove
+    access. \n\n\n## Conditions\nConditionAssets can be used to abstract a condition
+    that can be true or false. Extension methods and additional assets can be used
+    to group multiple ConditionAssets together and perform basic logic operations
+    like OR, AND etc.\n\n\n## Context\nContextAssets represent a context that can
+    either be active or inactive. \n\n\n## Enums\nEnumAssets can be used like a C#
+    Enum but each value is representat by an asset. They do not support Flags.\n\n\n##
+    Events\nEventAssets represent an event that can be raised and subscibet to. Events
+    can pass custom arguments. \n\n\n## Factory\nFactoryAssets represent a standart
+    C# Factory pattern factory.\n\n\n## Locks\nLockAssets & UnlockAssets can be used
+    to have multiple keys either locking or unlocking something. \n\n\n## Pooling\nPoolAssets
+    create dynamic object pools.\n\n\n## Request\nRequestAssets are similar to EventAssets
+    but only one responder can answer and the invoker will be notified if their call
+    was answered or not.\n\n\n## Values\nValueAssets contain a simple value. These
+    can either be dynamic and changed during runtime or static and only be changed
+    in the editor."
