@@ -129,12 +129,20 @@ namespace MobX.Mediator.Pooling
             }
 
             T instance;
-            if (_pool.Count == 0)
+            var isPoolEmpty = _pool.Count == 0;
+            if (isPoolEmpty)
             {
                 if (_activeItems.Count >= MaxPoolSize)
                 {
                     instance = _activeItems[0];
                     _activeItems.RemoveAt(0);
+
+                    if (instance == null)
+                    {
+                        instance = CreateInstance();
+                        Debug.LogWarning("Pooling", $"Active item in {this} was null!", this);
+                    }
+
                     OnReleaseInstance(instance);
                 }
                 else
