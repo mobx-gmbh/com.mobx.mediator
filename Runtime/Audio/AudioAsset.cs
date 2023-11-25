@@ -43,7 +43,10 @@ namespace MobX.Mediator.Audio
         {
             var eventInstance = RuntimeManager.CreateInstance(eventReference);
             eventInstance.set3DAttributes(target.To3DAttributes());
-            eventInstance.setVolume(volume);
+            if (volume.TryGetValue(out var value))
+            {
+                eventInstance.setVolume(value);
+            }
             eventInstance.start();
             eventInstance.release();
         }

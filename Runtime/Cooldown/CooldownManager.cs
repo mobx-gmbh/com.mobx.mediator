@@ -10,7 +10,6 @@ namespace MobX.Mediator.Cooldown
     /// <summary>
     ///     Legacy Cooldown Manager
     /// </summary>
-    [Obsolete]
     public class CooldownManager : SingletonAsset<CooldownManager>
     {
         #region Public
