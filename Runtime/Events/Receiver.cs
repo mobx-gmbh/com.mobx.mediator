@@ -156,6 +156,22 @@ namespace MobX.Mediator.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RaiseCriticalInternal()
+        {
+            for (var i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _listener[i]();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException("Event", exception);
+                }
+            }
+        }
+
         #endregion
     }
 
@@ -306,6 +322,22 @@ namespace MobX.Mediator.Events
             for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](arg);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RaiseCriticalInternal(T value)
+        {
+            for (var i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _listener[i](value);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException("Event", exception);
+                }
             }
         }
 
@@ -464,6 +496,22 @@ namespace MobX.Mediator.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RaiseCriticalInternal(T1 arg1, T2 arg2)
+        {
+            for (var i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _listener[i](arg1, arg2);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException("Event", exception);
+                }
+            }
+        }
+
         #endregion
     }
 
@@ -619,6 +667,22 @@ namespace MobX.Mediator.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RaiseCriticalInternal(T1 arg1, T2 arg2, T3 arg3)
+        {
+            for (var i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _listener[i](arg1, arg2, arg3);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException("Event", exception);
+                }
+            }
+        }
+
         #endregion
     }
 
@@ -771,6 +835,22 @@ namespace MobX.Mediator.Events
             for (var i = Count - 1; i >= 0; i--)
             {
                 _listener[i](first, second, third, fourth);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RaiseCriticalInternal(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            for (var i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _listener[i](arg1, arg2, arg3, arg4);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException("Event", exception);
+                }
             }
         }
 

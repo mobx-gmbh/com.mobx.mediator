@@ -81,6 +81,19 @@ namespace MobX.Mediator.Events
             Event.Raise();
         }
 
+        [Button]
+        [Foldout("Debug")]
+        public void RaiseCritical()
+        {
+#if UNITY_EDITOR
+            if (IsIllegalCall(this))
+            {
+                return;
+            }
+#endif
+            Event.RaiseCritical();
+        }
+
         [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
@@ -169,6 +182,19 @@ namespace MobX.Mediator.Events
             Event.Raise(value);
         }
 
+        [Button]
+        [Foldout("Debug")]
+        public void RaiseCritical(T value)
+        {
+#if UNITY_EDITOR
+            if (IsIllegalCall(this))
+            {
+                return;
+            }
+#endif
+            Event.RaiseCritical(value);
+        }
+
         [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
@@ -249,6 +275,19 @@ namespace MobX.Mediator.Events
             }
 #endif
             Event.Raise(value1, value2);
+        }
+
+        [Button]
+        [Foldout("Debug")]
+        public void RaiseCritical(T1 value1, T2 value2)
+        {
+#if UNITY_EDITOR
+            if (IsIllegalCall(this))
+            {
+                return;
+            }
+#endif
+            Event.RaiseCritical(value1, value2);
         }
 
         [ReadonlyInspector]
@@ -333,6 +372,19 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2, value3);
         }
 
+        [Button]
+        [Foldout("Debug")]
+        public void RaiseCritical(T1 value1, T2 value2, T3 value3)
+        {
+#if UNITY_EDITOR
+            if (IsIllegalCall(this))
+            {
+                return;
+            }
+#endif
+            Event.RaiseCritical(value1, value2, value3);
+        }
+
         [ReadonlyInspector]
         [Foldout("Debug")]
         public int Count => Event.Count;
@@ -413,6 +465,19 @@ namespace MobX.Mediator.Events
             }
 #endif
             Event.Raise(value1, value2, value3, value4);
+        }
+
+        [Button]
+        [Foldout("Debug")]
+        public void RaiseCritical(T1 value1, T2 value2, T3 value3, T4 value4)
+        {
+#if UNITY_EDITOR
+            if (IsIllegalCall(this))
+            {
+                return;
+            }
+#endif
+            Event.RaiseCritical(value1, value2, value3, value4);
         }
 
         [ReadonlyInspector]
