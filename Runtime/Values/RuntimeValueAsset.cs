@@ -1,5 +1,5 @@
-﻿using MobX.Mediator.Events;
-using MobX.Utilities.Callbacks;
+﻿using MobX.Mediator.Callbacks;
+using MobX.Mediator.Events;
 using MobX.Utilities.Inspector;
 using System;
 using System.Collections.Generic;

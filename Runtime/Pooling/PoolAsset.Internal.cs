@@ -1,4 +1,4 @@
-﻿using MobX.Utilities.Callbacks;
+﻿using MobX.Mediator.Callbacks;
 using MobX.Utilities.Libraries;
 using MobX.Utilities.Types;
 using System;
@@ -203,6 +203,7 @@ namespace MobX.Mediator.Pooling
             }
 
             OnReleaseInstance(instance);
+
             _activeItems.Remove(instance);
 
             if (CountInactive < MaxPoolSize)

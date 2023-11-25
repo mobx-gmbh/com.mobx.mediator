@@ -1,5 +1,5 @@
-﻿using MobX.Mediator.Events;
-using MobX.Utilities.Callbacks;
+﻿using MobX.Mediator.Callbacks;
+using MobX.Mediator.Events;
 using MobX.Utilities.Inspector;
 using System;
 using System.Runtime.CompilerServices;
@@ -54,7 +54,6 @@ namespace MobX.Mediator.Values
                 Repaint();
                 _lastValue = value;
 #endif
-
                 _changedEvent.Raise(value);
             }
         }

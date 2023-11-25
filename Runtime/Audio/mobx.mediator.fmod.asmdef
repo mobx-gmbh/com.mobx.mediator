@@ -1,0 +1,20 @@
+{
+    "name": "mobx.mediator.fmod",
+    "rootNamespace": "MobX.Mediator",
+    "references": [
+        "GUID:0c752da273b17c547ae705acf0f2adf2",
+        "GUID:451c7863c31cdec4fbc99d53f3082b53",
+        "GUID:60b317c0e9339ed42a02f571de4723cd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "FMOD_UNITY"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

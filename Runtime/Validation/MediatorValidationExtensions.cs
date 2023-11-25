@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using UnityEngine;
 
-namespace MobX.Mediator
+namespace MobX.Mediator.Validation
 {
     public static class MediatorValidationExtensions
     {

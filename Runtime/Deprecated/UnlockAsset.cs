@@ -1,13 +1,13 @@
-﻿using MobX.Mediator.Events;
+﻿using MobX.Mediator.Callbacks;
+using MobX.Mediator.Events;
 using MobX.Utilities;
-using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace MobX.Mediator.Locks
+namespace MobX.Mediator.Deprecated
 {
     public abstract class UnlockAsset<T> : MediatorAsset where T : IKey
     {

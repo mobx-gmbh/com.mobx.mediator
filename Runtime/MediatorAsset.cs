@@ -1,4 +1,4 @@
-using MobX.Utilities.Callbacks;
+using MobX.Mediator.Callbacks;
 using MobX.Utilities.Inspector;
 using MobX.Utilities.Reflection;
 
