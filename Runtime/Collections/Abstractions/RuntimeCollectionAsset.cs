@@ -1,6 +1,7 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;

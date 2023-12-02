@@ -1,6 +1,6 @@
 ﻿using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -79,8 +79,8 @@ namespace MobX.Mediator.Values
             ResetValue();
         }
 
-        [SpaceBefore]
-        [Button(ButtonType.Center)]
+        [PropertySpace]
+        [Button]
         [Tooltip("Reset the current value to the cached value")]
         private void ResetValue()
         {

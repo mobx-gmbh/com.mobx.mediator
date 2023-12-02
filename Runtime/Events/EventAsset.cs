@@ -1,10 +1,12 @@
 using JetBrains.Annotations;
-using MobX.Utilities.Inspector;
+using MobX.Inspector;
+using Sirenix.OdinInspector;
 using System;
+using System.Collections.Generic;
 
 namespace MobX.Mediator.Events
 {
-    public abstract class EventAsset : EventAssetBase, IReceiver
+    public abstract class EventAsset : EventMediatorAsset, IReceiver
     {
         private protected readonly IBroadcast Event = new Broadcast();
 
@@ -54,22 +56,25 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Clear()
         {
             Event.Clear();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
-        [Button]
+        [Line]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Raise()
         {
 #if UNITY_EDITOR
@@ -81,8 +86,8 @@ namespace MobX.Mediator.Events
             Event.Raise();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void RaiseCritical()
         {
 #if UNITY_EDITOR
@@ -94,12 +99,16 @@ namespace MobX.Mediator.Events
             Event.RaiseCritical();
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
         public int Count => Event.Count;
+
+        [Line(DrawTiming = DrawTiming.After)]
+        [ShowInInspector]
+        [Foldout("Debug")]
+        [LabelText("Listener")]
+        public IReadOnlyCollection<Action> GetListenerCollection => Event.GetListenerCollection;
     }
 
-    public abstract class EventAsset<T> : EventAssetBase, IReceiver<T>
+    public abstract class EventAsset<T> : EventMediatorAsset, IReceiver<T>
     {
         public event Action<T> Invoked
         {
@@ -155,22 +164,25 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Clear()
         {
             Event.Clear();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
-        [Button]
+        [Line]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Raise(T value)
         {
 #if UNITY_EDITOR
@@ -182,8 +194,8 @@ namespace MobX.Mediator.Events
             Event.Raise(value);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void RaiseCritical(T value)
         {
 #if UNITY_EDITOR
@@ -195,12 +207,16 @@ namespace MobX.Mediator.Events
             Event.RaiseCritical(value);
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
         public int Count => Event.Count;
+
+        [Line(DrawTiming = DrawTiming.After)]
+        [ShowInInspector]
+        [Foldout("Debug")]
+        [LabelText("Listener")]
+        public IReadOnlyCollection<Action<T>> GetListenerCollection => Event.GetListenerCollection;
     }
 
-    public abstract class EventAsset<T1, T2> : EventAssetBase, IReceiver<T1, T2>
+    public abstract class EventAsset<T1, T2> : EventMediatorAsset, IReceiver<T1, T2>
     {
         private protected readonly IBroadcast<T1, T2> Event = new Broadcast<T1, T2>();
 
@@ -250,22 +266,25 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Clear()
         {
             Event.Clear();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
-        [Button]
+        [Line]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Raise(T1 value1, T2 value2)
         {
 #if UNITY_EDITOR
@@ -277,8 +296,8 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void RaiseCritical(T1 value1, T2 value2)
         {
 #if UNITY_EDITOR
@@ -290,12 +309,16 @@ namespace MobX.Mediator.Events
             Event.RaiseCritical(value1, value2);
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
         public int Count => Event.Count;
+
+        [Line(DrawTiming = DrawTiming.After)]
+        [ShowInInspector]
+        [Foldout("Debug")]
+        [LabelText("Listener")]
+        public IReadOnlyCollection<Action<T1, T2>> GetListenerCollection => Event.GetListenerCollection;
     }
 
-    public abstract class EventAsset<T1, T2, T3> : EventAssetBase, IReceiver<T1, T2, T3>
+    public abstract class EventAsset<T1, T2, T3> : EventMediatorAsset, IReceiver<T1, T2, T3>
     {
         private protected readonly IBroadcast<T1, T2, T3> Event = new Broadcast<T1, T2, T3>();
 
@@ -345,22 +368,25 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Clear()
         {
             Event.Clear();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
-        [Button]
+        [Line]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Raise(T1 value1, T2 value2, T3 value3)
         {
 #if UNITY_EDITOR
@@ -372,8 +398,8 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2, value3);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void RaiseCritical(T1 value1, T2 value2, T3 value3)
         {
 #if UNITY_EDITOR
@@ -385,12 +411,16 @@ namespace MobX.Mediator.Events
             Event.RaiseCritical(value1, value2, value3);
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
         public int Count => Event.Count;
+
+        [Line(DrawTiming = DrawTiming.After)]
+        [ShowInInspector]
+        [Foldout("Debug")]
+        [LabelText("Listener")]
+        public IReadOnlyCollection<Action<T1, T2, T3>> GetListenerCollection => Event.GetListenerCollection;
     }
 
-    public abstract class EventAsset<T1, T2, T3, T4> : EventAssetBase, IReceiver<T1, T2, T3, T4>
+    public abstract class EventAsset<T1, T2, T3, T4> : EventMediatorAsset, IReceiver<T1, T2, T3, T4>
     {
         private protected readonly IBroadcast<T1, T2, T3, T4> Event = new Broadcast<T1, T2, T3, T4>();
 
@@ -440,22 +470,25 @@ namespace MobX.Mediator.Events
             return Event.Contains(listener);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Clear()
         {
             Event.Clear();
         }
 
-        [Button]
         [Foldout("Debug")]
+        [ButtonGroup("Debug/Clear")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void ClearInvalid()
         {
             Event.ClearInvalid();
         }
 
-        [Button]
+        [Line]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void Raise(T1 value1, T2 value2, T3 value3, T4 value4)
         {
 #if UNITY_EDITOR
@@ -467,8 +500,8 @@ namespace MobX.Mediator.Events
             Event.Raise(value1, value2, value3, value4);
         }
 
-        [Button]
         [Foldout("Debug")]
+        [Button(ButtonStyle.FoldoutButton)]
         public void RaiseCritical(T1 value1, T2 value2, T3 value3, T4 value4)
         {
 #if UNITY_EDITOR
@@ -480,8 +513,12 @@ namespace MobX.Mediator.Events
             Event.RaiseCritical(value1, value2, value3, value4);
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
         public int Count => Event.Count;
+
+        [Line(DrawTiming = DrawTiming.After)]
+        [ShowInInspector]
+        [Foldout("Debug")]
+        [LabelText("Listener")]
+        public IReadOnlyCollection<Action<T1, T2, T3, T4>> GetListenerCollection => Event.GetListenerCollection;
     }
 }

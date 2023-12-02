@@ -1,5 +1,5 @@
-﻿using MobX.Utilities.Editor.Helper;
-using UnityEngine;
+﻿using UnityEngine;
+using GUIUtility = MobX.Utilities.Editor.Helper.GUIUtility;
 
 namespace Mobx.Mediator.Editor
 {
@@ -8,7 +8,7 @@ namespace Mobx.Mediator.Editor
         private UnityEditor.Editor _editor;
         private Vector2 _scrollPosition;
 
-        [UnityEditor.MenuItem("Tools/Asset Renaming")]
+        [UnityEditor.MenuItem("MobX/Asset Renaming")]
         public static void ShowWindow()
         {
             GetWindow<RenamingWindow>("Asset and Object Renaming");
@@ -28,12 +28,12 @@ namespace Mobx.Mediator.Editor
         protected void OnGUI()
         {
             _scrollPosition = UnityEditor.EditorGUILayout.BeginScrollView(_scrollPosition);
-            GUIHelper.BeginLabelWidthOverride(250);
+            GUIUtility.BeginLabelWidthOverride(250);
             if (_editor != null)
             {
                 _editor.OnInspectorGUI();
             }
-            GUIHelper.EndLabelWidthOverride();
+            GUIUtility.EndLabelWidthOverride();
             UnityEditor.EditorGUILayout.EndScrollView();
         }
     }

@@ -1,6 +1,6 @@
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
 using MobX.Utilities.Reflection;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -22,7 +22,8 @@ namespace MobX.Mediator.Singleton
         [NonSerialized] private bool _enableEditing;
 #pragma warning restore
 
-        [ConditionalShow(nameof(_enableEditing), ReadOnly = true)]
+        [ReadOnly]
+        [ShowIf(nameof(_enableEditing))]
         [SerializeField] private List<Object> registry;
 
         #endregion
@@ -228,7 +229,7 @@ namespace MobX.Mediator.Singleton
         #region Editor
 
         [Button]
-        [SpaceBefore]
+        [PropertySpace]
         [Tooltip("Remove null objects from the registry")]
         private void Validate()
         {
@@ -242,14 +243,14 @@ namespace MobX.Mediator.Singleton
         }
 
         [Button]
-        [ConditionalShow(nameof(_enableEditing), false)]
+        [ShowIf(nameof(_enableEditing), false)]
         private void EnableEdit()
         {
             _enableEditing = true;
         }
 
         [Button]
-        [ConditionalShow(nameof(_enableEditing))]
+        [ShowIf(nameof(_enableEditing))]
         private void DisableEdit()
         {
             _enableEditing = false;

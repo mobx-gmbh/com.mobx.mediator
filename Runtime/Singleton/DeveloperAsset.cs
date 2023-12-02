@@ -1,5 +1,6 @@
+using MobX.Inspector;
 using MobX.Mediator.Callbacks;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 
 namespace MobX.Mediator.Singleton
@@ -91,16 +92,16 @@ namespace MobX.Mediator.Singleton
         }
 
         [Button]
-        [Foldout("Configuration")]
-        [ConditionalShow(nameof(IsLocal), false)]
+        [Foldout("Asset")]
+        [HideIf(nameof(IsLocal))]
         public void DeclareAsLocal()
         {
             LocalInstance = (T) this;
         }
 
         [Button]
-        [Foldout("Configuration")]
-        [ConditionalShow(nameof(IsGlobal), false)]
+        [Foldout("Asset")]
+        [HideIf(nameof(IsGlobal))]
         public void DeclareAsGlobal()
         {
             Singletons.Register((T) this);

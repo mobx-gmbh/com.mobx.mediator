@@ -1,9 +1,10 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Mediator.Singleton;
 using MobX.Utilities;
 using MobX.Utilities.Collections;
-using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -81,14 +82,14 @@ namespace MobX.Mediator.Registry
 #if UNITY_EDITOR
 
         [Button]
-        [Foldout("Validation", false)]
+        [Foldout("Validation")]
         public bool ContainsAsset(Object obj)
         {
             return registry.ContainsValue(obj);
         }
 
         [Button]
-        [Foldout("Validation", false)]
+        [Foldout("Validation")]
         public void Validate()
         {
             var assets = registry.ToArray();

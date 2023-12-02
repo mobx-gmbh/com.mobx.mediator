@@ -1,17 +1,18 @@
 {
-    "name": "mobx.mediator",
-    "rootNamespace": "MobX.Mediator",
-    "references": [
-        "GUID:451c7863c31cdec4fbc99d53f3082b53",
-        "GUID:2b03cf6b0ac5d23419bed626562b55fb"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "mobx.mediator",
+  "rootNamespace": "MobX.Mediator",
+  "references": [
+    "GUID:451c7863c31cdec4fbc99d53f3082b53",
+    "GUID:2b03cf6b0ac5d23419bed626562b55fb",
+    "GUID:06a3c3218ef731343985f180249a8161"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

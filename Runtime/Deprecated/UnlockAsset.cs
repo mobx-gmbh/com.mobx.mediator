@@ -1,7 +1,8 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace MobX.Mediator.Deprecated
         [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically")]
         [SerializeField] private bool clearLeaks = true;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         private readonly HashSet<T> _keys = new(4);
         private readonly IBroadcast _unlockedEvent = new Broadcast();
         private readonly IBroadcast _lockedEvent = new Broadcast();

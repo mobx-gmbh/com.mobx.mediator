@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
+using MobX.Inspector;
 using MobX.Mediator.Utility;
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Diagnostics;
 using UnityEngine;
@@ -36,15 +37,18 @@ namespace MobX.Mediator.Callbacks
             ResetRuntimeChanges = 4
         }
 
+        [PropertySpace(0, 8)]
         [Tooltip(AssetOptionsTooltip)]
+        [PropertyOrder(-10000)]
         [SerializeField] private Options assetOptions = Options.ReceiveCallbacks;
 
 #pragma warning disable
-        [FormerlySerializedAs("description")]
+        [Line(SpaceBefore = 0)]
         [TextArea(0, 6)]
-        [DrawLineAfter]
         [UsedImplicitly]
-        [ConditionalShow(nameof(assetOptions), Options.Annotation)]
+        [ShowIf(nameof(ShowAnnotation))]
+        [FormerlySerializedAs("description")]
+        [PropertyOrder(-10000)]
         [SerializeField] private string annotation;
 #pragma warning restore
 
@@ -52,6 +56,8 @@ namespace MobX.Mediator.Callbacks
             "Receive Callbacks: When enabled, the asset will receive custom runtime and editor callbacks." +
             "Annotation: When enabled, a developer annotation field is displayed." +
             "ResetRuntimeChanges: When enabled, changes to this asset during runtime are reset when entering edit mode.";
+
+        private bool ShowAnnotation => assetOptions.HasFlagUnsafe(Options.Annotation);
 
         [Conditional("UNITY_EDITOR")]
         public void Repaint()

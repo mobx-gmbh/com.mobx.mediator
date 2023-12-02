@@ -1,6 +1,7 @@
-﻿using MobX.Utilities.Inspector;
+﻿using MobX.Inspector;
 using MobX.Utilities.Libraries;
 using MobX.Utilities.Types;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,11 @@ namespace MobX.Mediator.Pooling
 
         [Foldout("Pool")]
         [SerializeField] private bool multiple;
-        [ConditionalHide(nameof(multiple))]
+        [HideIf(nameof(multiple))]
         [SerializeField] private T prefab;
-        [ConditionalShow(nameof(multiple))]
+        [ShowIf(nameof(multiple))]
         [SerializeField] private T[] prefabs;
-        [ConditionalShow(nameof(multiple))]
+        [ShowIf(nameof(multiple))]
         [SerializeField] private SelectionMode selectionMode;
 
         [Header("Initialization")]
@@ -30,7 +31,7 @@ namespace MobX.Mediator.Pooling
         [SerializeField] private bool warmupOnBeginPlay;
         [SerializeField] private int initialPoolSize = 10;
         [SerializeField] private bool limitPoolSize;
-        [ConditionalShow(nameof(limitPoolSize))]
+        [ShowIf(nameof(limitPoolSize))]
         [SerializeField] private int maxPoolSize = 100;
 
         #endregion
@@ -40,7 +41,7 @@ namespace MobX.Mediator.Pooling
 
         public T Prefab => prefab;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         public PoolState State { get; private set; }
 
         public int CountAll { get; private set; }
@@ -58,11 +59,11 @@ namespace MobX.Mediator.Pooling
 
         private Loop _prefabIndex;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         private readonly List<T> _pool = new();
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         private readonly List<T> _activeItems = new();
 

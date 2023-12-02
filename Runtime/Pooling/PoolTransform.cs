@@ -1,5 +1,5 @@
 ﻿using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MobX.Mediator.Pooling

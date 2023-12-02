@@ -1,7 +1,8 @@
+using MobX.Inspector;
 using MobX.Utilities;
 using MobX.Utilities.Collections;
-using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
+using Sirenix.OdinInspector;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;

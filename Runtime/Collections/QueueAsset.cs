@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
+using MobX.Inspector;
 using MobX.Mediator.Collections.Abstractions;
 using MobX.Utilities.Collections;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -13,9 +14,9 @@ namespace MobX.Mediator.Collections
     /// </summary>
     public abstract class QueueAsset<T> : RuntimeCollectionAsset<T>, IQueue<T>
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         [ShowInInspector]
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         private readonly Queue<T> _queue = new(8);
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>

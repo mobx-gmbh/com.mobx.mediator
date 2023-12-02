@@ -1,6 +1,7 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -13,9 +14,10 @@ namespace MobX.Mediator.Values
     /// </summary>
     public abstract class SerializedValueAsset<TValue> : ValueAsset<TValue>
     {
+        [Line]
         [SerializeField] private TValue value;
 
-        [ReadonlyInspector]
+        [ReadOnly]
 #pragma warning disable 414
         [SerializeField] private TValue cached;
 
@@ -92,8 +94,8 @@ namespace MobX.Mediator.Values
             ResetValue();
         }
 
-        [SpaceBefore]
-        [Button(ButtonType.Center)]
+        [PropertySpace]
+        [Button]
         [Tooltip("Reset the current value to the cached value")]
         private void ResetValue()
         {

@@ -23,6 +23,7 @@
         EditorUpdate = 105,
         EditorLoad = 106,
         BuildPreprocessor = 107,
-        BuildPostprocessor = 108
+        BuildPostprocessor = 108,
+        OnGUI = 109
     }
 }

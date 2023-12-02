@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine.Assertions;
 
@@ -9,6 +11,9 @@ namespace MobX.Mediator.Events
         #region Member Variables
 
         public int Count { get; private set; }
+
+        public IReadOnlyCollection<Action> GetListenerCollection => _listener.Take(Count).ToList();
+
         public Action this[int index] => _listener[index];
 
         private Action[] _listener;
@@ -182,6 +187,9 @@ namespace MobX.Mediator.Events
         public Action<T> this[int index] => _listener[index];
 
         public int Count { get; private set; }
+
+        public IReadOnlyCollection<Action<T>> GetListenerCollection => _listener.Take(Count).ToList();
+
         private Action<T>[] _listener;
 
         #endregion
@@ -351,6 +359,7 @@ namespace MobX.Mediator.Events
         public Action<T1, T2> this[int index] => _listener[index];
 
         public int Count { get; private set; }
+        public IReadOnlyCollection<Action<T1, T2>> GetListenerCollection => _listener.Take(Count).ToList();
         private Action<T1, T2>[] _listener;
 
         #endregion
@@ -522,6 +531,7 @@ namespace MobX.Mediator.Events
         public Action<T1, T2, T3> this[int index] => _listener[index];
 
         public int Count { get; private set; }
+        public IReadOnlyCollection<Action<T1, T2, T3>> GetListenerCollection => _listener.Take(Count).ToList();
         private Action<T1, T2, T3>[] _listener;
 
         #endregion
@@ -693,6 +703,7 @@ namespace MobX.Mediator.Events
         public Action<T1, T2, T3, T4> this[int index] => _listener[index];
 
         public int Count { get; private set; }
+        public IReadOnlyCollection<Action<T1, T2, T3, T4>> GetListenerCollection => _listener.Take(Count).ToList();
         private Action<T1, T2, T3, T4>[] _listener;
 
         #endregion

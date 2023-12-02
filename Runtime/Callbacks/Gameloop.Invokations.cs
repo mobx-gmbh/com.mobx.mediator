@@ -31,6 +31,7 @@ namespace MobX.Mediator.Callbacks
             UnityEditor.EditorApplication.playModeStateChanged -= EditorApplicationOnplayModeStateChanged;
             UnityEditor.EditorApplication.playModeStateChanged += EditorApplicationOnplayModeStateChanged;
             UnityEditor.EditorApplication.update += OnEditorUpdate;
+            UnityEditor.EditorApplication.projectWindowItemInstanceOnGUI += (_, _) => Segment = Segment.OnGUI;
 #endif
         }
 

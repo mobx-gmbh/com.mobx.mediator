@@ -1,11 +1,11 @@
-﻿using MobX.Utilities.Inspector;
+﻿using Sirenix.OdinInspector;
 using System;
 
 namespace MobX.Mediator.Values
 {
     public abstract class ReadonlyValueAsset<TValue> : ValueAsset
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         public TValue Value => GetValue();
 
         public abstract TValue GetValue();

@@ -1,8 +1,9 @@
-﻿using MobX.Mediator.Events;
+﻿using MobX.Inspector;
+using MobX.Mediator.Events;
 using MobX.Mediator.Values;
 using MobX.Serialization;
-using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -52,7 +53,7 @@ namespace MobX.Mediator.Deprecated
         private IProfile Profile => storageLevel switch
         {
             StorageLevel.Profile => FileSystem.Profile,
-            StorageLevel.Shared => FileSystem.SharedProfile,
+            StorageLevel.SharedProfile => FileSystem.SharedProfile,
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -67,6 +68,7 @@ namespace MobX.Mediator.Deprecated
 
         #region Value
 
+        [Line(DrawTiming = DrawTiming.After)]
         [ShowInInspector]
         [Foldout("Save Data")]
         public override T Value
@@ -139,8 +141,7 @@ namespace MobX.Mediator.Deprecated
         #region IO Operations
 
         [Button]
-        [DrawLine]
-        [Foldout("Save Data")]
+        [ButtonGroup("Save Data/Buttons")]
         public void Save()
         {
             var profile = Profile;
@@ -149,7 +150,7 @@ namespace MobX.Mediator.Deprecated
         }
 
         [Button]
-        [Foldout("Save Data")]
+        [ButtonGroup("Save Data/Buttons")]
         public void Load()
         {
             var profile = Profile;
@@ -164,7 +165,7 @@ namespace MobX.Mediator.Deprecated
         }
 
         [Button("Reset")]
-        [Foldout("Save Data")]
+        [ButtonGroup("Save Data/Buttons")]
         public void ResetData()
         {
             var profile = Profile;

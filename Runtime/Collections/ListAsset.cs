@@ -1,6 +1,7 @@
-﻿using MobX.Mediator.Collections.Abstractions;
+﻿using MobX.Inspector;
+using MobX.Mediator.Collections.Abstractions;
 using MobX.Mediator.Events;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace MobX.Mediator.Collections
 {
     public abstract class ListAsset<T> : RuntimeCollectionAsset<T>, IList<T>, IReadOnlyList<T>
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         [ShowInInspector]
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         private readonly List<T> _list = new(16);
         private readonly Broadcast _changed = new();
         private readonly Broadcast<T> _removed = new();

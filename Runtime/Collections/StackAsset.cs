@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
+using MobX.Inspector;
 using MobX.Mediator.Collections.Abstractions;
 using MobX.Utilities.Collections;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace MobX.Mediator.Collections
 {
     public abstract class StackAsset<T> : RuntimeCollectionAsset<T>, IStack<T>
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         [ShowInInspector]
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         private readonly List<T> _stack = new(8);
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>

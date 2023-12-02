@@ -1,6 +1,7 @@
+using MobX.Inspector;
 using MobX.Mediator.Events;
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace MobX.Mediator.Context
         /// <summary>
         ///     Returns true if the context is active and part of a context stack.
         /// </summary>
-        [ReadonlyInspector]
+        [ReadOnly]
         public bool IsActive => contextStack.Peek() == this;
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace MobX.Mediator.Context
         }
 
         [Button]
-        [DrawLine]
+        [Line]
         public void Enable()
         {
             if (IsActive)

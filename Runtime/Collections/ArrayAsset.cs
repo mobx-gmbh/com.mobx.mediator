@@ -1,5 +1,6 @@
-﻿using MobX.Utilities;
-using MobX.Utilities.Inspector;
+﻿using MobX.Inspector;
+using MobX.Utilities;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -17,7 +18,7 @@ namespace MobX.Mediator.Collections
         [Foldout("Options")]
         [SerializeField] private bool showMoreOptions;
 
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         [SerializeField] private List<T> items = new(16);
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
@@ -58,7 +59,7 @@ namespace MobX.Mediator.Collections
 
         /// <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
         /// <returns>The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
-        [ConditionalShow(nameof(showMoreOptions))]
+        [ShowIf(nameof(showMoreOptions))]
         [Foldout("Options")]
         public int Count
         {
@@ -107,7 +108,7 @@ namespace MobX.Mediator.Collections
 
         [Button]
         [Foldout("Options")]
-        [ConditionalShow(nameof(showMoreOptions))]
+        [ShowIf(nameof(showMoreOptions))]
         private void RemoveDuplicates()
         {
             items.RemoveDuplicates();
@@ -115,7 +116,7 @@ namespace MobX.Mediator.Collections
 
         [Button]
         [Foldout("Options")]
-        [ConditionalShow(nameof(showMoreOptions))]
+        [ShowIf(nameof(showMoreOptions))]
         private void RemoveNullObjects()
         {
             items.RemoveNull();

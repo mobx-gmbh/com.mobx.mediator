@@ -1,6 +1,7 @@
+using MobX.Inspector;
 using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,48 +21,48 @@ namespace MobX.Mediator.Cooldown
 
         #region Properties
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float TotalDurationInSeconds => GetTotalDurationInSeconds();
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float TotalDurationInSecondsUnmodified => cooldownInSeconds;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float RemainingDurationInSeconds { get; private set; }
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float PassedDurationInSeconds => TotalDurationInSeconds - RemainingDurationInSeconds;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float PercentageCompleted => FactorCompleted * 100;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public float FactorCompleted => PassedDurationInSeconds * _reciprocalOfTotalDuration;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public bool IsRunning { get; private set; }
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public bool IsPaused => IsActive && IsRunning is false;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public bool IsActive { get; private set; }
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [Foldout("Debug")]
         public bool IsInactive => IsActive is false;
 
-        [DrawLine]
-        [ReadonlyInspector]
+        [Line]
+        [ReadOnly]
         public IList<ICooldownDurationModifier> CooldownDurationModifiers { get; } =
             new List<ICooldownDurationModifier>();
 
@@ -202,10 +203,9 @@ namespace MobX.Mediator.Cooldown
             return true;
         }
 
+        [Line]
         [Button]
         [Foldout("Controls")]
-        [DrawLine]
-        [DrawLineAfter]
         public bool Reduce(float durationInSeconds)
         {
             if (IsInactive)
@@ -222,6 +222,7 @@ namespace MobX.Mediator.Cooldown
             return true;
         }
 
+        [Line]
         [Button]
         [Foldout("Controls")]
         public bool Pause()

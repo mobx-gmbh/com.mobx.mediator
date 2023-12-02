@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
+using MobX.Inspector;
 using MobX.Mediator.Collections.Abstractions;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -12,9 +13,9 @@ namespace MobX.Mediator.Collections
     /// </summary>
     public abstract class HashSetAsset<T> : RuntimeCollectionAsset<T>, ICollection<T>
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         [ShowInInspector]
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         private readonly HashSet<T> _hashSet = new();
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>

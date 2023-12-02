@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 
 namespace MobX.Mediator.Tasks
 {

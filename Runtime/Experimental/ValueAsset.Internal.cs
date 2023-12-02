@@ -1,9 +1,10 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Mediator.Deprecated;
 using MobX.Mediator.Events;
 using MobX.Serialization;
-using MobX.Utilities.Inspector;
 using MobX.Utilities.Types;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,36 +18,112 @@ namespace MobX.Mediator.Experimental
     {
         #region Inspector
 
-        [Space]
+        [Line]
         [SerializeField] private Type type;
-        [Label("Value")]
-        [ConditionalHide(nameof(type), Type.Persistent)]
-        [SerializeField] private TValue serializedValue;
-        [ConditionalShow(nameof(type), Type.Persistent)]
-        [SerializeField] private TValue defaultValue;
-        [SerializeField] private bool raiseChangedEvents = true;
+        [SerializeField] private bool enableEvents = true;
 
-        [DrawLine]
-        [ConditionalShow(nameof(type), Type.Persistent)]
+        // Serialized Value
+        [Line]
+        [LabelText("@name", NicifyText = true)]
+        [ShowIf(nameof(type), Type.Serialized)]
+        [SerializeField] private TValue serializedValue;
+
+        // Runtime Value
+        [Line]
+        [LabelText("Default Value")]
+        [ShowIf(nameof(type), Type.Runtime)]
+        [DisableIf("@UnityEngine.Application.isPlaying")]
+        [Tooltip("The default value for the runtime value. The runtime value will be reset to this value")]
+        [OnValueChanged(nameof(OnUpdateRuntimeValue))]
+        [SerializeField] private TValue defaultRuntimeValue;
+
+        // Persistent Value
+        [Line]
+        [ShowIf(nameof(type), Type.Persistent)]
+        [LabelText("Default Value")]
+        [SerializeField] private TValue defaultPersistentValue;
+        [ShowIf(nameof(type), Type.Persistent)]
         [SerializeField] private RuntimeGUID guid;
-        [ConditionalShow(nameof(type), Type.Persistent)]
+        [ShowIf(nameof(type), Type.Persistent)]
         [Tooltip("The level to store the data on. Either profile specific or shared between profiles")]
         [SerializeField] private StorageLevel storageLevel = StorageLevel.Profile;
+        [Tooltip("When enabled, the value is always saved when updated")]
+        [ShowIf(nameof(type), Type.Persistent)]
+        [SerializeField] private bool autoSave = true;
+
+        // Property
+        [Line]
+        [ShowIf(nameof(type), Type.Property)]
+        [SerializeField] private bool logPropertyWarnings;
+        [ShowInInspector]
+        [PropertyOrder(2)]
+        [ShowIf(nameof(type), Type.Property)]
+        private bool HasSetter => _setter != null;
+        [ShowInInspector]
+        [PropertyOrder(2)]
+        [ShowIf(nameof(type), Type.Property)]
+        private bool HasGetter => _getter != null;
 
         #endregion
 
 
         #region Fields
 
-        [NonSerialized] private TValue _value;
-        [NonSerialized] private TValue _cache;
+        [NonSerialized] private TValue _runtimeValue;
+        [NonSerialized] private ManagedStorage<TValue> _persistentValue = new();
 
-        [ConditionalShow(nameof(type), Type.Property)]
         private Func<TValue> _getter;
-        [ConditionalShow(nameof(type), Type.Property)]
         private Action<TValue> _setter;
 
         private readonly IBroadcast<TValue> _changedEvent = new Broadcast<TValue>();
+
+        #endregion
+
+
+        #region Initialization
+
+        [CallbackOnInitialization]
+        private void Initialize()
+        {
+            switch (type)
+            {
+                case Type.Serialized:
+                    break;
+                case Type.Runtime:
+                    _runtimeValue = defaultRuntimeValue;
+                    break;
+                case Type.Persistent:
+                    Assert.IsTrue(FileSystem.IsInitialized);
+                    LoadPersistentData();
+                    break;
+                case Type.Property:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [CallbackOnApplicationQuit]
+        private void Shutdown()
+        {
+            switch (type)
+            {
+                case Type.Serialized:
+                    break;
+                case Type.Runtime:
+                    _runtimeValue = defaultRuntimeValue;
+                    break;
+                case Type.Persistent:
+                    SavePersistentData();
+                    break;
+                case Type.Property:
+                    _setter = null;
+                    _getter = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
         #endregion
 
@@ -58,16 +135,31 @@ namespace MobX.Mediator.Experimental
             return type switch
             {
                 Type.Serialized => serializedValue,
-                Type.Runtime => _value,
-                Type.Persistent => _value,
-                Type.Property => _getter is not null ? _getter() : default(TValue),
+                Type.Runtime => _runtimeValue,
+                Type.Persistent => _persistentValue is not null ? _persistentValue.value : defaultPersistentValue,
+                Type.Property => GetPropertyValue(),
                 var _ => throw new InvalidOperationException()
             };
+
+            TValue GetPropertyValue()
+            {
+                if (_getter is null)
+                {
+#if DEBUG
+                    if (logPropertyWarnings)
+                    {
+                        Debug.LogWarning("Value Asset", "Property getter is not set!", this);
+                    }
+#endif
+                    return default(TValue);
+                }
+                return _getter();
+            }
         }
 
-        public void SetValue(TValue value)
+        public override void SetValue(TValue value)
         {
-            var raiseChangedEvent = raiseChangedEvents && _changedEvent.Count > 0 && AreEqual(Value, value);
+            var raiseChangedEvent = enableEvents && _changedEvent.Count > 0 && AreNotEqual(Value, value);
 
             switch (type)
             {
@@ -76,6 +168,7 @@ namespace MobX.Mediator.Experimental
                     if (Application.isPlaying)
                     {
                         Debug.LogWarning("Value Asset", "Setting a serialized value during runtime!", this);
+                        return;
                     }
 #endif
                     serializedValue = value;
@@ -90,14 +183,29 @@ namespace MobX.Mediator.Experimental
                     {
                         _changedEvent.Raise(value);
                     }
-                    _value = value;
+                    _runtimeValue = value;
                     break;
 
                 case Type.Persistent:
+                    _persistentValue.value = value;
+                    if (autoSave)
+                    {
+                        SavePersistentData();
+                    }
                     break;
 
                 case Type.Property:
-                    _setter?.Invoke(value);
+                    if (_setter is null)
+                    {
+#if DEBUG
+                        if (logPropertyWarnings)
+                        {
+                            Debug.LogWarning("Mediator", "Property setter is not set!", this);
+                        }
+#endif
+                        break;
+                    }
+                    _setter.Invoke(value);
                     break;
 
                 default:
@@ -105,7 +213,7 @@ namespace MobX.Mediator.Experimental
             }
         }
 
-        public void Save()
+        private void SaveInternal()
         {
             switch (type)
             {
@@ -113,13 +221,13 @@ namespace MobX.Mediator.Experimental
                 case Type.Serialized:
                     UnityEditor.EditorUtility.SetDirty(this);
                     break;
-
-                case Type.Runtime:
-                    _cache = _value;
-                    break;
 #endif
                 case Type.Persistent:
                     SavePersistentData();
+                    break;
+
+                case Type.Property:
+                    _changedEvent.Raise(Value);
                     break;
             }
         }
@@ -128,6 +236,12 @@ namespace MobX.Mediator.Experimental
         private bool AreEqual(in TValue first, in TValue second)
         {
             return EqualityComparer<TValue>.Default.Equals(first, second);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool AreNotEqual(in TValue first, in TValue second)
+        {
+            return !EqualityComparer<TValue>.Default.Equals(first, second);
         }
 
         #endregion
@@ -165,57 +279,16 @@ namespace MobX.Mediator.Experimental
         private IProfile Profile => storageLevel switch
         {
             StorageLevel.Profile => FileSystem.Profile,
-            StorageLevel.Shared => FileSystem.SharedProfile,
-            _ => throw new ArgumentOutOfRangeException()
+            StorageLevel.SharedProfile => FileSystem.SharedProfile,
+            var _ => throw new ArgumentOutOfRangeException()
         };
 
-        [CallbackOnInitialization]
-        private void InitializePersistentData()
-        {
-            if (type == Type.Persistent)
-            {
-                Assert.IsTrue(FileSystem.IsInitialized);
-                // TODO: LoadPersistentData();
-            }
-        }
+        private string Key => guid.ToString();
 
+        [Line]
         [Button]
-        [DrawLine]
-        [ConditionalShow(nameof(type), Type.Persistent)]
-        private void SavePersistentData()
-        {
-            var profile = Profile;
-            profile.Store(guid.ToString(), _value);
-            profile.SaveFile(guid.ToString());
-            FileSystem.Save();
-        }
-
-        [Button]
-        [ConditionalShow(nameof(type), Type.Persistent)]
-        private void LoadPersistentData()
-        {
-            var profile = Profile;
-
-            if (profile.HasFile(guid.ToString()))
-            {
-                _value = profile.Get<TValue>(guid.ToString());
-            }
-        }
-
-        [Button]
-        [ConditionalShow(nameof(type), Type.Persistent)]
-        private void ResetPersistentData()
-        {
-            var profile = Profile;
-            _value = defaultValue;
-            profile.Store(guid.ToString(), _value);
-            profile.SaveFile(guid.ToString());
-            FileSystem.Save();
-        }
-
-        [Button]
-        [DrawLine]
-        [ConditionalShow(nameof(type), Type.Persistent)]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 8)]
+        [ShowIf(nameof(type), Type.Persistent)]
         private void OpenInFileSystem()
         {
             var dataPath = Application.persistentDataPath;
@@ -225,44 +298,58 @@ namespace MobX.Mediator.Experimental
             Application.OpenURL(folderPath);
         }
 
+        [Button("Save")]
+        [ButtonGroup("Persistent")]
+        [ShowIf(nameof(type), Type.Persistent)]
+        public void SavePersistentData()
+        {
+            Profile.Store(Key, _persistentValue);
+            Profile.SaveFile(Key);
+        }
+
+        [Button("Load")]
+        [ButtonGroup("Persistent")]
+        [ShowIf(nameof(type), Type.Persistent)]
+        public void LoadPersistentData()
+        {
+            _persistentValue = Profile.HasFile(Key)
+                ? Profile.Get<ManagedStorage<TValue>>(Key)
+                : new ManagedStorage<TValue>(defaultPersistentValue);
+        }
+
+        [Button("Reset")]
+        [ButtonGroup("Persistent")]
+        [ShowIf(nameof(type), Type.Persistent)]
+        public void ResetPersistentData()
+        {
+            _persistentValue = new ManagedStorage<TValue>(defaultPersistentValue);
+            SavePersistentData();
+        }
+
         #endregion
 
 
         #region Editor
 
 #if UNITY_EDITOR
-        protected virtual void OnValidate()
+        private void OnUpdateRuntimeValue()
         {
-            switch (type)
+            if (Application.isPlaying is false)
             {
-                case Type.Serialized:
-                    break;
-                case Type.Runtime:
-                    if (Application.isPlaying is false)
-                    {
-                        _value = serializedValue;
-                        _cache = _value;
-                    }
-                    break;
-                case Type.Persistent:
-                    break;
-                case Type.Property:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                _runtimeValue = defaultRuntimeValue;
             }
         }
 
         [CallbackOnEnterPlayMode]
         private void OnEnterPlayMode()
         {
-            _cache = _value;
+            Initialize();
         }
 
         [CallbackOnEnterPlayMode]
         private void OnExitPlayMode()
         {
-            _value = _cache;
+            Shutdown();
         }
 #endif
 
@@ -273,12 +360,11 @@ namespace MobX.Mediator.Experimental
 
         protected override void OnEnable()
         {
-            base.OnEnable();
+            _persistentValue = new ManagedStorage<TValue>(defaultPersistentValue);
 #if UNITY_EDITOR
             RuntimeGUID.Create(this, ref guid);
 #endif
-
-            // TODO: Load data
+            base.OnEnable();
         }
 
         #endregion

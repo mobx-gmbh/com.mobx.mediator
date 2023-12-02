@@ -1,5 +1,5 @@
-﻿using MobX.Utilities.Collections;
-using MobX.Utilities.Inspector;
+﻿using MobX.Inspector;
+using MobX.Utilities.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ namespace MobX.Mediator.Collections
     /// </summary>
     public abstract class MapAsset<TKey, TValue> : MediatorAsset, IReadOnlyDictionary<TKey, TValue>
     {
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         [SerializeField] private Map<TKey, TValue> map;
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>

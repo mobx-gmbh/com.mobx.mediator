@@ -1,5 +1,5 @@
 ﻿using MobX.Mediator.Callbacks;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace MobX.Mediator.Requests
         [SerializeField] private bool clearResponder;
         [SerializeField] private bool logUnansweredResponses;
 
-        [ReadonlyInspector] private Action _responder;
+        [ReadOnly] private Action _responder;
 
 
         #region API
@@ -97,7 +97,7 @@ namespace MobX.Mediator.Requests
         [SerializeField] private bool clearResponder;
         [SerializeField] private bool logUnansweredResponses;
 
-        [ReadonlyInspector] private Func<T> _responder;
+        [ReadOnly] private Func<T> _responder;
 
 
         #region API
@@ -176,7 +176,7 @@ namespace MobX.Mediator.Requests
         [SerializeField] private bool clearResponder;
         [SerializeField] private bool logUnansweredResponses;
 
-        [ReadonlyInspector] private Func<(T1, T2)> _responder;
+        [ReadOnly] private Func<(T1, T2)> _responder;
 
 
         #region API
@@ -255,7 +255,7 @@ namespace MobX.Mediator.Requests
         [SerializeField] private bool clearResponder;
         [SerializeField] private bool logUnansweredResponses;
 
-        [ReadonlyInspector] private Func<(T1, T2, T3)> _responder;
+        [ReadOnly] private Func<(T1, T2, T3)> _responder;
 
 
         #region API
@@ -334,7 +334,7 @@ namespace MobX.Mediator.Requests
         [SerializeField] private bool clearResponder;
         [SerializeField] private bool logUnansweredResponses;
 
-        [ReadonlyInspector] private Func<(T1, T2, T3, T4)> _responder;
+        [ReadOnly] private Func<(T1, T2, T3, T4)> _responder;
 
 
         #region API

@@ -10,6 +10,6 @@
         /// <summary>
         ///     Data is stored on a shared profile.
         /// </summary>
-        Shared = 1
+        SharedProfile = 1
     }
 }

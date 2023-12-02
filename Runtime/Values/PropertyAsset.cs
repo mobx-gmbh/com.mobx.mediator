@@ -1,6 +1,6 @@
 ﻿using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -126,7 +126,7 @@ namespace MobX.Mediator.Values
             _setter = null;
         }
 
-        [ReadonlyInspector]
+        [ReadOnly]
         [NonSerialized] private T _lastValue;
 #endif
 

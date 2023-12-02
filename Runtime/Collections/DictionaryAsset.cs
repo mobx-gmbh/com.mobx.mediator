@@ -1,5 +1,6 @@
-﻿using MobX.Mediator.Collections.Abstractions;
-using MobX.Utilities.Inspector;
+﻿using MobX.Inspector;
+using MobX.Mediator.Collections.Abstractions;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -12,9 +13,9 @@ namespace MobX.Mediator.Collections
     public abstract class DictionaryAsset<TKey, TValue> : RuntimeCollectionAsset<KeyValuePair<TKey, TValue>>,
         IDictionary<TKey, TValue>
     {
-        [ReadonlyInspector]
+        [ReadOnly]
         [ShowInInspector]
-        [Foldout(FoldoutName.HumanizedObjectName)]
+        [Foldout("Elements")]
         private readonly Dictionary<TKey, TValue> _dictionary = new(16);
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>

@@ -1,8 +1,9 @@
 using JetBrains.Annotations;
+using MobX.Inspector;
 using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
 using MobX.Utilities;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace MobX.Mediator.Provider
         [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically")]
         [SerializeField] private bool clearLeaks = true;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         private readonly HashSet<T> _providers = new(4);
         private readonly IBroadcast _firstAddedEvent = new Broadcast();
         private readonly IBroadcast _lastRemovedEvent = new Broadcast();
@@ -177,7 +178,7 @@ namespace MobX.Mediator.Provider
         [Tooltip("When enabled, leaks that occur when exiting playmode will be cleared automatically")]
         [SerializeField] private bool clearLeaks = true;
 
-        [ReadonlyInspector]
+        [ReadOnly]
         private readonly HashSet<object> _providers = new(4);
         private readonly IBroadcast _firstAddedEvent = new Broadcast();
         private readonly IBroadcast _lastRemovedEvent = new Broadcast();
