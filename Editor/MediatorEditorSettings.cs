@@ -1,5 +1,7 @@
-﻿using MobX.Mediator.Generation;
+﻿using MobX.Inspector;
+using MobX.Mediator.Generation;
 using MobX.Utilities.Collections;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +12,9 @@ namespace Mobx.Mediator.Editor
     [UnityEditor.InitializeOnLoadAttribute]
     public class MediatorEditorSettings : UnityEditor.ScriptableSingleton<MediatorEditorSettings>
     {
+        [Title("Suffix")]
         [SerializeField] private string fallbackSuffix = "Mediator";
+        [Space]
         [SerializeField] private Map<MediatorType, string> mediatorTypeSuffix = new()
         {
             {MediatorType.None, "Missing"},
@@ -32,6 +36,7 @@ namespace Mobx.Mediator.Editor
             {MediatorType.ValueAssetProperty, "PropertyAsset"}
         };
 
+        [Title("Icons")]
         [SerializeField] private Texture2D fallbackIcon;
         [SerializeField] private Map<MediatorType, Texture2D> mediatorTypeIcons = new();
 

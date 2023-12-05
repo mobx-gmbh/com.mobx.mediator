@@ -15,24 +15,18 @@ namespace Mobx.Mediator.Editor
         {
         }
 
+        private UnityEditor.Editor _settingsEditor;
+
         public override void OnGUI(string searchContext)
         {
             base.OnGUI(searchContext);
 
             var serializedObject = new UnityEditor.SerializedObject(MediatorEditorSettings.instance);
-            var mediatorTypeSuffixProperty = serializedObject.FindProperty("mediatorTypeSuffix");
-            var mediatorTypeSuffixFallbackProperty = serializedObject.FindProperty("fallbackSuffix");
-            var mediatorTypeIconProperty = serializedObject.FindProperty("mediatorTypeIcons");
-            var mediatorTypeIconFallbackProperty = serializedObject.FindProperty("fallbackIcon");
+
+            _settingsEditor ??= UnityEditor.Editor.CreateEditor(serializedObject.targetObject);
 
             serializedObject.Update();
-            UnityEditor.EditorGUILayout.PropertyField(mediatorTypeSuffixFallbackProperty);
-            UnityEditor.EditorGUILayout.PropertyField(mediatorTypeSuffixProperty);
-            GUIUtility.Space();
-            GUIUtility.DrawLine();
-            GUIUtility.Space();
-            UnityEditor.EditorGUILayout.PropertyField(mediatorTypeIconFallbackProperty);
-            UnityEditor.EditorGUILayout.PropertyField(mediatorTypeIconProperty);
+            _settingsEditor.OnInspectorGUI();
             serializedObject.ApplyModifiedProperties();
 
             MediatorEditorSettings.instance.SaveSettings();
@@ -57,7 +51,7 @@ namespace Mobx.Mediator.Editor
         [UnityEditor.SettingsProviderAttribute]
         public static UnityEditor.SettingsProvider CreateSettingsProvider()
         {
-            return new MediatorSettingsProvider("Project/Mediator", UnityEditor.SettingsScope.Project);
+            return new MediatorSettingsProvider("Project/MobX/Mediator", UnityEditor.SettingsScope.Project);
         }
     }
 }
