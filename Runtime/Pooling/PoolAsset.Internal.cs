@@ -70,23 +70,9 @@ namespace MobX.Mediator.Pooling
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ResetInternal()
-        {
-            for (var index = _activeItems.Count - 1; index >= 0; index--)
-            {
-                var instance = _activeItems[index];
-                Release(instance);
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UnloadInternal()
         {
             AssertIsPlaying();
-            for (var index = _activeItems.Count - 1; index >= 0; index--)
-            {
-                Release(_activeItems[index]);
-            }
 
             foreach (var instance in _pool)
             {
@@ -132,24 +118,8 @@ namespace MobX.Mediator.Pooling
             var isPoolEmpty = _pool.Count == 0;
             if (isPoolEmpty)
             {
-                if (_activeItems.Count >= MaxPoolSize)
-                {
-                    instance = _activeItems[0];
-                    _activeItems.RemoveAt(0);
-
-                    if (instance == null)
-                    {
-                        instance = CreateInstance();
-                        Debug.LogWarning("Pooling", $"Active item in {this} was null!", this);
-                    }
-
-                    OnReleaseInstance(instance);
-                }
-                else
-                {
-                    instance = CreateInstance();
-                    ++CountAll;
-                }
+                instance = CreateInstance();
+                ++CountAll;
             }
             else
             {
@@ -168,16 +138,7 @@ namespace MobX.Mediator.Pooling
                 }
             }
 
-            if (instance == null)
-            {
-                Debug.LogError("Pooling", $"Requested Instance from {this} was null!", this);
-                instance = CreateInstance();
-                ++CountAll;
-            }
-
             OnGetInstance(instance);
-
-            _activeItems.Add(instance);
             UpdateInspector();
             return instance;
         }
@@ -204,8 +165,6 @@ namespace MobX.Mediator.Pooling
 
             OnReleaseInstance(instance);
 
-            _activeItems.Remove(instance);
-
             if (CountInactive < MaxPoolSize)
             {
                 _pool.Add(instance);
@@ -213,8 +172,7 @@ namespace MobX.Mediator.Pooling
             else
             {
                 Debug.Log("Pooling",
-                    $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ",
-                    LogOption.NoStacktrace);
+                    $"Pool [{name}] reached its max allowed capacity! Destroying released instance: [{instance}] ");
                 OnDestroyInstance(instance);
             }
 

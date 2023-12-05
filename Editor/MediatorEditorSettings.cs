@@ -26,9 +26,9 @@ namespace Mobx.Mediator.Editor
             {MediatorType.QueueAsset, "Queue"},
             {MediatorType.DictionaryAsset, "Dictionary"},
             {MediatorType.MapAsset, "Map"},
-            {MediatorType.ValueAssetSerialized, "SerializedAsset"},
+            {MediatorType.ValueAssetConstant, "SerializedAsset"},
             {MediatorType.ValueAssetRuntime, "RuntimeAsset"},
-            {MediatorType.ValueAssetPersistent, "PersistentAsset"},
+            {MediatorType.ValueAssetSave, "PersistentAsset"},
             {MediatorType.ValueAssetProperty, "PropertyAsset"}
         };
 

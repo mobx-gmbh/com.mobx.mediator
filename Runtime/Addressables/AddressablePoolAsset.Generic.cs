@@ -28,11 +28,6 @@ namespace MobX.Mediator.Addressables
             throw new NotImplementedException();
         }
 
-        public override void ResetPool()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Unload()
         {
             prefabReference.ReleaseAsset();

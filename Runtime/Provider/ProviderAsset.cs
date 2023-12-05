@@ -16,7 +16,7 @@ namespace MobX.Mediator.Provider
     ///     Use this for more control over what can and what cannot block.
     /// </summary>
     /// <typeparam name="T">Instances of this type can be used as lock</typeparam>
-    public abstract class ProviderAsset<T> : MediatorAsset where T : IProvider
+    public abstract class ProviderAsset<T> : MediatorAsset
     {
         #region Inspector
 

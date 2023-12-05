@@ -19,14 +19,10 @@ namespace MobX.Mediator.Generation
         QueueAsset = 1 << 9,
         DictionaryAsset = 1 << 10,
         MapAsset = 1 << 11,
-
-        ValueAssetSerialized = 1 << 12,
+        ValueAssetConstant = 1 << 12,
         ValueAssetRuntime = 1 << 13,
-        ValueAssetPersistent = 1 << 14,
+        ValueAssetSave = 1 << 14,
         ValueAssetProperty = 1 << 15,
-
-        CollectionAssets = ListAsset | ArrayAsset | HashSetAsset | SetAsset | StackAsset | QueueAsset |
-                           DictionaryAsset | MapAsset,
-        CoreTypes = ValueAsset | EventAsset | ListAsset | ArrayAsset
+        ProviderAsset = 1 << 16
     }
 }

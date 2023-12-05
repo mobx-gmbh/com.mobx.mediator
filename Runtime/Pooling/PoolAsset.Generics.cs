@@ -63,10 +63,6 @@ namespace MobX.Mediator.Pooling
         [Foldout("Debug")]
         private readonly List<T> _pool = new();
 
-        [ReadOnly]
-        [Foldout("Debug")]
-        private readonly List<T> _activeItems = new();
-
         private enum SelectionMode
         {
             RoundRobin,
@@ -96,11 +92,6 @@ namespace MobX.Mediator.Pooling
         public sealed override void Load()
         {
             LoadInternal();
-        }
-
-        public sealed override void ResetPool()
-        {
-            ResetInternal();
         }
 
         public void Dispose()

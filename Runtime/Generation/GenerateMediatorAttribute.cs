@@ -6,19 +6,19 @@ namespace MobX.Mediator.Generation
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
     public class GenerateMediatorAttribute : Attribute
     {
-        public MediatorTypes MediatorTypeses { get; }
+        public MediatorTypes MediatorTypes { get; }
         public string FilePath { get; }
         public string NameSpace { get; set; }
 
-        public GenerateMediatorAttribute(MediatorTypes mediatorTypeses, [CallerFilePath] string filePath = default)
+        public GenerateMediatorAttribute(MediatorTypes mediatorTypes, [CallerFilePath] string filePath = default)
         {
-            MediatorTypeses = mediatorTypeses;
+            MediatorTypes = mediatorTypes;
             FilePath = filePath;
         }
 
         public GenerateMediatorAttribute([CallerFilePath] string filePath = default)
         {
-            MediatorTypeses = MediatorTypes.Everything;
+            MediatorTypes = MediatorTypes.Everything;
             FilePath = filePath;
         }
     }

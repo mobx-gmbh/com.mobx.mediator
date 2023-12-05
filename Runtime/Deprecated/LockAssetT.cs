@@ -1,3 +1,0 @@
-﻿namespace MobX.Mediator.Deprecated
-{
-}

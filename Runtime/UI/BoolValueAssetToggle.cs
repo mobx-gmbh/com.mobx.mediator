@@ -7,7 +7,7 @@ namespace MobX.Mediator.UI
 {
     public class BoolValueAssetToggle : MonoBehaviour
     {
-        [SerializeField] private ValueAsset<bool> valueAsset;
+        [SerializeField] private ValueAssetRW<bool> valueAsset;
         [SerializeField] private Toggle toggle;
         [SerializeField] private string nameText = "Missing";
         [SerializeField] private TMP_Text nameTextField;

@@ -15,9 +15,10 @@
         QueueAsset = 10,
         DictionaryAsset = 11,
         MapAsset = 12,
-        ValueAssetSerialized = 13,
+        ValueAssetConstant = 13,
         ValueAssetRuntime = 14,
-        ValueAssetPersistent = 15,
-        ValueAssetProperty = 16
+        ValueAssetSave = 15,
+        ValueAssetProperty = 16,
+        ProviderAsset = 17
     }
 }

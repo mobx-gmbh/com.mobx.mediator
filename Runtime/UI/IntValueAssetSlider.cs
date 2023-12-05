@@ -9,7 +9,7 @@ namespace MobX.Mediator.UI
     {
         [SerializeField] private int minValue;
         [SerializeField] private int maxValue = 1;
-        [SerializeField] private ValueAsset<int> valueAsset;
+        [SerializeField] private ValueAssetRW<int> valueAsset;
         [SerializeField] private Slider slider;
         [SerializeField] private string nameText = "Missing";
         [SerializeField] private TMP_Text nameTextField;

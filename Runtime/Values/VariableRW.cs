@@ -10,7 +10,7 @@ namespace MobX.Mediator.Values
     public struct VariableRW<T>
     {
         [SerializeField] private bool byReference;
-        [SerializeField] private ValueAsset<T> reference;
+        [SerializeField] private ValueAssetRW<T> reference;
         [SerializeField] private T value;
 
         /// <summary>

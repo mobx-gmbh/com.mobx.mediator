@@ -1,9 +1,10 @@
 using MobX.Mediator.Collections;
 using MobX.Mediator.Events;
-using MobX.Mediator.Experimental;
 using MobX.Mediator.Generation;
 using MobX.Mediator.Pooling;
+using MobX.Mediator.Provider;
 using MobX.Mediator.Requests;
+using MobX.Mediator.Values;
 using MobX.Utilities;
 using MobX.Utilities.Editor.ScriptGeneration;
 using MobX.Utilities.Pooling;
@@ -50,6 +51,7 @@ namespace Mobx.Mediator.Editor.Generation
             var profiles = await Task.Run(() => GenerateMediatorClassProfileAsync(suffixDictionary));
 
             var reimportAssetPaths = new List<(string path, MediatorType type)>();
+            var skippedAssetPaths = new List<(string path, MediatorType type)>();
             var operations = new List<Task>();
             foreach (var profile in profiles)
             {
@@ -61,6 +63,7 @@ namespace Mobx.Mediator.Editor.Generation
                 if (asset != null && asset.text == fileContent)
                 {
                     Debug.Log("Mediator", $"Skipping script at: {relativePath}");
+                    skippedAssetPaths.Add((relativePath, mediatorType));
                     continue;
                 }
 
@@ -77,20 +80,60 @@ namespace Mobx.Mediator.Editor.Generation
             {
                 UnityEditor.AssetDatabase.ImportAsset(path);
             }
-            UnityEditor.AssetDatabase.StopAssetEditing();
 
+            UnityEditor.AssetDatabase.StopAssetEditing();
+            UnityEditor.AssetDatabase.Refresh();
             UnityEditor.AssetDatabase.StartAssetEditing();
+
             foreach (var (path, type) in reimportAssetPaths)
             {
-                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<Object>(path);
                 var settings = MediatorEditorSettings.instance;
                 var assetIcon = settings.MediatorTypeIcons.TryGetValue(type, out var icon)
                     ? icon
                     : settings.FallbackIcon;
 
-                UnityEditor.EditorGUIUtility.SetIconForObject(asset, assetIcon);
+                SetIconForAsset(path, assetIcon);
             }
+
+            foreach (var (path, type) in skippedAssetPaths)
+            {
+                var settings = MediatorEditorSettings.instance;
+                var assetIcon = settings.MediatorTypeIcons.TryGetValue(type, out var icon)
+                    ? icon
+                    : settings.FallbackIcon;
+
+                SetIconForAsset(path, assetIcon);
+            }
+
+            foreach (var (path, type) in reimportAssetPaths)
+            {
+                UnityEditor.AssetDatabase.ImportAsset(path);
+            }
+            foreach (var (path, type) in skippedAssetPaths)
+            {
+                UnityEditor.AssetDatabase.ImportAsset(path);
+            }
+
             UnityEditor.AssetDatabase.StopAssetEditing();
+        }
+
+        private static void SetIconForAsset(string assetPath, Texture2D icon)
+        {
+            var metaFilePath = Path.Combine(Application.dataPath.RemoveFromEnd("Assets"), $"{assetPath}.meta");
+            var iconPath = UnityEditor.AssetDatabase.GetAssetPath(icon);
+            var iconGUID = UnityEditor.AssetDatabase.GUIDFromAssetPath(iconPath);
+
+            var metaFileContent = File.ReadAllText(metaFilePath);
+            var attributes = File.GetAttributes(metaFilePath);
+
+            var updatedAttributes = attributes & ~ FileAttributes.ReadOnly;
+            File.SetAttributes(metaFilePath, updatedAttributes);
+
+            metaFileContent = metaFileContent.Replace("icon: {instanceID: 0}",
+                $"icon: {{fileID: 2800000, guid: {iconGUID}, type: 3}}");
+
+            File.WriteAllText(metaFilePath, metaFileContent);
+            File.SetAttributes(metaFilePath, attributes);
         }
 
         private static Task<List<GenerationResult>> GenerateMediatorClassProfileAsync(
@@ -133,7 +176,7 @@ namespace Mobx.Mediator.Editor.Generation
                         var result = new ProfilingResult
                         {
                             Types = new[] {type},
-                            MediatorTypes = attribute.MediatorTypeses,
+                            MediatorTypes = attribute.MediatorTypes,
                             FilePath = attribute.FilePath,
                             NameSpaceOverride = attribute.NameSpace
                         };
@@ -163,11 +206,11 @@ namespace Mobx.Mediator.Editor.Generation
                         case MediatorTypes.None:
                             break;
 
-                        case MediatorTypes.ValueAssetSerialized when length == 1:
+                        case MediatorTypes.ProviderAsset when length == 1 && !types.First().IsStruct():
                         {
                             var mediator = CreateMediator(
                                 types,
-                                typeof(ValueAssetSerialized<>),
+                                typeof(ProviderAsset<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);
@@ -175,7 +218,43 @@ namespace Mobx.Mediator.Editor.Generation
                             {
                                 FilePath = mediator.filePath,
                                 FileContent = mediator.script,
-                                MediatorType = MediatorType.ValueAssetSerialized
+                                MediatorType = MediatorType.ProviderAsset
+                            };
+                            results.Add(result);
+                        }
+                            break;
+
+                        case MediatorTypes.ProviderAsset when length > 1 && !types.First().IsStruct():
+                        {
+                            var mediator = CreateMediator(
+                                types.Take(1).ToArray(),
+                                typeof(ProviderAsset<>),
+                                suffix,
+                                attributePath,
+                                nameSpaceOverride);
+                            var result = new GenerationResult
+                            {
+                                FilePath = mediator.filePath,
+                                FileContent = mediator.script,
+                                MediatorType = MediatorType.ProviderAsset
+                            };
+                            results.Add(result);
+                        }
+                            break;
+
+                        case MediatorTypes.ValueAssetConstant when length == 1:
+                        {
+                            var mediator = CreateMediator(
+                                types,
+                                typeof(ValueAssetConstant<>),
+                                suffix,
+                                attributePath,
+                                nameSpaceOverride);
+                            var result = new GenerationResult
+                            {
+                                FilePath = mediator.filePath,
+                                FileContent = mediator.script,
+                                MediatorType = MediatorType.ValueAssetConstant
                             };
                             results.Add(result);
                         }
@@ -199,11 +278,11 @@ namespace Mobx.Mediator.Editor.Generation
                         }
                             break;
 
-                        case MediatorTypes.ValueAssetPersistent when length == 1:
+                        case MediatorTypes.ValueAssetSave when length == 1:
                         {
                             var mediator = CreateMediator(
                                 types,
-                                typeof(ValueAssetPersistent<>),
+                                typeof(ValueAssetSave<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);
@@ -211,7 +290,7 @@ namespace Mobx.Mediator.Editor.Generation
                             {
                                 FilePath = mediator.filePath,
                                 FileContent = mediator.script,
-                                MediatorType = MediatorType.ValueAssetPersistent
+                                MediatorType = MediatorType.ValueAssetSave
                             };
                             results.Add(result);
                         }
@@ -859,14 +938,16 @@ namespace Mobx.Mediator.Editor.Generation
                 case MediatorTypes.MapAsset:
                     return MediatorType.MapAsset;
 
-                case MediatorTypes.ValueAssetSerialized:
-                    return MediatorType.ValueAssetSerialized;
+                case MediatorTypes.ValueAssetConstant:
+                    return MediatorType.ValueAssetConstant;
                 case MediatorTypes.ValueAssetRuntime:
                     return MediatorType.ValueAssetRuntime;
-                case MediatorTypes.ValueAssetPersistent:
-                    return MediatorType.ValueAssetPersistent;
+                case MediatorTypes.ValueAssetSave:
+                    return MediatorType.ValueAssetSave;
                 case MediatorTypes.ValueAssetProperty:
                     return MediatorType.ValueAssetProperty;
+                case MediatorTypes.ProviderAsset:
+                    return MediatorType.ProviderAsset;
 
                 default:
                     return MediatorType.None;

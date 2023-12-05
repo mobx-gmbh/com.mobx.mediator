@@ -4,13 +4,13 @@ using UnityEngine;
 namespace MobX.Mediator.Values
 {
     /// <summary>
-    ///     Proxy variable that either points to a <see cref="SerializedValueAsset{TValue}" /> or a locally serialized value.
+    ///     Proxy variable that either points to a <see cref="ValueAsset{TValue}" /> or a locally serialized value.
     /// </summary>
     [Serializable]
     public struct VariableRO<T>
     {
         [SerializeField] private bool byReference;
-        [SerializeField] private ReadonlyValueAsset<T> reference;
+        [SerializeField] private ValueAssetRO<T> reference;
         [SerializeField] private T value;
 
         /// <summary>

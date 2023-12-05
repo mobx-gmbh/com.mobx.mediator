@@ -10,6 +10,7 @@ namespace MobX.Mediator.Collections.Abstractions
 {
     public abstract class RuntimeCollectionAsset<T> : MediatorAsset
     {
+#pragma warning disable
         [Foldout("Options")]
         [Tooltip(
             "When enabled, leaks that occur when exiting playmode will logged to the console. A leak occurs when a collection is not empty after transitioning from play to edit mode.")]
