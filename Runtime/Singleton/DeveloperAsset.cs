@@ -1,5 +1,6 @@
 using MobX.Inspector;
 using MobX.Mediator.Callbacks;
+using MobX.Mediator.Registry;
 using Sirenix.OdinInspector;
 using System;
 
@@ -53,7 +54,7 @@ namespace MobX.Mediator.Singleton
 
                 if (local == null)
                 {
-                    LocalInstance = Singletons.Resolve<T>();
+                    LocalInstance = AssetRegistry.ResolveSingleton<T>();
                 }
 
                 return local;
@@ -70,9 +71,9 @@ namespace MobX.Mediator.Singleton
                 var path = UnityEditor.AssetDatabase.GetAssetPath(value);
                 var guid = UnityEditor.AssetDatabase.AssetPathToGUID(path);
                 UnityEditor.EditorPrefs.SetString(typeof(T).FullName, guid);
-                if (Singletons.Exists<T>() is false)
+                if (AssetRegistry.ExistsSingleton<T>() is false)
                 {
-                    Singletons.Register(value);
+                    AssetRegistry.RegisterSingleton(value);
                 }
 #endif
                 local = value;
@@ -88,7 +89,7 @@ namespace MobX.Mediator.Singleton
 
         private bool IsGlobal()
         {
-            return this == Singletons.Resolve<T>();
+            return this == AssetRegistry.ResolveSingleton<T>();
         }
 
         [Button]
@@ -104,7 +105,7 @@ namespace MobX.Mediator.Singleton
         [HideIf(nameof(IsGlobal))]
         public void DeclareAsGlobal()
         {
-            Singletons.Register((T) this);
+            AssetRegistry.RegisterSingleton((T) this);
         }
 
 #endif

@@ -8,6 +8,7 @@ namespace MobX.Mediator.Generation
     {
         public MediatorTypes MediatorTypes { get; set; } = MediatorTypes.Everything;
         public string NameSpace { get; set; } = null;
+        public string Subfolder { get; set; }
         public Type[] Types { get; }
         public string FilePath { get; }
 

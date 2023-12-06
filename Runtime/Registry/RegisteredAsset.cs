@@ -8,7 +8,7 @@ namespace MobX.Mediator.Registry
     ///     Registered assets are always included in a build and loaded during startup.
     ///     They can also be resolved during runtime, using their GUID.
     /// </summary>
-    public class RegisteredAsset : ScriptableAsset, IAssetGUID
+    public abstract class RegisteredAsset : ScriptableAsset, IAssetGUID
     {
         [SerializeField] private RuntimeGUID guid;
         public RuntimeGUID GUID => guid;
@@ -18,7 +18,7 @@ namespace MobX.Mediator.Registry
         {
             base.OnEnable();
             RuntimeGUID.Create(this, ref guid);
-            AssetRegistry.Register(this);
+            AssetRegistry.RegisterAsset(this);
         }
 #endif
     }

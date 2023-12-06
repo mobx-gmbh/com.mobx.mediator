@@ -7,12 +7,12 @@ namespace MobX.Mediator.Registry
     {
         public static T ToAsset<T>(this RuntimeGUID guid) where T : Object
         {
-            return AssetRegistry.Resolve<T>(guid);
+            return AssetRegistry.ResolveAsset<T>(guid);
         }
 
         public static bool TryToAsset<T>(this RuntimeGUID guid, out T result) where T : Object
         {
-            return AssetRegistry.TryResolve(guid, out result);
+            return AssetRegistry.TryResolveAsset(guid, out result);
         }
 
         public static RuntimeGUID ToGUID(this string value)

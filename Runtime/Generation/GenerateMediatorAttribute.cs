@@ -7,8 +7,18 @@ namespace MobX.Mediator.Generation
     public class GenerateMediatorAttribute : Attribute
     {
         public MediatorTypes MediatorTypes { get; }
+
         public string FilePath { get; }
+
+        /// <summary>
+        ///     Optional namespace override for the generated mediator file.
+        /// </summary>
         public string NameSpace { get; set; }
+
+        /// <summary>
+        ///     Optional subfolder.
+        /// </summary>
+        public string Subfolder { get; set; }
 
         public GenerateMediatorAttribute(MediatorTypes mediatorTypes, [CallerFilePath] string filePath = default)
         {

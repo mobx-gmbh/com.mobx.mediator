@@ -53,5 +53,11 @@ namespace Mobx.Mediator.Editor
         {
             return new MediatorSettingsProvider("Project/MobX/Mediator", UnityEditor.SettingsScope.Project);
         }
+
+        [UnityEditor.MenuItem("MobX/Settings/Mediator", priority = 5000)]
+        public static void MenuItem()
+        {
+            UnityEditor.SettingsService.OpenProjectSettings("Project/MobX/Mediator");
+        }
     }
 }

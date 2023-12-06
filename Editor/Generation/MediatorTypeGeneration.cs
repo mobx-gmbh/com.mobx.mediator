@@ -34,6 +34,7 @@ namespace Mobx.Mediator.Editor.Generation
             public string FilePath { get; set; }
             public MediatorTypes MediatorTypes { get; set; }
             public string NameSpaceOverride { get; set; }
+            public string Subfolder { get; set; }
         }
 
         private struct GenerationResult
@@ -68,6 +69,9 @@ namespace Mobx.Mediator.Editor.Generation
                 }
 
                 reimportAssetPaths.Add((relativePath, mediatorType));
+                var directoryPath = Path.GetDirectoryName(filePath)!;
+                Debug.Log(directoryPath);
+                Directory.CreateDirectory(directoryPath);
                 var writeOperation = File.WriteAllTextAsync(filePath, fileContent);
                 operations.Add(writeOperation);
                 Debug.Log("Mediator", $"Creating mediator script at: {relativePath}");
@@ -157,8 +161,13 @@ namespace Mobx.Mediator.Editor.Generation
                     {
                         Types = attribute.Types,
                         MediatorTypes = attribute.MediatorTypes,
-                        FilePath = attribute.FilePath,
-                        NameSpaceOverride = attribute.NameSpace
+                        NameSpaceOverride = attribute.NameSpace,
+                        FilePath = attribute.Subfolder.IsNotNullOrWhitespace()
+                            ? Path.Combine(
+                                Path.GetDirectoryName(attribute.FilePath)!,
+                                attribute.Subfolder,
+                                Path.GetFileName(attribute.FilePath))
+                            : attribute.FilePath
                     };
 
                     profilingResults.Add(result);
@@ -177,8 +186,14 @@ namespace Mobx.Mediator.Editor.Generation
                         {
                             Types = new[] {type},
                             MediatorTypes = attribute.MediatorTypes,
-                            FilePath = attribute.FilePath,
-                            NameSpaceOverride = attribute.NameSpace
+                            NameSpaceOverride = attribute.NameSpace,
+                            Subfolder = attribute.Subfolder,
+                            FilePath = attribute.Subfolder.IsNotNullOrWhitespace()
+                                ? Path.Combine(
+                                    Path.GetDirectoryName(attribute.FilePath)!,
+                                    attribute.Subfolder,
+                                    Path.GetFileName(attribute.FilePath))
+                                : attribute.FilePath
                         };
                         profilingResults.Add(result);
                     }
