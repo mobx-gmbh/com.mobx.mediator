@@ -21,7 +21,7 @@ namespace MobX.Mediator.Singleton
             get
             {
 #if !UNITY_EDITOR
-                return Singletons.Resolve<T>();
+                return AssetRegistry.ResolveSingleton<T>();
 #else
                 if (local == null)
                 {

@@ -270,7 +270,9 @@ namespace MobX.Mediator.Registry
         public void OnAfterDeserialize()
         {
             singleton = this;
+#if UNITY_EDITOR
             Validate();
+#endif
         }
 
         public void OnBeforeSerialize()
