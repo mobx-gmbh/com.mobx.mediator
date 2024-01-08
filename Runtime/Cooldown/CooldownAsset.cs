@@ -27,7 +27,11 @@ namespace MobX.Mediator.Cooldown
 
         [ReadOnly]
         [Foldout("Debug")]
-        public float TotalDurationInSecondsUnmodified => cooldownInSeconds;
+        public float Value
+        {
+            get => cooldownInSeconds;
+            set => cooldownInSeconds = value;
+        }
 
         [ReadOnly]
         [Foldout("Debug")]
@@ -188,10 +192,15 @@ namespace MobX.Mediator.Cooldown
 
         [Button]
         [Foldout("Controls")]
-        public bool Restart()
+        public bool Restart(bool startIfInactive = true)
         {
             if (IsInactive)
             {
+                if (startIfInactive)
+                {
+                    Start();
+                    return true;
+                }
                 return false;
             }
 
@@ -278,10 +287,10 @@ namespace MobX.Mediator.Cooldown
 
         private float GetTotalDurationInSeconds()
         {
-            var duration = TotalDurationInSecondsUnmodified;
+            var duration = Value;
             foreach (var cooldownDurationModifier in CooldownDurationModifiers)
             {
-                cooldownDurationModifier.ModifyCooldownDuration(ref duration, TotalDurationInSecondsUnmodified);
+                cooldownDurationModifier.ModifyCooldownDuration(ref duration, Value);
             }
             return duration;
         }

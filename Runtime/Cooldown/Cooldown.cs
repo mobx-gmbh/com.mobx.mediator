@@ -12,7 +12,7 @@ namespace MobX.Mediator.Cooldown
         #region Properties
 
         public float TotalDurationInSeconds => GetTotalDurationInSeconds();
-        public float TotalDurationInSecondsUnmodified { get; private set; }
+        public float Value { get; set; }
         public float RemainingDurationInSeconds { get; private set; }
 
         public float PassedDurationInSeconds => TotalDurationInSeconds - RemainingDurationInSeconds;
@@ -72,6 +72,12 @@ namespace MobX.Mediator.Cooldown
             remove => _reduced.Remove(value);
         }
 
+        public event Action Updated
+        {
+            add => _updated.Add(value);
+            remove => _updated.Remove(value);
+        }
+
         #endregion
 
 
@@ -84,6 +90,7 @@ namespace MobX.Mediator.Cooldown
         private readonly Broadcast _paused = new();
         private readonly Broadcast _resumed = new();
         private readonly Broadcast<float> _reduced = new();
+        private readonly Broadcast _updated = new();
         private float _reciprocalOfTotalDuration;
         private static readonly IObjectPool<Cooldown> pool = new ObjectPool<Cooldown>(() => new Cooldown());
 
@@ -100,7 +107,7 @@ namespace MobX.Mediator.Cooldown
         public static Cooldown Create(float durationInSeconds)
         {
             var cooldown = pool.Get();
-            cooldown.TotalDurationInSecondsUnmodified = durationInSeconds;
+            cooldown.Value = durationInSeconds;
             return cooldown;
         }
 
@@ -108,9 +115,9 @@ namespace MobX.Mediator.Cooldown
         {
         }
 
-        public Cooldown(float durationInSeconds)
+        public Cooldown(float durationInSeconds) : this()
         {
-            TotalDurationInSecondsUnmodified = durationInSeconds;
+            Value = durationInSeconds;
         }
 
         #endregion
@@ -166,10 +173,15 @@ namespace MobX.Mediator.Cooldown
             return true;
         }
 
-        public bool Restart()
+        public bool Restart(bool startIfInactive = true)
         {
             if (IsInactive)
             {
+                if (startIfInactive)
+                {
+                    Start();
+                    return true;
+                }
                 return false;
             }
 
@@ -247,10 +259,10 @@ namespace MobX.Mediator.Cooldown
 
         private float GetTotalDurationInSeconds()
         {
-            var duration = TotalDurationInSecondsUnmodified;
+            var duration = Value;
             foreach (var cooldownDurationModifier in CooldownDurationModifiers)
             {
-                cooldownDurationModifier.ModifyCooldownDuration(ref duration, TotalDurationInSecondsUnmodified);
+                cooldownDurationModifier.ModifyCooldownDuration(ref duration, Value);
             }
             return duration;
         }
@@ -262,6 +274,7 @@ namespace MobX.Mediator.Cooldown
             if (IsRunning)
             {
                 RemainingDurationInSeconds -= deltaTime;
+                _updated.Raise();
                 if (RemainingDurationInSeconds <= 0)
                 {
                     Complete();

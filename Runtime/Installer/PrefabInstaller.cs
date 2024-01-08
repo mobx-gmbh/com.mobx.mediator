@@ -3,13 +3,15 @@ using MobX.Mediator.Singleton;
 using MobX.Utilities;
 using MobX.Utilities.Types;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MobX.Mediator.Installer
 {
     public class PrefabInstaller : SingletonAsset<PrefabInstaller>
     {
         [SerializeField] private bool autoInstall;
-        [SerializeField] private Optional<GameObject>[] systems;
+        [FormerlySerializedAs("systems")]
+        [SerializeField] private Optional<GameObject>[] prefabs;
 
         private static bool installed;
 
@@ -21,7 +23,7 @@ namespace MobX.Mediator.Installer
                 return;
             }
             installed = true;
-            foreach (var system in systems)
+            foreach (var system in prefabs)
             {
                 if (system.TryGetValue(out var prefab))
                 {

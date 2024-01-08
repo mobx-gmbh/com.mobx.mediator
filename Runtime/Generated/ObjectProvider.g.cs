@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MobX.Mediator
 {
-    public class ObjectProvider : ProviderAsset<Object>
+    public class ObjectProvider : KeyCollectionAsset<Object>
     {
     }
 }

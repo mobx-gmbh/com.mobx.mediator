@@ -66,8 +66,8 @@ namespace MobX.Mediator.Cooldown
             Gameloop.Update -= OnUpdate;
             Gameloop.Update += OnUpdate;
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.update -= OnUpdate;
-            UnityEditor.EditorApplication.update += OnUpdate;
+            UnityEditor.EditorApplication.update -= OnEditorUpdate;
+            UnityEditor.EditorApplication.update += OnEditorUpdate;
 #endif
         }
 
@@ -89,6 +89,16 @@ namespace MobX.Mediator.Cooldown
                 cooldowns[index].UpdateCooldown(deltaTime);
             }
         }
+
+#if UNITY_EDITOR
+        private static void OnEditorUpdate()
+        {
+            if (Application.isPlaying is false)
+            {
+                OnUpdate();
+            }
+        }
+#endif
 
         #endregion
     }

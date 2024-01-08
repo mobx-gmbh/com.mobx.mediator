@@ -5,6 +5,8 @@ namespace MobX.Mediator.Singleton
 {
     public abstract class SingletonBehaviour<T> : MonoBehaviour where T : SingletonBehaviour<T>
     {
+        [SerializeField] private bool dontDestroyOnLoad;
+
         /// <summary>
         ///     The current singleton instance.
         /// </summary>
@@ -27,6 +29,11 @@ namespace MobX.Mediator.Singleton
 
             Singleton = (T) this;
             SingletonInitialized = true;
+
+            if (dontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
         protected virtual void OnDestroy()

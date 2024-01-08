@@ -63,7 +63,7 @@ namespace Mobx.Mediator.Editor.Generation
                 var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(relativePath);
                 if (asset != null && asset.text == fileContent)
                 {
-                    Debug.Log("Mediator", $"Skipping script at: {relativePath}");
+                    // Debug.Log("Mediator", $"Skipping script at: {relativePath}");
                     skippedAssetPaths.Add((relativePath, mediatorType));
                     continue;
                 }
@@ -225,7 +225,7 @@ namespace Mobx.Mediator.Editor.Generation
                         {
                             var mediator = CreateMediator(
                                 types,
-                                typeof(ProviderAsset<>),
+                                typeof(KeyCollectionAsset<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);
@@ -243,7 +243,7 @@ namespace Mobx.Mediator.Editor.Generation
                         {
                             var mediator = CreateMediator(
                                 types.Take(1).ToArray(),
-                                typeof(ProviderAsset<>),
+                                typeof(KeyCollectionAsset<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);

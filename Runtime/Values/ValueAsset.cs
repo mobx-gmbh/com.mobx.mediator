@@ -32,7 +32,7 @@ namespace MobX.Mediator.Values
         [PublicAPI]
         public override event Action<TValue> Changed
         {
-            add => _changedEvent.Add(value);
+            add => _changedEvent.AddUnique(value);
             remove => _changedEvent.Remove(value);
         }
 
@@ -43,6 +43,16 @@ namespace MobX.Mediator.Values
         public void Save()
         {
             SaveInternal();
+        }
+
+        /// <summary>
+        ///     Get the content if it is not null.
+        /// </summary>
+        [PublicAPI]
+        public bool TryGetValue(out TValue value)
+        {
+            value = Value;
+            return value != null;
         }
 
         #endregion

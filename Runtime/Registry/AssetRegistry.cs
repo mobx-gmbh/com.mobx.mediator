@@ -19,7 +19,7 @@ namespace MobX.Mediator.Registry
     [UnityEditor.InitializeOnLoadAttribute]
 #endif
     [CreateAssetMenu]
-    [AddressablesGroup("Singletons")]
+    [AddressablesGroup("Preload", CreateLabel = true)]
     public sealed class AssetRegistry : ScriptableObject, ISerializationCallbackReceiver
     {
         #region Inspector

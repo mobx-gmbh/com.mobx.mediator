@@ -25,6 +25,7 @@ namespace MobX.Mediator.Values
 
         [NonSerialized] private TValue _persistentValue;
         [NonSerialized] private readonly Broadcast<TValue> _changedEvent = new();
+        [NonSerialized] private StoreOptions _storeOptions;
 
         [ShowInInspector]
         public override TValue Value
@@ -67,6 +68,7 @@ namespace MobX.Mediator.Values
 
         protected override void OnEnable()
         {
+            _storeOptions = new StoreOptions(name);
             if (FileSystem.IsInitialized)
             {
                 LoadPersistentData();
@@ -121,14 +123,14 @@ namespace MobX.Mediator.Values
         [ButtonGroup("Persistent")]
         public void SavePersistentData()
         {
-            Profile.SaveFile(Key, _persistentValue);
+            Profile.SaveFile(Key, _persistentValue, _storeOptions);
         }
 
         [Button("Load")]
         [ButtonGroup("Persistent")]
         public void LoadPersistentData()
         {
-            if (!Profile.TryLoadFile(Key, out _persistentValue))
+            if (!Profile.TryLoadFile(Key, out _persistentValue, _storeOptions))
             {
                 _persistentValue = defaultPersistentValue;
             }

@@ -12,11 +12,11 @@ using UnityEngine;
 namespace MobX.Mediator.Provider
 {
     /// <summary>
-    ///     Generic variant of a <see cref="ProviderAsset" />.
+    ///     Generic variant of a <see cref="KeyCollectionAsset" />.
     ///     Use this for more control over what can and what cannot block.
     /// </summary>
     /// <typeparam name="T">Instances of this type can be used as lock</typeparam>
-    public abstract class ProviderAsset<T> : MediatorAsset
+    public abstract class KeyCollectionAsset<T> : MediatorAsset
     {
         #region Inspector
 
@@ -27,6 +27,7 @@ namespace MobX.Mediator.Provider
         [SerializeField] private bool clearLeaks = true;
 
         [ReadOnly]
+        [ShowInInspector]
         private readonly HashSet<T> _providers = new(4);
         private readonly IBroadcast _firstAddedEvent = new Broadcast();
         private readonly IBroadcast _lastRemovedEvent = new Broadcast();
@@ -93,13 +94,14 @@ namespace MobX.Mediator.Provider
         /// </summary>
         /// <returns>true if the object was added, false if it was already added</returns>
         [PublicAPI]
-        public bool AddProvider(T lockInstance)
+        public bool Add(T lockInstance)
         {
             var wasAdded = _providers.Add(lockInstance);
             if (wasAdded && _providers.Count == 1)
             {
                 _firstAddedEvent.Raise();
             }
+            Repaint();
             return wasAdded;
         }
 
@@ -108,13 +110,14 @@ namespace MobX.Mediator.Provider
         /// </summary>
         /// <returns>true if the object was removed, false if it was not an active lock</returns>
         [PublicAPI]
-        public bool RemoveProvider(T lockInstance)
+        public bool Remove(T lockInstance)
         {
             var wasRemoved = _providers.Remove(lockInstance);
             if (wasRemoved && _providers.Count == 0)
             {
                 _lastRemovedEvent.Raise();
             }
+            Repaint();
             return wasRemoved;
         }
 
@@ -140,9 +143,9 @@ namespace MobX.Mediator.Provider
 
         #region Operator
 
-        public static explicit operator bool(ProviderAsset<T> providerAsset)
+        public static explicit operator bool(KeyCollectionAsset<T> keyCollectionAsset)
         {
-            return providerAsset.IsProvided();
+            return keyCollectionAsset.IsProvided();
         }
 
         #endregion
@@ -168,7 +171,7 @@ namespace MobX.Mediator.Provider
         #endregion
     }
 
-    public abstract class ProviderAsset : MediatorAsset
+    public class KeyCollectionAsset : MediatorAsset
     {
         #region Inspector
 
@@ -179,6 +182,7 @@ namespace MobX.Mediator.Provider
         [SerializeField] private bool clearLeaks = true;
 
         [ReadOnly]
+        [ShowInInspector]
         private readonly HashSet<object> _providers = new(4);
         private readonly IBroadcast _firstAddedEvent = new Broadcast();
         private readonly IBroadcast _lastRemovedEvent = new Broadcast();
@@ -197,7 +201,7 @@ namespace MobX.Mediator.Provider
             add
             {
                 _firstAddedEvent.Add(value);
-                if (HasProvider())
+                if (HasAny())
                 {
                     value();
                 }
@@ -214,7 +218,7 @@ namespace MobX.Mediator.Provider
             add
             {
                 _lastRemovedEvent.Add(value);
-                if (HasProvider() is false)
+                if (HasAny() is false)
                 {
                     value();
                 }
@@ -226,7 +230,7 @@ namespace MobX.Mediator.Provider
         ///     Returns true if any object is currently registered as a provider.
         /// </summary>
         [PublicAPI]
-        public bool HasProvider()
+        public bool HasAny()
         {
             return _providers.Any();
         }
@@ -235,7 +239,7 @@ namespace MobX.Mediator.Provider
         ///     Returns true if the passed object is registered.
         /// </summary>
         [PublicAPI]
-        public bool IsObjectProviding(object potentialLock)
+        public bool IsObjectRegistered(object potentialLock)
         {
             return _providers.Contains(potentialLock);
         }
@@ -245,7 +249,7 @@ namespace MobX.Mediator.Provider
         /// </summary>
         /// <returns>true if the object was added, false if it was already added</returns>
         [PublicAPI]
-        public bool AddProvider(object lockInstance)
+        public bool Add(object lockInstance)
         {
             var wasAdded = _providers.Add(lockInstance);
             if (wasAdded && _providers.Count == 1)
@@ -260,7 +264,7 @@ namespace MobX.Mediator.Provider
         /// </summary>
         /// <returns>true if the object was removed, false if it was not an active lock</returns>
         [PublicAPI]
-        public bool RemoveProvider(object lockInstance)
+        public bool Remove(object lockInstance)
         {
             var wasRemoved = _providers.Remove(lockInstance);
             if (wasRemoved && _providers.Count == 0)
@@ -292,9 +296,9 @@ namespace MobX.Mediator.Provider
 
         #region Operator
 
-        public static explicit operator bool(ProviderAsset providerAsset)
+        public static explicit operator bool(KeyCollectionAsset keyCollectionAsset)
         {
-            return providerAsset.HasProvider();
+            return keyCollectionAsset.HasAny();
         }
 
         #endregion

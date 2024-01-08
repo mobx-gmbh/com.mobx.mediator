@@ -3,7 +3,7 @@ using System;
 
 namespace MobX.Mediator
 {
-    public class ByteProvider : ProviderAsset<byte>
+    public class ByteProvider : KeyCollectionAsset<byte>
     {
     }
 }

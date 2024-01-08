@@ -43,9 +43,7 @@ namespace MobX.Mediator.Callbacks
         /// <param name="callback">The name of the callback method</param>
         public static void RaiseCallback(string callback)
         {
-#if !DISABLE_GAMELOOP_CALLBACKS
             RaiseCallbackInternal(callback);
-#endif
         }
 
         /// <summary>
@@ -53,9 +51,8 @@ namespace MobX.Mediator.Callbacks
         /// </summary>
         public static void RaiseInitializationCompleted()
         {
-#if !DISABLE_GAMELOOP_CALLBACKS
+            Debug.Log("Gameloop", "Raising initialization completed!");
             RaiseInitializationCompletedInternal();
-#endif
         }
 
         /// <summary>
@@ -71,11 +68,7 @@ namespace MobX.Mediator.Callbacks
         /// </summary>
         public static Task ShutdownAsync()
         {
-#if !DISABLE_GAMELOOP_CALLBACKS
             return ShutdownAsyncInternal();
-#else
-            return Task.CompletedTask;
-#endif
         }
 
         #endregion

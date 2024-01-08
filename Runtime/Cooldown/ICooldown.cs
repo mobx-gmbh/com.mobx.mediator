@@ -28,7 +28,7 @@ namespace MobX.Mediator.Cooldown
         /// <summary>
         ///     How long is the cooldown without any modifications.
         /// </summary>
-        public float TotalDurationInSecondsUnmodified { get; }
+        public float Value { get; }
 
         /// <summary>
         ///     How many seconds remain until the cooldown has completed.
@@ -107,7 +107,7 @@ namespace MobX.Mediator.Cooldown
         ///     Restart the cooldown.
         /// </summary>
         /// <returns>True if the cooldown was running</returns>
-        public bool Restart();
+        public bool Restart(bool startIfInactive = true);
 
         /// <summary>
         ///     Reduce the cooldown by a given duration.
