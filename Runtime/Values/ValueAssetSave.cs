@@ -68,12 +68,17 @@ namespace MobX.Mediator.Values
 
         protected override void OnEnable()
         {
+            base.OnEnable();
             _storeOptions = new StoreOptions(name);
             if (FileSystem.IsInitialized)
             {
                 LoadPersistentData();
             }
-            base.OnEnable();
+            else
+            {
+                FileSystem.InitializationCompleted -= LoadPersistentData;
+                FileSystem.InitializationCompleted += LoadPersistentData;
+            }
         }
 
         [CallbackOnInitialization]
@@ -130,9 +135,14 @@ namespace MobX.Mediator.Values
         [ButtonGroup("Persistent")]
         public void LoadPersistentData()
         {
-            if (!Profile.TryLoadFile(Key, out _persistentValue, _storeOptions))
+            if (Profile.HasFile(Key) is false)
             {
-                _persistentValue = defaultPersistentValue;
+                SetValue(defaultPersistentValue);
+            }
+            else
+            {
+                var value = Profile.LoadFile<TValue>(Key);
+                SetValue(value);
             }
         }
 
