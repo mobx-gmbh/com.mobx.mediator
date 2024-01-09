@@ -9,7 +9,8 @@
   "licensesUrl": "https://github.com/mobx-gmbh/com.mobx.mediator/blob/main/LICENSE.md",
   "dependencies": {
     "com.mobx.utilities": "1.0.0",
-    "com.mobx.debug": "1.0.0"
+    "com.mobx.debug": "1.0.0",
+    "com.unity.localization": "1.4.5"
   },
   "keywords": [
     "event",
