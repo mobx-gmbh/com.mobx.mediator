@@ -3,7 +3,7 @@ using System;
 
 namespace MobX.Mediator
 {
-    public class BoolProvider : KeyCollectionAsset<bool>
+    public class BoolLocks : LockAsset<bool>
     {
     }
 }

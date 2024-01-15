@@ -149,7 +149,7 @@ namespace Mobx.Mediator.Editor.Generation
 
             foreach (var assembly in assemblies)
             {
-                foreach (var attribute in assembly.TryGetCustomAttributes<GenerateMediatorForAttribute>())
+                foreach (var attribute in assembly.GetCustomAttributes<GenerateMediatorForAttribute>())
                 {
                     if (attribute.Types.Any(type => type.IsGenericTypeDefinition))
                     {
@@ -180,7 +180,7 @@ namespace Mobx.Mediator.Editor.Generation
                     {
                         continue;
                     }
-                    if (type.TryGetCustomAttribute<GenerateMediatorAttribute>(out var attribute))
+                    foreach (var attribute in type.GetCustomAttributes<GenerateMediatorAttribute>())
                     {
                         var result = new ProfilingResult
                         {
@@ -221,11 +221,11 @@ namespace Mobx.Mediator.Editor.Generation
                         case MediatorTypes.None:
                             break;
 
-                        case MediatorTypes.ProviderAsset when length == 1 && !types.First().IsStruct():
+                        case MediatorTypes.LockAsset when length == 1 && !types.First().IsStruct():
                         {
                             var mediator = CreateMediator(
                                 types,
-                                typeof(KeyCollectionAsset<>),
+                                typeof(LockAsset<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);
@@ -233,17 +233,17 @@ namespace Mobx.Mediator.Editor.Generation
                             {
                                 FilePath = mediator.filePath,
                                 FileContent = mediator.script,
-                                MediatorType = MediatorType.ProviderAsset
+                                MediatorType = MediatorType.LockAsset
                             };
                             results.Add(result);
                         }
                             break;
 
-                        case MediatorTypes.ProviderAsset when length > 1 && !types.First().IsStruct():
+                        case MediatorTypes.LockAsset when length > 1 && !types.First().IsStruct():
                         {
                             var mediator = CreateMediator(
                                 types.Take(1).ToArray(),
-                                typeof(KeyCollectionAsset<>),
+                                typeof(LockAsset<>),
                                 suffix,
                                 attributePath,
                                 nameSpaceOverride);
@@ -251,7 +251,7 @@ namespace Mobx.Mediator.Editor.Generation
                             {
                                 FilePath = mediator.filePath,
                                 FileContent = mediator.script,
-                                MediatorType = MediatorType.ProviderAsset
+                                MediatorType = MediatorType.LockAsset
                             };
                             results.Add(result);
                         }
@@ -961,8 +961,8 @@ namespace Mobx.Mediator.Editor.Generation
                     return MediatorType.ValueAssetSave;
                 case MediatorTypes.ValueAssetProperty:
                     return MediatorType.ValueAssetProperty;
-                case MediatorTypes.ProviderAsset:
-                    return MediatorType.ProviderAsset;
+                case MediatorTypes.LockAsset:
+                    return MediatorType.LockAsset;
 
                 default:
                     return MediatorType.None;

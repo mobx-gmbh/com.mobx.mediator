@@ -23,6 +23,6 @@ namespace MobX.Mediator.Generation
         ValueAssetRuntime = 1 << 13,
         ValueAssetSave = 1 << 14,
         ValueAssetProperty = 1 << 15,
-        ProviderAsset = 1 << 16
+        LockAsset = 1 << 16
     }
 }

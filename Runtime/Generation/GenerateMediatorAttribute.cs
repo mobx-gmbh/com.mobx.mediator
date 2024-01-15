@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace MobX.Mediator.Generation
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct,
+        AllowMultiple = true)]
     public class GenerateMediatorAttribute : Attribute
     {
         public MediatorTypes MediatorTypes { get; }
@@ -18,7 +19,7 @@ namespace MobX.Mediator.Generation
         /// <summary>
         ///     Optional subfolder.
         /// </summary>
-        public string Subfolder { get; set; }
+        public string Subfolder { get; set; } = "Mediator";
 
         public GenerateMediatorAttribute(MediatorTypes mediatorTypes, [CallerFilePath] string filePath = default)
         {

@@ -19,6 +19,6 @@
         ValueAssetRuntime = 14,
         ValueAssetSave = 15,
         ValueAssetProperty = 16,
-        ProviderAsset = 17
+        LockAsset = 17
     }
 }

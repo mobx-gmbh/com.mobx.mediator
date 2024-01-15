@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 namespace MobX.Mediator.Installer
 {
-    public class PrefabInstaller : SingletonAsset<PrefabInstaller>
+    public class InstallationSystem : SingletonAsset<InstallationSystem>
     {
         [SerializeField] private bool autoInstall;
         [FormerlySerializedAs("systems")]
