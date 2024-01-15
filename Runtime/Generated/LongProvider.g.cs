@@ -3,7 +3,7 @@ using System;
 
 namespace MobX.Mediator
 {
-    public class LongLocks : LockAsset<long>
+    public class LongProvider : LockAsset<long>
     {
     }
 }

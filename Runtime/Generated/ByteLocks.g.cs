@@ -3,7 +3,7 @@ using System;
 
 namespace MobX.Mediator
 {
-    public class StringProvider : LockAsset<string>
+    public class ByteLocks : LockAsset<byte>
     {
     }
 }

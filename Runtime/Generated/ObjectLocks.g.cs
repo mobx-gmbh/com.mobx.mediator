@@ -1,9 +1,9 @@
 using MobX.Mediator.Provider;
-using System;
+using UnityEngine;
 
 namespace MobX.Mediator
 {
-    public class StringProvider : LockAsset<string>
+    public class ObjectLocks : LockAsset<Object>
     {
     }
 }

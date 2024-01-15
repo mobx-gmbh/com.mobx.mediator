@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MobX.Mediator
 {
-    public class ObjectProvider : LockAsset<Object>
+    public class ScriptableObjectLocks : LockAsset<ScriptableObject>
     {
     }
 }

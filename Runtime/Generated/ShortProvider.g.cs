@@ -3,7 +3,7 @@ using System;
 
 namespace MobX.Mediator
 {
-    public class ShortLocks : LockAsset<short>
+    public class ShortProvider : LockAsset<short>
     {
     }
 }

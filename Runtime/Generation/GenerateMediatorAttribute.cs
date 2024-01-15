@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace MobX.Mediator.Generation
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct,
+    [AttributeUsage(
+        AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum,
         AllowMultiple = true)]
     public class GenerateMediatorAttribute : Attribute
     {
