@@ -1,23 +1,28 @@
-﻿using MobX.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MobX.Mediator.Callbacks
 {
+    public delegate void TimeScaleDelegate(ref float timeScale);
+
     public partial class Gameloop
     {
-        private static readonly List<Func<float>> timeScaleModifier = new();
+        private static readonly List<TimeScaleDelegate> timeScaleModifier = new();
 
-        private static float CalculateTimeScale()
+        private static void UpdateTimeScale()
         {
-            var modifier = 1f;
-            foreach (var func in timeScaleModifier)
+            if (ControlTimeScale is false)
             {
-                modifier *= func().WithMinLimit(0);
+                return;
             }
 
-            return Time.timeScale * modifier;
+            var timeScale = 1f;
+            foreach (var timeScaleDelegate in timeScaleModifier)
+            {
+                timeScaleDelegate(ref timeScale);
+            }
+
+            Time.timeScale = timeScale;
         }
     }
 }

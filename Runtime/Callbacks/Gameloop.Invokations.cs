@@ -121,7 +121,7 @@ namespace MobX.Mediator.Callbacks
                 return;
             }
 
-            OneSecondTimer = new Timer(1);
+            OneSecondTimer = Timer.FromSeconds(1);
 #if DEBUG
             for (var index = slowTickUpdateCallbacks.Count - 1; index >= 0; index--)
             {
@@ -149,7 +149,7 @@ namespace MobX.Mediator.Callbacks
                 return;
             }
 
-            TickTimer = new Timer(.1f);
+            TickTimer = Timer.FromSeconds(.1f);
 #if DEBUG
             for (var index = tickUpdateCallbacks.Count - 1; index >= 0; index--)
             {
@@ -191,6 +191,15 @@ namespace MobX.Mediator.Callbacks
                 lateUpdateCallbacks[index]();
             }
 #endif
+            try
+            {
+                UpdateTimeScale();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(logCategory, exception);
+            }
+
             FrameCount++;
         }
 

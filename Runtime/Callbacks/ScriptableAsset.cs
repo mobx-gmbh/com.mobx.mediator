@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace MobX.Mediator.Callbacks
 {
@@ -40,6 +41,7 @@ namespace MobX.Mediator.Callbacks
         [PropertySpace(0, 8)]
         [Tooltip(AssetOptionsTooltip)]
         [PropertyOrder(-10000)]
+        [HideInInlineEditors]
         [SerializeField] private Options assetOptions = Options.ReceiveCallbacks;
 
 #pragma warning disable
@@ -58,6 +60,23 @@ namespace MobX.Mediator.Callbacks
             "ResetRuntimeChanges: When enabled, changes to this asset during runtime are reset when entering edit mode.";
 
         private bool ShowAnnotation => assetOptions.HasFlagUnsafe(Options.Annotation);
+
+#if UNITY_EDITOR
+        [ShowInInlineEditors]
+        [ShowInInspector]
+        [PropertyOrder(-1)]
+        [PropertySpace(0, 8)]
+        private Object Script
+        {
+            get
+            {
+                _serializedObject ??= new UnityEditor.SerializedObject(this);
+                return _serializedObject.FindProperty("m_Script").objectReferenceValue;
+            }
+        }
+
+        private UnityEditor.SerializedObject _serializedObject;
+#endif
 
         [Conditional("UNITY_EDITOR")]
         public void Repaint()

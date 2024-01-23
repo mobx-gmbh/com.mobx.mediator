@@ -19,6 +19,7 @@ namespace MobX.Mediator.Cooldown
         public float PercentageCompleted => FactorCompleted * 100;
         public float FactorCompleted => PassedDurationInSeconds * _reciprocalOfTotalDuration;
         public bool IsRunning { get; private set; }
+        public bool IsNotRunning => IsRunning is false;
         public bool IsPaused => IsActive && IsRunning is false;
         public bool IsActive { get; private set; }
         public bool IsInactive => IsActive is false;

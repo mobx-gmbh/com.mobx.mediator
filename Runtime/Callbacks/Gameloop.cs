@@ -230,14 +230,14 @@ namespace MobX.Mediator.Callbacks
         #region Time Scale
 
         /// <summary>
-        ///     A custom timescale implementation that can be modified by multiple sources.
+        ///     When enabled, TimeScaleDelegates can be added to control the time scale of the game.
         /// </summary>
-        public static float TimeScale => CalculateTimeScale();
+        public static bool ControlTimeScale { get; set; } = true;
 
         /// <summary>
         ///     Add a custom timescale modification source.
         /// </summary>
-        public static void AddTimeScaleModifier(Func<float> modifier)
+        public static void AddTimeScaleModifier(TimeScaleDelegate modifier)
         {
             timeScaleModifier.AddUnique(modifier);
         }
@@ -245,7 +245,7 @@ namespace MobX.Mediator.Callbacks
         /// <summary>
         ///     Remove a custom timescale modification source.
         /// </summary>
-        public static void RemoveTimeScaleModifier(Func<float> modifier)
+        public static void RemoveTimeScaleModifier(TimeScaleDelegate modifier)
         {
             timeScaleModifier.Remove(modifier);
         }
