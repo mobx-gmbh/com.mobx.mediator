@@ -48,6 +48,9 @@ namespace MobX.Mediator.Callbacks
                 OnFixedUpdate,
                 OnApplicationFocus,
                 OnApplicationPause);
+
+            EarlyUpdateEvents.Create(OnPreUpdate, OnPreLateUpdate);
+            DelayedUpdateEvents.Create(OnPostUpdate, OnPostLateUpdate);
 #endif
             for (var index = beforeFirstSceneLoadCallbacks.Count - 1; index >= 0; index--)
             {
@@ -85,6 +88,98 @@ namespace MobX.Mediator.Callbacks
             for (var index = firstUpdateCallbacks.Count - 1; index >= 0; index--)
             {
                 firstUpdateCallbacks[index]();
+            }
+#endif
+        }
+
+        private static void OnPreUpdate()
+        {
+            Segment = Segment.PreUpdate;
+#if DEBUG
+            for (var index = preUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                try
+                {
+                    preUpdateCallbacks[index]();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(logCategory, exception);
+                }
+            }
+#else
+            for (var index = preUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                preUpdateCallbacks[index]();
+            }
+#endif
+        }
+
+        private static void OnPostUpdate()
+        {
+            Segment = Segment.PostUpdate;
+#if DEBUG
+            for (var index = postUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                try
+                {
+                    postUpdateCallbacks[index]();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(logCategory, exception);
+                }
+            }
+#else
+            for (var index = postUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                postUpdateCallbacks[index]();
+            }
+#endif
+        }
+
+        private static void OnPreLateUpdate()
+        {
+            Segment = Segment.PreLateUpdate;
+#if DEBUG
+            for (var index = preLateUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                try
+                {
+                    preLateUpdateCallbacks[index]();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(logCategory, exception);
+                }
+            }
+#else
+            for (var index = preLateUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                preLateUpdateCallbacks[index]();
+            }
+#endif
+        }
+
+        private static void OnPostLateUpdate()
+        {
+            Segment = Segment.PostLateUpdate;
+#if DEBUG
+            for (var index = postLateUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                try
+                {
+                    postLateUpdateCallbacks[index]();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(logCategory, exception);
+                }
+            }
+#else
+            for (var index = postLateUpdateCallbacks.Count - 1; index >= 0; index--)
+            {
+                postLateUpdateCallbacks[index]();
             }
 #endif
         }

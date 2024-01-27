@@ -29,7 +29,11 @@ namespace MobX.Mediator.Callbacks
         private static readonly List<Action> initializationCompletedCallbacks = new(Capacity64);
         private static readonly List<Action> beforeFirstSceneLoadCallbacks = new(Capacity16);
         private static readonly List<Action> afterFirstSceneLoadCallbacks = new(Capacity16);
-        private static readonly List<Action> updateCallbacks = new(Capacity32);
+        private static readonly List<Action> preUpdateCallbacks = new(Capacity32);
+        private static readonly List<Action> postUpdateCallbacks = new(Capacity32);
+        private static readonly List<Action> preLateUpdateCallbacks = new(Capacity32);
+        private static readonly List<Action> postLateUpdateCallbacks = new(Capacity32);
+        private static readonly List<Action> updateCallbacks = new(Capacity64);
         private static readonly List<Action> lateUpdateCallbacks = new(Capacity32);
         private static readonly List<Action> fixedUpdateCallbacks = new(Capacity32);
         private static readonly List<Action> slowTickUpdateCallbacks = new(Capacity32);
@@ -72,6 +76,10 @@ namespace MobX.Mediator.Callbacks
             }
 
             RemoveCallbacksFromList(updateCallbacks, target);
+            RemoveCallbacksFromList(preUpdateCallbacks, target);
+            RemoveCallbacksFromList(postUpdateCallbacks, target);
+            RemoveCallbacksFromList(preLateUpdateCallbacks, target);
+            RemoveCallbacksFromList(postLateUpdateCallbacks, target);
             RemoveCallbacksFromList(lateUpdateCallbacks, target);
             RemoveCallbacksFromList(fixedUpdateCallbacks, target);
             RemoveCallbacksFromList(applicationQuitCallbacks, target);
@@ -233,6 +241,26 @@ namespace MobX.Mediator.Callbacks
                     {
                         afterFirstSceneLoadCallback();
                     }
+                    break;
+
+                case Segment.PreUpdate:
+                    var preUpdateCallback = (Action) methodInfo.CreateDelegate(typeof(Action), target);
+                    preUpdateCallbacks.Add(preUpdateCallback);
+                    break;
+
+                case Segment.PostUpdate:
+                    var postUpdateCallback = (Action) methodInfo.CreateDelegate(typeof(Action), target);
+                    postUpdateCallbacks.Add(postUpdateCallback);
+                    break;
+
+                case Segment.PreLateUpdate:
+                    var preLateUpdateCallback = (Action) methodInfo.CreateDelegate(typeof(Action), target);
+                    preLateUpdateCallbacks.Add(preLateUpdateCallback);
+                    break;
+
+                case Segment.PostLateUpdate:
+                    var postLateUpdateCallback = (Action) methodInfo.CreateDelegate(typeof(Action), target);
+                    postLateUpdateCallbacks.Add(postLateUpdateCallback);
                     break;
 
 #if UNITY_EDITOR
