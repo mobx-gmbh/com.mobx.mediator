@@ -1,20 +1,23 @@
 {
-    "name": "mobx.mediator.fmod",
-    "rootNamespace": "MobX.Mediator",
-    "references": [
-        "GUID:0c752da273b17c547ae705acf0f2adf2",
-        "GUID:451c7863c31cdec4fbc99d53f3082b53",
-        "GUID:60b317c0e9339ed42a02f571de4723cd"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [
-        "FMOD_UNITY"
-    ],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "mobx.mediator.fmod",
+  "rootNamespace": "MobX.Mediator",
+  "references": [
+    "GUID:0c752da273b17c547ae705acf0f2adf2",
+    "GUID:451c7863c31cdec4fbc99d53f3082b53",
+    "GUID:60b317c0e9339ed42a02f571de4723cd",
+    "GUID:06a3c3218ef731343985f180249a8161",
+    "GUID:2b03cf6b0ac5d23419bed626562b55fb",
+    "GUID:ffd42dcff86317b4584e4e050d4e924d"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "FMOD_UNITY"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
